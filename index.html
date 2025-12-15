@@ -33,121 +33,39 @@
             overflow: hidden;
         }
 
-        /* Tooltip Styles */
-        [data-source] {
-            position: relative;
-            cursor: help;
-            border-bottom: 1px dotted var(--text-muted);
-        }
+        [data-source] { position: relative; cursor: help; border-bottom: 1px dotted var(--text-muted); }
         [data-source]:hover::after {
             content: attr(data-source);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: var(--primary-blue);
-            color: #fff;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 13px;
-            white-space: nowrap;
-            z-index: 1000;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-bottom: 10px;
-            pointer-events: none;
+            position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+            background-color: var(--primary-blue); color: #fff; padding: 8px 12px;
+            border-radius: 4px; font-size: 13px; white-space: nowrap; z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 10px; pointer-events: none;
         }
         [data-source]:hover::before {
-            content: '';
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border-width: 6px;
-            border-style: solid;
+            content: ''; position: absolute; bottom: 100%; left: 50%;
+            transform: translateX(-50%); border-width: 6px; border-style: solid;
             border-color: var(--primary-blue) transparent transparent transparent;
-            margin-bottom: -2px;
-            z-index: 1000;
-            pointer-events: none;
+            margin-bottom: -2px; z-index: 1000; pointer-events: none;
         }
 
-        /* Sidebar */
-        .sidebar {
-            width: 260px;
-            background-color: var(--sidebar-bg);
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            border-left: 1px solid var(--border-color);
-            z-index: 10;
-            flex-shrink: 0;
-        }
-        .logo {
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--primary-blue);
-            margin-bottom: 40px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .nav-btn {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            padding: 15px;
-            text-align: right;
-            font-size: 15px;
-            cursor: pointer;
-            transition: 0.2s;
-            border-radius: 6px;
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 500;
-        }
+        .sidebar { width: 260px; background-color: var(--sidebar-bg); display: flex; flex-direction: column; padding: 20px; border-left: 1px solid var(--border-color); z-index: 10; flex-shrink: 0; }
+        .logo { font-size: 20px; font-weight: 800; color: var(--primary-blue); margin-bottom: 40px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 10px; }
+        .nav-btn { background: none; border: none; color: var(--text-muted); padding: 15px; text-align: right; font-size: 15px; cursor: pointer; transition: 0.2s; border-radius: 6px; margin-bottom: 5px; display: flex; align-items: center; gap: 12px; font-weight: 500; }
         .nav-btn:hover { background-color: #f1f5f9; color: var(--primary-blue); }
         .nav-btn.active { background-color: #eff6ff; color: var(--accent-blue); font-weight: 700; border-right: 4px solid var(--accent-blue); }
 
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            padding: 30px;
-            overflow-y: auto;
-            background-color: var(--bg-color);
-            width: 100%;
-        }
-        .header {
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; background-color: var(--bg-color); width: 100%; }
+        .header { margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .header h1 { font-size: 24px; margin: 0; color: var(--primary-blue); }
         .header p { color: var(--text-muted); margin: 5px 0 0 0; font-size: 14px; }
 
-        /* Grids */
         .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
         .police-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .foi-container { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+        .controls-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
 
-        /* Cards */
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            border: 1px solid var(--border-color);
-            transition: transform 0.2s;
-        }
+        .card { background-color: var(--card-bg); border-radius: 10px; padding: 20px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid var(--border-color); transition: transform 0.2s; }
         .card:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .card .value { font-size: 32px; font-weight: 800; margin: 10px 0; font-family: 'Segoe UI', sans-serif; }
         .card .value.orange { color: var(--accent-orange); }
@@ -156,120 +74,27 @@
         .card .value.blue { color: var(--accent-blue); }
         .card .label { color: var(--text-muted); font-size: 14px; font-weight: 600; }
 
-        .alert-box {
-            background-color: #fef2f2;
-            border: 1px solid #fee2e2;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            font-size: 14px;
-            color: #991b1b;
-            text-align: center;
-            font-weight: 500;
-        }
+        .alert-box { background-color: #fef2f2; border: 1px solid #fee2e2; padding: 15px; border-radius: 8px; margin-top: 15px; font-size: 14px; color: #991b1b; text-align: center; font-weight: 500; }
+        
+        .control-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--primary-blue); }
+        .control-group select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background-color: #fff; font-size: 15px; outline: none; cursor: pointer; }
+        .control-group select:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+        .insight-box { background: #eff6ff; border-left: 4px solid var(--accent-blue); padding: 15px; border-radius: 4px; margin-top: 20px; text-align: right; font-weight: 500; color: var(--primary-blue); }
 
-        /* Controls for Profile Tab */
-        .controls-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        .control-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--primary-blue);
-        }
-        .control-group select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background-color: #fff;
-            font-size: 15px;
-            color: var(--text-color);
-            outline: none;
-            cursor: pointer;
-        }
-        .control-group select:focus {
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-        .insight-box {
-            background: #eff6ff;
-            border-left: 4px solid var(--accent-blue);
-            padding: 15px;
-            border-radius: 4px;
-            margin-top: 20px;
-            text-align: right;
-            font-weight: 500;
-            color: var(--primary-blue);
-        }
-
-        /* Specific Cards */
-        .failure-card {
-            background-color: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            border-right: 4px solid var(--accent-yellow);
-            margin-bottom: 15px;
-            text-align: right;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        }
+        .failure-card { background-color: #fff; padding: 15px; border-radius: 8px; border-right: 4px solid var(--accent-yellow); margin-bottom: 15px; text-align: right; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
         .failure-card h4 { margin: 0 0 5px 0; color: var(--primary-blue); font-size: 16px; }
         .failure-card p { margin: 0; font-size: 13px; color: var(--text-muted); }
 
-        .mahash-stats {
-            background-color: var(--card-bg);
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-        }
+        .mahash-stats { background-color: var(--card-bg); padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); }
         .stat-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #f1f5f9; }
         .stat-row:last-child { border-bottom: none; }
         .stat-row .num { font-weight: bold; font-size: 18px; color: var(--primary-blue); }
 
-        /* FOI */
-        .foi-options .option {
-            background-color: var(--card-bg);
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            border: 1px solid var(--border-color);
-            transition: 0.2s;
-        }
+        .foi-options .option { background-color: var(--card-bg); padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px; cursor: pointer; border: 1px solid var(--border-color); transition: 0.2s; }
         .foi-options .option:hover { border-color: var(--accent-blue); background-color: #f8fafc; }
         .foi-options input { transform: scale(1.2); accent-color: var(--accent-blue); }
-        .foi-preview {
-            background-color: #f8fafc;
-            padding: 20px;
-            border-radius: 8px;
-            font-family: 'Courier New', Courier, monospace;
-            white-space: pre-wrap;
-            color: #334155;
-            height: 500px;
-            overflow-y: auto;
-            border: 1px solid var(--border-color);
-            font-size: 14px;
-            line-height: 1.5;
-        }
-        .action-btn {
-            background-color: var(--primary-blue);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            margin-top: 15px;
-            width: 100%;
-            transition: 0.2s;
-        }
+        .foi-preview { background-color: #f8fafc; padding: 20px; border-radius: 8px; font-family: 'Courier New', Courier, monospace; white-space: pre-wrap; color: #334155; height: 500px; overflow-y: auto; border: 1px solid var(--border-color); font-size: 14px; line-height: 1.5; }
+        .action-btn { background-color: var(--primary-blue); color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: 15px; width: 100%; transition: 0.2s; }
         .action-btn:hover { background-color: #1e293b; }
 
         .tab-content { display: none; }
@@ -377,7 +202,7 @@
 
         <div id="profile" class="tab-content">
             <div class="card" style="min-height: 500px;">
-                <h3 style="margin: 0 0 20px 0; color: var(--primary-blue);">חקר נתונים: פרופיל העבריין</h3>
+                <h3 style="margin: 0 0 20px 0; color: var(--primary-blue);">חקר נתונים: פרופיל העבריין (נתוני אמת)</h3>
                 
                 <div class="controls-container">
                     <div class="control-group">
@@ -539,6 +364,45 @@
     </div>
 
     <script>
+        // --- DATA STORE: Real data from the excel analysis (Updated) ---
+        const realData = {
+            'all': {
+                'all': {'data': [2.2, 25.8, 36.1, 17.7, 16.5, 1.5, 0.3], 'text': 'מבוסס על 674 מקרים. הקבוצה הבולטת: 22-25 (36%).'},
+                'pyro': {'data': [3.0, 27.3, 25.8, 25.8, 18.2, 0.0, 0.0], 'text': 'מבוסס על 66 מקרים. הקבוצה הבולטת: 18-21 (27%).'},
+                'assault': {'data': [3.0, 25.8, 37.1, 12.1, 16.7, 3.8, 1.5], 'text': 'מבוסס על 132 מקרים. הקבוצה הבולטת: 22-25 (37%).'},
+                'police': {'data': [1.1, 31.8, 33.0, 23.9, 10.2, 0.0, 0.0], 'text': 'מבוסס על 88 מקרים. הקבוצה הבולטת: 22-25 (33%).'},
+                'order': {'data': [2.4, 26.8, 33.1, 18.9, 18.1, 0.8, 0.0], 'text': 'מבוסס על 127 מקרים. הקבוצה הבולטת: 22-25 (33%).'}
+            },
+            'jerusalem': {
+                'all': {'data': [3.4, 19.1, 42.7, 28.1, 6.7, 0.0, 0.0], 'text': 'מבוסס על 178 מקרים. הקבוצה הבולטת: 22-25 (43%).'},
+                'pyro': {'data': [0.0, 11.8, 52.9, 29.4, 5.9, 0.0, 0.0], 'text': 'מבוסס על 17 מקרים. הקבוצה הבולטת: 22-25 (53%).'},
+                'assault': {'data': [7.4, 18.5, 44.4, 25.9, 3.7, 0.0, 0.0], 'text': 'מבוסס על 27 מקרים. הקבוצה הבולטת: 22-25 (44%).'},
+                'police': {'data': [3.0, 36.4, 30.3, 24.2, 6.1, 0.0, 0.0], 'text': 'מבוסס על 33 מקרים. הקבוצה הבולטת: 18-21 (36%).'},
+                'order': {'data': [6.5, 23.9, 28.3, 28.3, 13.0, 0.0, 0.0], 'text': 'מבוסס על 46 מקרים. הקבוצה הבולטת: 22-25 (28%).'}
+            },
+            'telaviv': {
+                'all': {'data': [4.4, 25.8, 38.4, 11.3, 18.9, 1.3, 0.0], 'text': 'מבוסס על 159 מקרים. הקבוצה הבולטת: 22-25 (38%).'},
+                'pyro': {'data': [9.5, 33.3, 23.8, 23.8, 9.5, 0.0, 0.0], 'text': 'מבוסס על 21 מקרים. הקבוצה הבולטת: 18-21 (33%).'},
+                'assault': {'data': [4.1, 26.5, 40.8, 8.2, 18.4, 2.0, 0.0], 'text': 'מבוסס על 49 מקרים. הקבוצה הבולטת: 22-25 (41%).'},
+                'police': {'data': [0.0, 25.0, 43.8, 18.8, 12.5, 0.0, 0.0], 'text': 'מבוסס על 16 מקרים. הקבוצה הבולטת: 22-25 (44%).'},
+                'order': {'data': [0.0, 24.0, 40.0, 8.0, 28.0, 0.0, 0.0], 'text': 'מבוסס על 25 מקרים. הקבוצה הבולטת: 22-25 (40%).'}
+            },
+            'haifa': {
+                'all': {'data': [1.3, 29.4, 19.6, 19.0, 28.8, 2.0, 0.0], 'text': 'מבוסס על 153 מקרים. הקבוצה הבולטת: 18-21 (29%).'},
+                'pyro': {'data': [0.0, 38.9, 5.6, 22.2, 33.3, 0.0, 0.0], 'text': 'מבוסס על 18 מקרים. הקבוצה הבולטת: 18-21 (39%).'},
+                'assault': {'data': [0.0, 23.8, 23.8, 14.3, 38.1, 0.0, 0.0], 'text': 'מבוסס על 21 מקרים. הקבוצה הבולטת: 31-40 (38%).'},
+                'police': {'data': [0.0, 25.0, 33.3, 16.7, 25.0, 0.0, 0.0], 'text': 'מבוסס על 12 מקרים. הקבוצה הבולטת: 22-25 (33%).'},
+                'order': {'data': [0.0, 29.2, 20.8, 20.8, 25.0, 4.2, 0.0], 'text': 'מבוסס על 24 מקרים. הקבוצה הבולטת: 18-21 (29%).'}
+            },
+            'beersheva': {
+                'all': {'data': [0.0, 34.6, 63.0, 2.5, 0.0, 0.0, 0.0], 'text': 'מבוסס על 81 מקרים. הקבוצה הבולטת: 22-25 (63%).'},
+                'pyro': {'data': [0, 0, 0, 0, 0, 0, 0], 'text': 'אין נתונים לחתך זה.'},
+                'assault': {'data': [0.0, 36.4, 54.5, 9.1, 0.0, 0.0, 0.0], 'text': 'מבוסס על 11 מקרים. הקבוצה הבולטת: 22-25 (55%).'},
+                'police': {'data': [0.0, 50.0, 50.0, 0.0, 0.0, 0.0, 0.0], 'text': 'מבוסס על 6 מקרים. הקבוצה הבולטת: 18-21 (50%).'},
+                'order': {'data': [0.0, 31.6, 63.2, 5.3, 0.0, 0.0, 0.0], 'text': 'מבוסס על 19 מקרים. הקבוצה הבולטת: 22-25 (63%).'}
+            }
+        };
+
         // Global variables for Profile Chart
         let profileChartInstance = null;
 
@@ -551,51 +415,28 @@
             document.getElementById(tabId).classList.add('active');
             
             // If opening profile tab, init the chart
-            if(tabId === 'profile' && !profileChartInstance) {
-                updateProfileChart();
+            if(tabId === 'profile') {
+                setTimeout(updateProfileChart, 100);
             }
         }
 
-        // Profile Chart Logic
+        // Profile Chart Logic with REAL DATA
         function updateProfileChart() {
             const city = document.getElementById('citySelect').value;
             const offense = document.getElementById('offenseSelect').value;
             const insightBox = document.getElementById('profileInsight');
             
-            // Simulated Data Logic (Based on Analysis)
-            // Default distribution (Age groups: 13-17, 18-21, 22-25, 26-30, 31-40, 41-50, 50+)
-            let data = [5, 30, 45, 15, 4, 1, 0]; // Default
-            let color = '#3b82f6'; // Default Blue
-            let text = "מציג נתונים כלליים לכלל האוכלוסייה.";
-
-            // Logic Tree
-            if (city === 'jerusalem') {
-                if (offense === 'pyro') {
-                    data = [10, 50, 30, 8, 2, 0, 0]; // Younger, Pyro
-                    color = '#ef4444'; // Red
-                    text = "בירושלים, שימוש באבוקות מאפיין בעיקר צעירים בגילאי 18-21.";
-                } else if (offense === 'order') {
-                    data = [5, 40, 40, 10, 5, 0, 0];
-                    color = '#eab308'; // Yellow
-                    text = "בירושלים, הפרות סדר נפוצות בקרב גילאי 18-25.";
-                } else {
-                    data = [5, 35, 35, 15, 8, 2, 0];
-                    text = "בירושלים, התפלגות המעצרים נוטה לגילאים צעירים.";
-                }
-            } else if (city === 'telaviv') {
-                if (offense === 'assault' || offense === 'police') {
-                    data = [0, 20, 40, 25, 10, 5, 0]; // Older, Violence
-                    color = '#f97316'; // Orange
-                    text = "בתל אביב, עבירות אלימות ותקיפת שוטרים מאפיינות אוכלוסייה בוגרת יותר (22-30).";
-                } else {
-                    data = [2, 25, 45, 20, 6, 2, 0];
-                    text = "בתל אביב, שיא המעצרים הוא בגילאי 22-25.";
-                }
-            } else if (city === 'haifa') {
-                data = [5, 30, 40, 15, 8, 2, 0];
-                color = '#10b981'; // Green
-                text = "בחיפה, התפלגות המעצרים ממוצעת, עם דגש על גילאי צבא.";
-            }
+            // Retrieve real data from object
+            const currentData = realData[city][offense];
+            const data = currentData.data;
+            const text = currentData.text;
+            
+            // Determine color based on city
+            let color = '#3b82f6';
+            if (city === 'jerusalem') color = '#eab308'; // Yellow
+            if (city === 'telaviv') color = '#ef4444'; // Red
+            if (city === 'haifa') color = '#10b981'; // Green
+            if (city === 'beersheva') color = '#f97316'; // Orange
 
             // Update UI
             insightBox.innerText = text;
@@ -624,10 +465,10 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: { display: false },
-                        title: { display: true, text: 'התפלגות גילאים לפי חתך' }
+                        title: { display: true, text: 'התפלגות גילאים (באחוזים) לפי חתך נבחר' }
                     },
                     scales: {
-                        y: { beginAtZero: true, max: 60 }
+                        y: { beginAtZero: true, max: 80 }
                     }
                 }
             });
@@ -663,13 +504,16 @@
             navigator.clipboard.writeText(text).then(() => { alert('הטקסט הועתק ללוח!'); });
         }
 
+        // Initialize Charts when finished loading
         window.onload = function() {
             updateFOI();
+            // Start Profile Chart
+            updateProfileChart();
+            
             Chart.defaults.color = '#64748b';
             Chart.defaults.font.family = "'Segoe UI', sans-serif";
 
-            // Init charts
-            // 1. Racism Pie
+            // --- גרף 1: עוגת גזענות ---
             const ctxPie = document.getElementById('racismPieChart');
             if (ctxPie) {
                 new Chart(ctxPie.getContext('2d'), {
@@ -679,14 +523,20 @@
                         datasets: [{
                             data: [118, 115, 29, 28, 24, 53],
                             backgroundColor: ['#eab308', '#1e293b', '#f97316', '#ef4444', '#3b82f6', '#cbd5e1'],
-                            borderColor: '#ffffff', borderWidth: 2
+                            borderColor: '#ffffff',
+                            borderWidth: 2
                         }]
                     },
-                    options: { responsive: true, maintainAspectRatio: false, cutout: '50%', plugins: { legend: { position: 'right', labels: { color: '#334155', font: { size: 13 }, padding: 20 } } } }
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'right', labels: { color: '#334155', font: { size: 13 }, padding: 20 } } },
+                        cutout: '50%'
+                    }
                 });
             }
 
-            // 2. Bar Gap
+            // --- גרף 2: פער האכיפה ---
             const ctxBar = document.getElementById('barChart');
             if (ctxBar) {
                 new Chart(ctxBar.getContext('2d'), {
@@ -696,14 +546,26 @@
                         datasets: [{
                             data: [138, 32, 367, 165, 398],
                             backgroundColor: ['#3b82f6', '#3b82f6', '#ef4444', '#ef4444', '#eab308'],
+                            barPercentage: 0.6,
                             borderRadius: 6
                         }]
                     },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } } } }
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false, 
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: true, text: 'פער האכיפה: אירועים מול תיקים וכתבי אישום', color: '#0f172a', font: { size: 18 } },
+                        },
+                        scales: {
+                            y: { grid: { color: '#e2e8f0', borderDash: [5, 5] }, ticks: { color: '#64748b' } },
+                            x: { grid: { display: false }, ticks: { color: '#0f172a', font: { size: 13, weight: 'bold' } } }
+                        }
+                    }
                 });
             }
 
-            // 3. Offenses
+            // --- גרף 3: התפלגות מעצרים (10 העבירות) ---
             const ctxOffenses = document.getElementById('offensesChart');
             if (ctxOffenses) {
                 new Chart(ctxOffenses.getContext('2d'), {
@@ -714,14 +576,27 @@
                             label: 'מספר מעצרים',
                             data: [65, 54, 53, 47, 41, 36, 36, 32, 25, 21],
                             backgroundColor: ['#0f172a', '#ef4444', '#3b82f6', '#ef4444', '#3b82f6', '#3b82f6', '#cbd5e1', '#ef4444', '#cbd5e1', '#eab308'],
-                            borderRadius: 4
+                            borderRadius: 4,
+                            barPercentage: 0.7
                         }]
                     },
-                    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { grid: { display: false } } } }
+                    options: {
+                        indexAxis: 'y', 
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { backgroundColor: '#0f172a' }
+                        },
+                        scales: {
+                            x: { position: 'top', grid: { color: '#f1f5f9' }, ticks: { font: { weight: 'bold' } } },
+                            y: { grid: { display: false }, ticks: { font: { weight: '600' } } }
+                        }
+                    }
                 });
             }
 
-            // 4. Ages
+            // --- גרף 4: התפלגות גילאים ---
             const ctxAges = document.getElementById('fansAgeChart');
             if (ctxAges) {
                 new Chart(ctxAges.getContext('2d'), {
@@ -732,29 +607,71 @@
                             label: 'מספר עצורים',
                             data: [15, 174, 243, 119, 111, 10, 2],
                             backgroundColor: ['#cbd5e1', '#ef4444', '#0f172a', '#3b82f6', '#3b82f6', '#cbd5e1', '#cbd5e1'],
-                            borderRadius: 6
+                            borderRadius: 6,
+                            barPercentage: 0.6
                         }]
                     },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } } } }
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: false },
+                            tooltip: {
+                                backgroundColor: '#0f172a',
+                                callbacks: { label: function(context) { return context.raw + ' עצורים'; } }
+                            }
+                        },
+                        scales: {
+                            y: { grid: { color: '#e2e8f0', borderDash: [5, 5] }, ticks: { color: '#64748b' } },
+                            x: { grid: { display: false }, ticks: { color: '#0f172a', font: { size: 12, weight: 'bold' } } }
+                        }
+                    }
                 });
             }
 
-            // 5. Bubble Cities
+            // --- גרף 5 (חדש!): בועות ערים עם אימוג'ים ---
             const ctxCities = document.getElementById('bubbleCitiesChart');
             if (ctxCities) {
                 new Chart(ctxCities.getContext('2d'), {
                     type: 'bubble',
                     data: {
                         datasets: [
-                            { label: 'ירושלים', data: [{x: 80, y: 50, r: 50}], backgroundColor: 'rgba(255, 205, 86, 0.6)', emoji: '🔥' },
-                            { label: 'תל אביב - יפו', data: [{x: 20, y: 60, r: 35}], backgroundColor: 'rgba(255, 99, 132, 0.6)', emoji: '👊' },
-                            { label: 'חיפה', data: [{x: 50, y: 90, r: 25}], backgroundColor: 'rgba(75, 192, 192, 0.6)', emoji: '🏟️' },
-                            { label: 'באר שבע', data: [{x: 50, y: 10, r: 15}], backgroundColor: 'rgba(255, 159, 64, 0.6)', emoji: '👮' },
-                            { label: 'פתח תקווה', data: [{x: 35, y: 75, r: 12}], backgroundColor: 'rgba(54, 162, 235, 0.6)', emoji: '🧨' }
+                            {
+                                label: 'ירושלים',
+                                data: [{x: 80, y: 50, r: 50}], 
+                                backgroundColor: 'rgba(255, 205, 86, 0.6)', // צהוב
+                                emoji: '🔥' // אבוקות/הפרת סדר
+                            },
+                            {
+                                label: 'תל אביב - יפו',
+                                data: [{x: 20, y: 60, r: 35}], 
+                                backgroundColor: 'rgba(255, 99, 132, 0.6)', // אדום
+                                emoji: '👊' // תקיפה/קטטה
+                            },
+                            {
+                                label: 'חיפה',
+                                data: [{x: 50, y: 90, r: 25}], 
+                                backgroundColor: 'rgba(75, 192, 192, 0.6)', // ירוק
+                                emoji: '🏟️' // אלימות במגרש
+                            },
+                            {
+                                label: 'באר שבע',
+                                data: [{x: 50, y: 10, r: 15}], 
+                                backgroundColor: 'rgba(255, 159, 64, 0.6)', // כתום
+                                emoji: '👮' // תקיפת שוטר
+                            },
+                            {
+                                label: 'פתח תקווה',
+                                data: [{x: 35, y: 75, r: 12}], 
+                                backgroundColor: 'rgba(54, 162, 235, 0.6)', // כחול
+                                emoji: '🧨' // אמל"ח/רימון עשן
+                            }
                         ]
                     },
                     options: {
-                        responsive: true, maintainAspectRatio: false,
+                        responsive: true,
+                        maintainAspectRatio: false,
                         plugins: {
                             legend: { position: 'right' },
                             tooltip: {
@@ -768,7 +685,10 @@
                                 }
                             }
                         },
-                        scales: { x: { display: false, min: 0, max: 100 }, y: { display: false, min: 0, max: 100 } }
+                        scales: {
+                            x: { display: false, min: 0, max: 100 }, 
+                            y: { display: false, min: 0, max: 100 }
+                        }
                     }
                 });
             }
