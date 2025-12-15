@@ -4,25 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>דוח אכיפה ואלימות בספורט</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            /* Corporate Light Theme */
             --bg-color: #f0f2f5;
             --card-bg: #ffffff;
             --sidebar-bg: #ffffff;
             --text-color: #2c3e50;
             --text-muted: #64748b;
             --border-color: #e2e8f0;
-            
-            /* Professional Palette */
-            --primary-blue: #0f172a;      /* Dark Navy */
-            --accent-blue: #3b82f6;       /* Bright Blue */
-            --accent-green: #10b981;      /* Green */
-            --accent-red: #ef4444;        /* Red */
-            --accent-orange: #f97316;     /* Orange */
-            --accent-yellow: #eab308;     /* Yellow */
+            --primary-blue: #0f172a;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-orange: #f97316;
+            --accent-yellow: #eab308;
         }
 
         body {
@@ -36,13 +33,12 @@
             overflow: hidden;
         }
 
-        /* Tooltip Styles for HTML Elements */
+        /* Tooltip Styles */
         [data-source] {
             position: relative;
             cursor: help;
             border-bottom: 1px dotted var(--text-muted);
         }
-
         [data-source]:hover::after {
             content: attr(data-source);
             position: absolute;
@@ -60,7 +56,6 @@
             margin-bottom: 10px;
             pointer-events: none;
         }
-
         [data-source]:hover::before {
             content: '';
             position: absolute;
@@ -84,9 +79,8 @@
             padding: 20px;
             border-left: 1px solid var(--border-color);
             z-index: 10;
-            flex-shrink: 0; /* Prevent shrinking */
+            flex-shrink: 0;
         }
-
         .logo {
             font-size: 20px;
             font-weight: 800;
@@ -98,7 +92,6 @@
             align-items: center;
             gap: 10px;
         }
-
         .nav-btn {
             background: none;
             border: none;
@@ -115,18 +108,8 @@
             gap: 12px;
             font-weight: 500;
         }
-
-        .nav-btn:hover {
-            background-color: #f1f5f9;
-            color: var(--primary-blue);
-        }
-
-        .nav-btn.active {
-            background-color: #eff6ff;
-            color: var(--accent-blue);
-            font-weight: 700;
-            border-right: 4px solid var(--accent-blue);
-        }
+        .nav-btn:hover { background-color: #f1f5f9; color: var(--primary-blue); }
+        .nav-btn.active { background-color: #eff6ff; color: var(--accent-blue); font-weight: 700; border-right: 4px solid var(--accent-blue); }
 
         /* Main Content */
         .main-content {
@@ -134,9 +117,8 @@
             padding: 30px;
             overflow-y: auto;
             background-color: var(--bg-color);
-            width: 100%; /* Ensure full width */
+            width: 100%;
         }
-
         .header {
             margin-bottom: 30px;
             display: flex;
@@ -147,33 +129,16 @@
             border-radius: 10px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
+        .header h1 { font-size: 24px; margin: 0; color: var(--primary-blue); }
+        .header p { color: var(--text-muted); margin: 5px 0 0 0; font-size: 14px; }
 
-        .header h1 {
-            font-size: 24px;
-            margin: 0;
-            color: var(--primary-blue);
-        }
+        /* Grids */
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .police-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .foi-container { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
 
-        .header p {
-            color: var(--text-muted);
-            margin: 5px 0 0 0;
-            font-size: 14px;
-        }
-
-        /* Grid Layouts */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
+        /* Cards */
         .card {
             background-color: var(--card-bg);
             border-radius: 10px;
@@ -183,29 +148,13 @@
             border: 1px solid var(--border-color);
             transition: transform 0.2s;
         }
-        
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-
-        .card .value {
-            font-size: 32px;
-            font-weight: 800;
-            margin: 10px 0;
-            font-family: 'Segoe UI', sans-serif;
-        }
-        
+        .card:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .card .value { font-size: 32px; font-weight: 800; margin: 10px 0; font-family: 'Segoe UI', sans-serif; }
         .card .value.orange { color: var(--accent-orange); }
         .card .value.red { color: var(--accent-red); }
         .card .value.yellow { color: var(--accent-yellow); }
         .card .value.blue { color: var(--accent-blue); }
-
-        .card .label {
-            color: var(--text-muted);
-            font-size: 14px;
-            font-weight: 600;
-        }
+        .card .label { color: var(--text-muted); font-size: 14px; font-weight: 600; }
 
         .alert-box {
             background-color: #fef2f2;
@@ -219,13 +168,7 @@
             font-weight: 500;
         }
 
-        /* Police Tab Specifics */
-        .police-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
+        /* Specific Cards */
         .failure-card {
             background-color: #fff;
             padding: 15px;
@@ -235,7 +178,6 @@
             text-align: right;
             box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
-        
         .failure-card h4 { margin: 0 0 5px 0; color: var(--primary-blue); font-size: 16px; }
         .failure-card p { margin: 0; font-size: 13px; color: var(--text-muted); }
 
@@ -245,24 +187,11 @@
             border-radius: 8px;
             border: 1px solid var(--border-color);
         }
-
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 15px 0;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        
+        .stat-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #f1f5f9; }
         .stat-row:last-child { border-bottom: none; }
         .stat-row .num { font-weight: bold; font-size: 18px; color: var(--primary-blue); }
 
-        /* FOI Generator */
-        .foi-container {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 20px;
-        }
-
+        /* FOI */
         .foi-options .option {
             background-color: var(--card-bg);
             padding: 15px;
@@ -275,10 +204,8 @@
             border: 1px solid var(--border-color);
             transition: 0.2s;
         }
-
         .foi-options .option:hover { border-color: var(--accent-blue); background-color: #f8fafc; }
         .foi-options input { transform: scale(1.2); accent-color: var(--accent-blue); }
-
         .foi-preview {
             background-color: #f8fafc;
             padding: 20px;
@@ -292,7 +219,6 @@
             font-size: 14px;
             line-height: 1.5;
         }
-
         .action-btn {
             background-color: var(--primary-blue);
             color: white;
@@ -305,101 +231,27 @@
             width: 100%;
             transition: 0.2s;
         }
-        
         .action-btn:hover { background-color: #1e293b; }
 
-        /* Utility */
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.4s; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- MOBILE RESPONSIVENESS --- */
+        /* Mobile */
         @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-                height: auto;
-                overflow-y: auto;
-            }
-
-            .sidebar {
-                width: 100%;
-                height: auto;
-                padding: 10px;
-                border-left: none;
-                border-bottom: 1px solid var(--border-color);
-                flex-direction: row;
-                overflow-x: auto;
-                white-space: nowrap;
-                align-items: center;
-                gap: 10px;
-                position: sticky;
-                top: 0;
-                background: white;
-                z-index: 100;
-            }
-
-            .logo {
-                display: none; /* Hide logo on mobile to save space */
-            }
-
-            .nav-btn {
-                padding: 8px 12px;
-                margin: 0;
-                font-size: 14px;
-                border-radius: 20px;
-                border: 1px solid var(--border-color);
-            }
-
-            .nav-btn.active {
-                background-color: var(--primary-blue);
-                color: white;
-                border: 1px solid var(--primary-blue);
-            }
-
-            .main-content {
-                padding: 15px;
-                height: auto;
-                overflow: visible;
-            }
-
-            .header {
-                flex-direction: column;
-                text-align: center;
-                gap: 10px;
-            }
-
-            .header h1 {
-                font-size: 22px;
-            }
-
-            .dashboard-grid, 
-            .police-grid, 
-            .kpi-grid, 
-            .foi-container {
-                grid-template-columns: 1fr; /* Stack columns vertically */
-            }
-
-            .card .value {
-                font-size: 28px;
-            }
-
-            .foi-preview {
-                height: 300px; /* Shorter preview on mobile */
-            }
-            
-            /* Fix tooltips on mobile - position them better */
-            [data-source]:hover::after {
-                left: 0;
-                transform: translateX(0);
-                white-space: normal;
-                width: 200px;
-                text-align: center;
-            }
-            
-            [data-source]:hover::before {
-                left: 20px;
-                transform: translateX(0);
-            }
+            body { flex-direction: column; height: auto; overflow-y: auto; }
+            .sidebar { width: 100%; height: auto; padding: 10px; border-left: none; border-bottom: 1px solid var(--border-color); flex-direction: row; overflow-x: auto; white-space: nowrap; align-items: center; gap: 10px; position: sticky; top: 0; background: white; z-index: 100; }
+            .logo { display: none; }
+            .nav-btn { padding: 8px 12px; margin: 0; font-size: 14px; border-radius: 20px; border: 1px solid var(--border-color); }
+            .nav-btn.active { background-color: var(--primary-blue); color: white; border: 1px solid var(--primary-blue); }
+            .main-content { padding: 15px; height: auto; overflow: visible; }
+            .header { flex-direction: column; text-align: center; gap: 10px; }
+            .header h1 { font-size: 22px; }
+            .dashboard-grid, .police-grid, .kpi-grid, .foi-container { grid-template-columns: 1fr; }
+            .card .value { font-size: 28px; }
+            .foi-preview { height: 300px; }
+            [data-source]:hover::after { left: 0; transform: translateX(0); white-space: normal; width: 200px; text-align: center; }
+            [data-source]:hover::before { left: 20px; transform: translateX(0); }
         }
     </style>
 </head>
@@ -410,7 +262,6 @@
             <i class="fas fa-chart-line" style="color: var(--accent-blue);"></i>
             <span>BI קליניקה</span>
         </div>
-        
         <button class="nav-btn active" onclick="showTab('overview')">
             <i class="fas fa-home"></i> תמונת מצב
         </button>
@@ -463,7 +314,6 @@
                         <i class="fas fa-info-circle"></i> פער אדיר בין כמות הקריאות הגזעניות (367) לבין תיקי חקירה שנפתחו בנושא (2 בלבד).
                     </div>
                 </div>
-
                 <div class="card" data-source="מקור: דוח בועטים 24-25, עמ' 8 (טבלת סיכום)">
                     <h3 style="margin: 0 0 20px 0; font-size: 16px;">שיאני הגזענות (עונת 24/25)</h3>
                     <div style="height: 300px; position: relative;">
@@ -477,7 +327,6 @@
             <div class="police-grid">
                 <div>
                     <h3 style="margin-top: 0; color: var(--primary-blue);">אלימות שוטרים: תמונת מצב</h3>
-                    
                     <div style="background-color: #fff; padding: 20px; border-radius: 8px; border-right: 4px solid var(--accent-red); margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);" 
                          data-source="מקור: דוח בועטים 24-25, עמ' 3 (התערבות כוחות המשטרה)">
                         <div style="display: flex; align-items: center; justify-content: space-between;">
@@ -486,7 +335,6 @@
                         </div>
                         <p style="margin: 10px 0 0 0; color: var(--text-muted);">כולל פגיעת רימון עשן בילד שפונה לבי"ח.</p>
                     </div>
-
                     <h4 style="color: var(--text-color);">כשלים מערכתיים</h4>
                     <div class="failure-card" data-source="מקור: דוח מח'ש, עמ' 4 (סעיף 3.1)">
                         <h4><i class="fas fa-exclamation-triangle" style="color: var(--accent-yellow); margin-left: 10px;"></i>היעדר נתונים על קבוצות אוכלוסייה</h4>
@@ -501,7 +349,6 @@
                         <p>נושא מרכזי בבקשת חופש המידע. נוהל קיים אך האכיפה לגביו לא שקופה.</p>
                     </div>
                 </div>
-
                 <div>
                     <h3 style="margin-top: 0; color: var(--primary-blue);">טיפול מערכתי (מח"ש)</h3>
                     <div class="mahash-stats">
@@ -518,7 +365,6 @@
                             <span class="num" style="color: var(--accent-red); font-size: 24px;">69</span>
                         </div>
                     </div>
-                    
                     <div style="margin-top: 20px; background-color: #fff; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color);">
                         <h4 style="margin-top: 0; color: var(--primary-blue);">מקרי בוחן (סמי עופר ובלומפילד)</h4>
                         <p style="font-size: 12px; color: var(--accent-blue); margin-top: -10px;">מקור: מרכז המחקר והמידע של הכנסת (2024), עמ' 2-3</p>
@@ -540,7 +386,7 @@
                     <canvas id="offensesChart"></canvas>
                 </div>
             </div>
-            </div>
+        </div>
 
         <div id="fans" class="tab-content">
             <div class="card" style="height: 500px;" data-source="מקורות: פרוטוקול הוועדה עמ' 1-2 (חקירות ואישומים), דוח בועטים עמ' 1 (אירועים)">
@@ -554,7 +400,6 @@
             <div class="foi-container">
                 <div class="foi-options">
                     <h3 style="margin-top: 0; color: var(--primary-blue);">בחר נושאים לבקשה:</h3>
-                    
                     <div class="option">
                         <input type="checkbox" id="chk_bodycam" checked onchange="updateFOI()">
                         <div>
@@ -562,7 +407,6 @@
                             <small style="color: var(--text-muted);">נתונים על הפעלה/אי-הפעלה, שמירת חומרים ונהלים.</small>
                         </div>
                     </div>
-
                     <div class="option">
                         <input type="checkbox" id="chk_violence" checked onchange="updateFOI()">
                         <div>
@@ -570,7 +414,6 @@
                             <small style="color: var(--text-muted);">מספר דוחות שימוש בכוח ספציפית ביציעים.</small>
                         </div>
                     </div>
-
                     <div class="option">
                         <input type="checkbox" id="chk_demo" onchange="updateFOI()">
                         <div>
@@ -578,7 +421,6 @@
                             <small style="color: var(--text-muted);">ניסיון לחלץ נתונים על אכיפת יתר כלפי מיעוטים.</small>
                         </div>
                     </div>
-
                     <div class="option">
                         <input type="checkbox" id="chk_admin" onchange="updateFOI()">
                         <div>
@@ -587,7 +429,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div>
                     <div class="foi-preview" id="foiText" data-source="מקור: קובץ 'טיוטה אלימות בספורט.docx'"></div>
                     <button class="action-btn" onclick="copyToClipboard()">
@@ -596,187 +437,131 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <script>
-        // --- Navigation ---
+        // פונקציות גלובליות מוגדרות מחוץ ל-window.onload כדי למנוע קריסה
         function showTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            
-            // Find the button that corresponds to the tabId
             const activeBtn = document.querySelector(`.nav-btn[onclick="showTab('${tabId}')"]`);
             if (activeBtn) activeBtn.classList.add('active');
-            
             document.getElementById(tabId).classList.add('active');
         }
 
-        // Configuration for Charts
-        Chart.defaults.color = '#64748b';
-        Chart.defaults.font.family = "'Segoe UI', sans-serif";
-
-        // --- Chart 1: Racism Pie Chart ---
-        const ctxPie = document.getElementById('racismPieChart').getContext('2d');
-        new Chart(ctxPie, {
-            type: 'doughnut',
-            data: {
-                labels: ['מכבי ת"א', 'בית"ר י-ם', 'מכבי נתניה', 'הפועל חיפה', 'ק"ש', 'אחרים'],
-                datasets: [{
-                    data: [118, 115, 29, 28, 24, 53],
-                    backgroundColor: [
-                        '#eab308', // Yellow
-                        '#1e293b', // Dark Blue/Black
-                        '#f97316', // Orange
-                        '#ef4444', // Red
-                        '#3b82f6', // Blue
-                        '#cbd5e1'  // Grey
-                    ],
-                    borderColor: '#ffffff',
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                        labels: { color: '#334155', font: { size: 13 }, padding: 20 }
-                    }
-                },
-                cutout: '50%'
-            }
-        });
-
-        // --- Chart 2: Bar Chart (The Gap) ---
-        const ctxBar = document.getElementById('barChart').getContext('2d');
-        new Chart(ctxBar, {
-            type: 'bar',
-            data: {
-                labels: ['תיקי חקירה שנפתחו', 'כתבי אישום (בכלל)', 'אירועי גזענות (במגרש)', 'אירועי אלימות (במגרש)', 'הרחקות'],
-                datasets: [{
-                    data: [138, 32, 367, 165, 398],
-                    backgroundColor: [
-                        '#3b82f6', // Blue
-                        '#3b82f6', // Blue
-                        '#ef4444', // Red
-                        '#ef4444', // Red
-                        '#eab308'  // Yellow
-                    ],
-                    barPercentage: 0.6,
-                    borderRadius: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false, 
-                plugins: {
-                    legend: { display: false },
-                    title: { display: true, text: 'פער האכיפה: אירועים מול תיקים וכתבי אישום', color: '#0f172a', font: { size: 18 } },
-                    tooltip: {
-                        backgroundColor: '#0f172a',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        padding: 10,
-                        callbacks: {
-                            afterLabel: function(context) {
-                                if (context.label === 'תיקי חקירה שנפתחו') return 'מקור: פרוטוקול הוועדה 2025 (עמ\' 1)';
-                                if (context.label === 'כתבי אישום (בכלל)') return 'מקור: פרוטוקול הוועדה 2025 (עמ\' 2)';
-                                if (context.label === 'אירועי גזענות (במגרש)') return 'מקור: דוח בועטים 24-25 (עמ\' 1)';
-                                if (context.label === 'אירועי אלימות (במגרש)') return 'מקור: דוח בועטים 24-25 (עמ\' 1)';
-                                if (context.label === 'הרחקות') return 'מקור: פרוטוקול הוועדה 2025 (עמ\' 1)';
-                                return '';
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        grid: { color: '#e2e8f0', borderDash: [5, 5] },
-                        ticks: { color: '#64748b' }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: { color: '#0f172a', font: { size: 13, weight: 'bold' } }
-                    }
-                }
-            }
-        });
-
-        // --- FOI Generator Logic ---
         function updateFOI() {
             const showBodyCam = document.getElementById('chk_bodycam').checked;
             const showViolence = document.getElementById('chk_violence').checked;
             const showDemo = document.getElementById('chk_demo').checked;
             const showAdmin = document.getElementById('chk_admin').checked;
 
-            let text = `לכבוד
-הממונה על חופש המידע
-משטרת ישראל / המשרד לביטחון לאומי
-
-הנדון: בקשה לפי חוק חופש המידע, התשנ״ח-1998 – נתוני אלימות, אכיפה ושימוש במצלמות גוף באירועי ספורט
-
-שלום רב,
-אבקש לקבל לידיי את המידע המפורט להלן, המתייחס לשנים 2024-2025 (ועד למועד המענה):
-
-`;
+            let text = `לכבוד\nהממונה על חופש המידע\nמשטרת ישראל / המשרד לביטחון לאומי\n\nהנדון: בקשה לפי חוק חופש המידע, התשנ״ח-1998 – נתוני אלימות, אכיפה ושימוש במצלמות גוף באירועי ספורט\n\nשלום רב,\nאבקש לקבל לידיי את המידע המפורט להלן, המתייחס לשנים 2024-2025 (ועד למועד המענה):\n\n`;
 
             if (showBodyCam) {
-                text += `1. נושא מצלמות הגוף (בהתייחס לנוהל משטרת ישראל 90.220.003.16):
-   א. כמה דוחות צפייה/תובנות (דוחות בקרה) נכתבו בעקבות אירועי ספורט בהם הופעל כוח על ידי שוטרים?
-   ב. בכמה מקרים של שימוש בכוח באירועי ספורט נמצא כי לא קיים תיעוד במצלמת הגוף?
-   ג. כמה מזכרים על "אי-קיום חומר תיעודי" נכתבו על ידי חוקרים/סיירים באירועי ספורט בהם הוגשה תלונה על אלימות שוטר?
-   ד. מהו משך הזמן הממוצע לשמירת צילומים מאירועי ספורט שאינם מוגדרים כאירועים פליליים חמורים?
-
-`;
+                text += `1. נושא מצלמות הגוף (בהתייחס לנוהל משטרת ישראל 90.220.003.16):\n   א. כמה דוחות צפייה/תובנות (דוחות בקרה) נכתבו בעקבות אירועי ספורט בהם הופעל כוח על ידי שוטרים?\n   ב. בכמה מקרים של שימוש בכוח באירועי ספורט נמצא כי לא קיים תיעוד במצלמת הגוף?\n   ג. כמה מזכרים על "אי-קיום חומר תיעודי" נכתבו על ידי חוקרים/סיירים באירועי ספורט בהם הוגשה תלונה על אלימות שוטר?\n   ד. מהו משך הזמן הממוצע לשמירת צילומים מאירועי ספורט שאינם מוגדרים כאירועים פליליים חמורים?\n\n`;
             }
-
             if (showViolence) {
-                text += `2. שימוש בכוח ואלימות שוטרים במגרשים:
-   א. כמה "דוחות שימוש בכוח" מולאו על ידי שוטרים במהלך אירועי ספורט (כדורגל וכדורסל) בשנים הנ"ל?
-   ב. כמה תלונות הוגשו ליחידה לתלונות הציבור (ית"ץ) בגין התנהגות שוטרים באירועי ספורט?
-   ג. כמה מתוך תלונות אלו הועברו לטיפול במח"ש וכמה טופלו במישור המשמעתי/פיקודי?
-
-`;
+                text += `2. שימוש בכוח ואלימות שוטרים במגרשים:\n   א. כמה "דוחות שימוש בכוח" מולאו על ידי שוטרים במהלך אירועי ספורט (כדורגל וכדורסל) בשנים הנ"ל?\n   ב. כמה תלונות הוגשו ליחידה לתלונות הציבור (ית"ץ) בגין התנהגות שוטרים באירועי ספורט?\n   ג. כמה מתוך תלונות אלו הועברו לטיפול במח"ש וכמה טופלו במישור המשמעתי/פיקודי?\n\n`;
             }
-
             if (showDemo) {
-                text += `3. פילוח דמוגרפי ואפיון עבירות:
-   א. אבקש לקבל את פילוח המעצרים והעיכובים במגרשי הכדורגל לפי שיוך קבוצתי (אוהדי איזו קבוצה) ולפי גיל (קטינים/בגירים)?
-   ב. במידה וקיים, אבקש פילוח לפי לאום/מוצא של העצורים, על מנת לבחון טענות לשיטור יתר כלפי אוכלוסיות ספציפיות?
-   ג. כמה כתבי אישום הוגשו בגין תקיפת שוטר במגרשים לעומת כתבי אישום שהוגשו נגד שוטרים בגין תקיפה במגרשים?
-
-`;
+                text += `3. פילוח דמוגרפי ואפיון עבירות:\n   א. אבקש לקבל את פילוח המעצרים והעיכובים במגרשי הכדורגל לפי שיוך קבוצתי (אוהדי איזו קבוצה) ולפי גיל (קטינים/בגירים)?\n   ב. במידה וקיים, אבקש פילוח לפי לאום/מוצא של העצורים, על מנת לבחון טענות לשיטור יתר כלפי אוכלוסיות ספציפיות?\n   ג. כמה כתבי אישום הוגשו בגין תקיפת שוטר במגרשים לעומת כתבי אישום שהוגשו נגד שוטרים בגין תקיפה במגרשים?\n\n`;
             }
-
             if (showAdmin) {
-                text += `4. הרחקות מנהליות (צווי הרחקה):
-   א. כמה צווי הרחקה מנהליים הוצאו על ידי קצין משטרה לאוהדי כדורגל?
-   ב. כמה מתוך מורחקים אלו הועמדו בסופו של דבר לדין פלילי (נתון זה נדרש לבחינת השימוש בכלי המנהלי כתחליף להליך פלילי ראייתי)?
-   ג. בכמה מקרים בוטל צו ההרחקה על ידי בית המשפט לאחר ערר שהגיש האוהד?
-
-`;
+                text += `4. הרחקות מנהליות (צווי הרחקה):\n   א. כמה צווי הרחקה מנהליים הוצאו על ידי קצין משטרה לאוהדי כדורגל?\n   ב. כמה מתוך מורחקים אלו הועמדו בסופו של דבר לדין פלילי (נתון זה נדרש לבחינת השימוש בכלי המנהלי כתחליף להליך פלילי ראייתי)?\n   ג. בכמה מקרים בוטל צו ההרחקה על ידי בית המשפט לאחר ערר שהגיש האוהד?\n\n`;
             }
-
-            text += `אודה לקבלת המידע בפורמט דיגיטלי קריא (Excel/PDF).
-בברכה,
-אגם חן
-קליניקה לחופש מידע`;
-
+            text += `אודה לקבלת המידע בפורמט דיגיטלי קריא (Excel/PDF).\nבברכה,\nאגם חן\nקליניקה לחופש מידע`;
             document.getElementById('foiText').innerText = text;
         }
 
         function copyToClipboard() {
             const text = document.getElementById('foiText').innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                alert('הטקסט הועתק ללוח!');
-            });
+            navigator.clipboard.writeText(text).then(() => { alert('הטקסט הועתק ללוח!'); });
         }
 
-        // Initialize FOI text on load
-        window.onload = updateFOI;
+        // טעינת הגרפים רק כשהכל מוכן
+        window.onload = function() {
+            updateFOI();
+            
+            Chart.defaults.color = '#64748b';
+            Chart.defaults.font.family = "'Segoe UI', sans-serif";
 
+            // גרף 1: עוגת גזענות
+            const ctxPie = document.getElementById('racismPieChart').getContext('2d');
+            new Chart(ctxPie, {
+                type: 'doughnut',
+                data: {
+                    labels: ['מכבי ת"א', 'בית"ר י-ם', 'מכבי נתניה', 'הפועל חיפה', 'ק"ש', 'אחרים'],
+                    datasets: [{
+                        data: [118, 115, 29, 28, 24, 53],
+                        backgroundColor: ['#eab308', '#1e293b', '#f97316', '#ef4444', '#3b82f6', '#cbd5e1'],
+                        borderColor: '#ffffff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'right', labels: { color: '#334155', font: { size: 13 }, padding: 20 } } },
+                    cutout: '50%'
+                }
+            });
+
+            // גרף 2: פער האכיפה
+            const ctxBar = document.getElementById('barChart').getContext('2d');
+            new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: ['תיקי חקירה שנפתחו', 'כתבי אישום (בכלל)', 'אירועי גזענות (במגרש)', 'אירועי אלימות (במגרש)', 'הרחקות'],
+                    datasets: [{
+                        data: [138, 32, 367, 165, 398],
+                        backgroundColor: ['#3b82f6', '#3b82f6', '#ef4444', '#ef4444', '#eab308'],
+                        barPercentage: 0.6,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, 
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: 'פער האכיפה: אירועים מול תיקים וכתבי אישום', color: '#0f172a', font: { size: 18 } },
+                    },
+                    scales: {
+                        y: { grid: { color: '#e2e8f0', borderDash: [5, 5] }, ticks: { color: '#64748b' } },
+                        x: { grid: { display: false }, ticks: { color: '#0f172a', font: { size: 13, weight: 'bold' } } }
+                    }
+                }
+            });
+
+            // גרף 3: התפלגות מעצרים (החדש!)
+            const ctxOffenses = document.getElementById('offensesChart').getContext('2d');
+            new Chart(ctxOffenses, {
+                type: 'bar',
+                data: {
+                    labels: ['הפרת שלום הציבור', 'שימוש פחזני באש/חומר דליק', 'התנהגות פרועה במקום ציבורי', 'תקיפת שוטר בעת מילוי תפקידו', 'תקיפה באירוע ספורט', 'תגרה', 'הכנסת חפץ אסור (כללי)', 'הפרעת שוטר במילוי תפקידו', 'איסור כניסה לשדה המשחק', 'הכנסת אמצעים כימיים (אבוקות)'],
+                    datasets: [{
+                        label: 'מספר מעצרים',
+                        data: [65, 54, 53, 47, 41, 36, 36, 32, 25, 21],
+                        backgroundColor: ['#0f172a', '#ef4444', '#3b82f6', '#ef4444', '#3b82f6', '#3b82f6', '#cbd5e1', '#ef4444', '#cbd5e1', '#eab308'],
+                        borderRadius: 4,
+                        barPercentage: 0.7
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', 
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { backgroundColor: '#0f172a' }
+                    },
+                    scales: {
+                        x: { position: 'top', grid: { color: '#f1f5f9' }, ticks: { font: { weight: 'bold' } } },
+                        y: { grid: { display: false }, ticks: { font: { weight: '600' } } }
+                    }
+                }
+            });
+        };
     </script>
 </body>
 </html>
