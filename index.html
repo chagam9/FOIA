@@ -156,7 +156,6 @@
 
         <div id="overview" class="tab-content active">
             <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--primary-blue);">תמונת מצב אכיפה (עונת 24/25)</h3>
-            
             <div class="kpi-grid">
                 <div class="card" data-source="מקור: פרוטוקול הוועדה (ספט' 2025), עמ' 2">
                     <div class="value orange">415</div>
@@ -175,11 +174,9 @@
                     <div class="label">תיקי אלימות שנפתחו</div>
                 </div>
             </div>
-
             <div class="alert-box" style="margin-bottom: 20px;" data-source="מקור: דוח בועטים 24-25, עמ' 1 (367 קריאות) מול פרוטוקול הוועדה עמ' 1">
                 <i class="fas fa-info-circle"></i> פער אדיר בין כמות הקריאות הגזעניות (367) לבין תיקי חקירה שנפתחו בנושא (2 בלבד).
             </div>
-
             <div class="dashboard-grid">
                 <div class="card" data-source="מקור: דוח בועטים 24-25, עמ' 8 (טבלת סיכום)">
                     <h3 style="margin: 0 0 20px 0; font-size: 16px;">שיאני הגזענות (עונת 24/25)</h3>
@@ -187,7 +184,6 @@
                         <canvas id="racismPieChart"></canvas>
                     </div>
                 </div>
-                
                 <div class="card" data-source="מקור: ניתוח נתוני מעצרים 2021-2025 (אקסל)">
                     <h3 style="margin: 0 0 20px 0; font-size: 16px; text-align: right;">
                         <i class="fas fa-city" style="margin-left: 5px; color: var(--accent-blue);"></i>
@@ -203,7 +199,6 @@
         <div id="profile" class="tab-content">
             <div class="card" style="min-height: 500px;">
                 <h3 style="margin: 0 0 20px 0; color: var(--primary-blue);">חקר נתונים: פרופיל העבריין (נתוני אמת)</h3>
-                
                 <div class="controls-container">
                     <div class="control-group">
                         <label for="citySelect">בחר עיר:</label>
@@ -226,11 +221,9 @@
                         </select>
                     </div>
                 </div>
-
                 <div style="height: 350px; position: relative;">
                     <canvas id="profileChartCanvas"></canvas>
                 </div>
-
                 <div id="profileInsight" class="insight-box">
                     אנא בחר פרמטרים להצגת נתונים.
                 </div>
@@ -290,7 +283,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="card" style="margin-top: 20px; height: auto;" data-source="מקור: ניתוח נתוני מעצרים 2021-2025 (אקסל)">
                 <h3 style="margin: 0 0 20px 0; color: var(--primary-blue); text-align: right; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
                     <i class="fas fa-handcuffs" style="margin-left: 8px; color: var(--accent-red);"></i>
@@ -308,7 +300,6 @@
                     <canvas id="barChart"></canvas>
                 </div>
             </div>
-
             <div class="card" style="height: auto;" data-source="מקור: ניתוח נתוני מעצרים 2021-2025 (אקסל)">
                 <h3 style="margin: 0 0 20px 0; color: var(--primary-blue); text-align: right; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
                     <i class="fas fa-users" style="margin-left: 8px; color: var(--accent-blue);"></i>
@@ -324,127 +315,79 @@
             <div class="foi-container">
                 <div class="foi-options">
                     <h3 style="margin-top: 0; color: var(--primary-blue);">בחר נושאים לבקשה:</h3>
-                    <div class="option">
-                        <input type="checkbox" id="chk_bodycam" checked onchange="updateFOI()">
-                        <div>
-                            <strong>א. מצלמות גוף (חובה)</strong><br>
-                            <small style="color: var(--text-muted);">נתונים על הפעלה/אי-הפעלה, שמירת חומרים ונהלים.</small>
-                        </div>
-                    </div>
-                    <div class="option">
-                        <input type="checkbox" id="chk_violence" checked onchange="updateFOI()">
-                        <div>
-                            <strong>ב. אלימות שוטרים במגרשים</strong><br>
-                            <small style="color: var(--text-muted);">מספר דוחות שימוש בכוח ספציפית ביציעים.</small>
-                        </div>
-                    </div>
-                    <div class="option">
-                        <input type="checkbox" id="chk_demo" onchange="updateFOI()">
-                        <div>
-                            <strong>ג. פילוח דמוגרפי (הצעה)</strong><br>
-                            <small style="color: var(--text-muted);">ניסיון לחלץ נתונים על אכיפת יתר כלפי מיעוטים.</small>
-                        </div>
-                    </div>
-                    <div class="option">
-                        <input type="checkbox" id="chk_admin" onchange="updateFOI()">
-                        <div>
-                            <strong>ד. הרחקות מנהליות (הצעה)</strong><br>
-                            <small style="color: var(--text-muted);">יחס בין הרחקות לכתבי אישום (מדד שרירותיות).</small>
-                        </div>
-                    </div>
+                    <div class="option"><input type="checkbox" id="chk_bodycam" checked onchange="updateFOI()"><div><strong>א. מצלמות גוף (חובה)</strong><br><small style="color: var(--text-muted);">נתונים על הפעלה/אי-הפעלה, שמירת חומרים ונהלים.</small></div></div>
+                    <div class="option"><input type="checkbox" id="chk_violence" checked onchange="updateFOI()"><div><strong>ב. אלימות שוטרים במגרשים</strong><br><small style="color: var(--text-muted);">מספר דוחות שימוש בכוח ספציפית ביציעים.</small></div></div>
+                    <div class="option"><input type="checkbox" id="chk_demo" onchange="updateFOI()"><div><strong>ג. פילוח דמוגרפי (הצעה)</strong><br><small style="color: var(--text-muted);">ניסיון לחלץ נתונים על אכיפת יתר כלפי מיעוטים.</small></div></div>
+                    <div class="option"><input type="checkbox" id="chk_admin" onchange="updateFOI()"><div><strong>ד. הרחקות מנהליות (הצעה)</strong><br><small style="color: var(--text-muted);">יחס בין הרחקות לכתבי אישום (מדד שרירותיות).</small></div></div>
                 </div>
                 <div>
                     <div class="foi-preview" id="foiText" data-source="מקור: קובץ 'טיוטה אלימות בספורט.docx'"></div>
-                    <button class="action-btn" onclick="copyToClipboard()">
-                        <i class="fas fa-copy"></i> העתק טקסט ללוח
-                    </button>
+                    <button class="action-btn" onclick="copyToClipboard()"><i class="fas fa-copy"></i> העתק טקסט ללוח</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // --- DATA STORE: Real data from the excel analysis (Updated) ---
         const realData = {
-            'all': {
-                'all': {'data': [2.2, 25.8, 36.1, 17.7, 16.5, 1.5, 0.3], 'text': 'מבוסס על 674 מקרים. הקבוצה הבולטת: 22-25 (36%).'},
-                'pyro': {'data': [3.0, 27.3, 25.8, 25.8, 18.2, 0.0, 0.0], 'text': 'מבוסס על 66 מקרים. הקבוצה הבולטת: 18-21 (27%).'},
-                'assault': {'data': [3.0, 25.8, 37.1, 12.1, 16.7, 3.8, 1.5], 'text': 'מבוסס על 132 מקרים. הקבוצה הבולטת: 22-25 (37%).'},
-                'police': {'data': [1.1, 31.8, 33.0, 23.9, 10.2, 0.0, 0.0], 'text': 'מבוסס על 88 מקרים. הקבוצה הבולטת: 22-25 (33%).'},
-                'order': {'data': [2.4, 26.8, 33.1, 18.9, 18.1, 0.8, 0.0], 'text': 'מבוסס על 127 מקרים. הקבוצה הבולטת: 22-25 (33%).'}
-            },
-            'jerusalem': {
-                'all': {'data': [3.4, 19.1, 42.7, 28.1, 6.7, 0.0, 0.0], 'text': 'מבוסס על 178 מקרים. הקבוצה הבולטת: 22-25 (43%).'},
-                'pyro': {'data': [0.0, 11.8, 52.9, 29.4, 5.9, 0.0, 0.0], 'text': 'מבוסס על 17 מקרים. הקבוצה הבולטת: 22-25 (53%).'},
-                'assault': {'data': [7.4, 18.5, 44.4, 25.9, 3.7, 0.0, 0.0], 'text': 'מבוסס על 27 מקרים. הקבוצה הבולטת: 22-25 (44%).'},
-                'police': {'data': [3.0, 36.4, 30.3, 24.2, 6.1, 0.0, 0.0], 'text': 'מבוסס על 33 מקרים. הקבוצה הבולטת: 18-21 (36%).'},
-                'order': {'data': [6.5, 23.9, 28.3, 28.3, 13.0, 0.0, 0.0], 'text': 'מבוסס על 46 מקרים. הקבוצה הבולטת: 22-25 (28%).'}
-            },
-            'telaviv': {
-                'all': {'data': [4.4, 25.8, 38.4, 11.3, 18.9, 1.3, 0.0], 'text': 'מבוסס על 159 מקרים. הקבוצה הבולטת: 22-25 (38%).'},
-                'pyro': {'data': [9.5, 33.3, 23.8, 23.8, 9.5, 0.0, 0.0], 'text': 'מבוסס על 21 מקרים. הקבוצה הבולטת: 18-21 (33%).'},
-                'assault': {'data': [4.1, 26.5, 40.8, 8.2, 18.4, 2.0, 0.0], 'text': 'מבוסס על 49 מקרים. הקבוצה הבולטת: 22-25 (41%).'},
-                'police': {'data': [0.0, 25.0, 43.8, 18.8, 12.5, 0.0, 0.0], 'text': 'מבוסס על 16 מקרים. הקבוצה הבולטת: 22-25 (44%).'},
-                'order': {'data': [0.0, 24.0, 40.0, 8.0, 28.0, 0.0, 0.0], 'text': 'מבוסס על 25 מקרים. הקבוצה הבולטת: 22-25 (40%).'}
-            },
-            'haifa': {
-                'all': {'data': [1.3, 29.4, 19.6, 19.0, 28.8, 2.0, 0.0], 'text': 'מבוסס על 153 מקרים. הקבוצה הבולטת: 18-21 (29%).'},
-                'pyro': {'data': [0.0, 38.9, 5.6, 22.2, 33.3, 0.0, 0.0], 'text': 'מבוסס על 18 מקרים. הקבוצה הבולטת: 18-21 (39%).'},
-                'assault': {'data': [0.0, 23.8, 23.8, 14.3, 38.1, 0.0, 0.0], 'text': 'מבוסס על 21 מקרים. הקבוצה הבולטת: 31-40 (38%).'},
-                'police': {'data': [0.0, 25.0, 33.3, 16.7, 25.0, 0.0, 0.0], 'text': 'מבוסס על 12 מקרים. הקבוצה הבולטת: 22-25 (33%).'},
-                'order': {'data': [0.0, 29.2, 20.8, 20.8, 25.0, 4.2, 0.0], 'text': 'מבוסס על 24 מקרים. הקבוצה הבולטת: 18-21 (29%).'}
-            },
-            'beersheva': {
-                'all': {'data': [0.0, 34.6, 63.0, 2.5, 0.0, 0.0, 0.0], 'text': 'מבוסס על 81 מקרים. הקבוצה הבולטת: 22-25 (63%).'},
-                'pyro': {'data': [0, 0, 0, 0, 0, 0, 0], 'text': 'אין נתונים לחתך זה.'},
-                'assault': {'data': [0.0, 36.4, 54.5, 9.1, 0.0, 0.0, 0.0], 'text': 'מבוסס על 11 מקרים. הקבוצה הבולטת: 22-25 (55%).'},
-                'police': {'data': [0.0, 50.0, 50.0, 0.0, 0.0, 0.0, 0.0], 'text': 'מבוסס על 6 מקרים. הקבוצה הבולטת: 18-21 (50%).'},
-                'order': {'data': [0.0, 31.6, 63.2, 5.3, 0.0, 0.0, 0.0], 'text': 'מבוסס על 19 מקרים. הקבוצה הבולטת: 22-25 (63%).'}
-            }
-        };
+    "all": {
+        "all": { "data": [2.2, 25.8, 36.1, 17.7, 16.5, 1.5, 0.3], "text": "מבוסס על 674 מקרים. הקבוצה הבולטת: 22-25 (36%)." },
+        "pyro": { "data": [3.0, 27.3, 25.8, 25.8, 18.2, 0.0, 0.0], "text": "מבוסס על 66 מקרים. הקבוצה הבולטת: 18-21 (27%)." },
+        "assault": { "data": [3.0, 25.8, 37.1, 12.1, 16.7, 3.8, 1.5], "text": "מבוסס על 132 מקרים. הקבוצה הבולטת: 22-25 (37%)." },
+        "police": { "data": [1.1, 31.8, 33.0, 23.9, 10.2, 0.0, 0.0], "text": "מבוסס על 88 מקרים. הקבוצה הבולטת: 22-25 (33%)." },
+        "order": { "data": [2.4, 26.8, 33.1, 18.9, 18.1, 0.8, 0.0], "text": "מבוסס על 127 מקרים. הקבוצה הבולטת: 22-25 (33%)." }
+    },
+    "jerusalem": {
+        "all": { "data": [3.4, 19.1, 42.7, 28.1, 6.7, 0.0, 0.0], "text": "מבוסס על 178 מקרים. הקבוצה הבולטת: 22-25 (43%)." },
+        "pyro": { "data": [0.0, 11.8, 52.9, 29.4, 5.9, 0.0, 0.0], "text": "מבוסס על 17 מקרים. הקבוצה הבולטת: 22-25 (53%)." },
+        "assault": { "data": [7.4, 18.5, 44.4, 25.9, 3.7, 0.0, 0.0], "text": "מבוסס על 27 מקרים. הקבוצה הבולטת: 22-25 (44%)." },
+        "police": { "data": [3.0, 36.4, 30.3, 24.2, 6.1, 0.0, 0.0], "text": "מבוסס על 33 מקרים. הקבוצה הבולטת: 18-21 (36%)." },
+        "order": { "data": [6.5, 23.9, 28.3, 28.3, 13.0, 0.0, 0.0], "text": "מבוסס על 46 מקרים. הקבוצה הבולטת: 22-25 (28%)." }
+    },
+    "telaviv": {
+        "all": { "data": [4.4, 25.8, 38.4, 11.3, 18.9, 1.3, 0.0], "text": "מבוסס על 159 מקרים. הקבוצה הבולטת: 22-25 (38%)." },
+        "pyro": { "data": [9.5, 33.3, 23.8, 23.8, 9.5, 0.0, 0.0], "text": "מבוסס על 21 מקרים. הקבוצה הבולטת: 18-21 (33%)." },
+        "assault": { "data": [4.1, 26.5, 40.8, 8.2, 18.4, 2.0, 0.0], "text": "מבוסס על 49 מקרים. הקבוצה הבולטת: 22-25 (41%)." },
+        "police": { "data": [0.0, 25.0, 43.8, 18.8, 12.5, 0.0, 0.0], "text": "מבוסס על 16 מקרים. הקבוצה הבולטת: 22-25 (44%)." },
+        "order": { "data": [0.0, 24.0, 40.0, 8.0, 28.0, 0.0, 0.0], "text": "מבוסס על 25 מקרים. הקבוצה הבולטת: 22-25 (40%)." }
+    },
+    "haifa": {
+        "all": { "data": [1.3, 29.4, 19.6, 19.0, 28.8, 2.0, 0.0], "text": "מבוסס על 153 מקרים. הקבוצה הבולטת: 18-21 (29%)." },
+        "pyro": { "data": [0.0, 38.9, 5.6, 22.2, 33.3, 0.0, 0.0], "text": "מבוסס על 18 מקרים. הקבוצה הבולטת: 18-21 (39%)." },
+        "assault": { "data": [0.0, 23.8, 23.8, 14.3, 38.1, 0.0, 0.0], "text": "מבוסס על 21 מקרים. הקבוצה הבולטת: 31-40 (38%)." },
+        "police": { "data": [0.0, 25.0, 33.3, 16.7, 25.0, 0.0, 0.0], "text": "מבוסס על 12 מקרים. הקבוצה הבולטת: 22-25 (33%)." },
+        "order": { "data": [0.0, 29.2, 20.8, 20.8, 25.0, 4.2, 0.0], "text": "מבוסס על 24 מקרים. הקבוצה הבולטת: 18-21 (29%)." }
+    },
+    "beersheva": {
+        "all": { "data": [0.0, 34.6, 63.0, 2.5, 0.0, 0.0, 0.0], "text": "מבוסס על 81 מקרים. הקבוצה הבולטת: 22-25 (63%)." },
+        "pyro": { "data": [0, 0, 0, 0, 0, 0, 0], "text": "אין נתונים לחתך זה." },
+        "assault": { "data": [0.0, 36.4, 54.5, 9.1, 0.0, 0.0, 0.0], "text": "מבוסס על 11 מקרים. הקבוצה הבולטת: 22-25 (55%)." },
+        "police": { "data": [0.0, 50.0, 50.0, 0.0, 0.0, 0.0, 0.0], "text": "מבוסס על 6 מקרים. הקבוצה הבולטת: 18-21 (50%)." },
+        "order": { "data": [0.0, 31.6, 63.2, 5.3, 0.0, 0.0, 0.0], "text": "מבוסס על 19 מקרים. הקבוצה הבולטת: 22-25 (63%)." }
+    }
+};
 
-        // Global variables for Profile Chart
         let profileChartInstance = null;
 
-        // Navigation
-        function showTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            const activeBtn = document.querySelector(`.nav-btn[onclick="showTab('${tabId}')"]`);
-            if (activeBtn) activeBtn.classList.add('active');
-            document.getElementById(tabId).classList.add('active');
-            
-            // If opening profile tab, init the chart
-            if(tabId === 'profile') {
-                setTimeout(updateProfileChart, 100);
-            }
-        }
-
-        // Profile Chart Logic with REAL DATA
         function updateProfileChart() {
             const city = document.getElementById('citySelect').value;
             const offense = document.getElementById('offenseSelect').value;
             const insightBox = document.getElementById('profileInsight');
+            const ctx = document.getElementById('profileChartCanvas').getContext('2d');
             
-            // Retrieve real data from object
             const currentData = realData[city][offense];
             const data = currentData.data;
             const text = currentData.text;
             
-            // Determine color based on city
             let color = '#3b82f6';
-            if (city === 'jerusalem') color = '#eab308'; // Yellow
-            if (city === 'telaviv') color = '#ef4444'; // Red
-            if (city === 'haifa') color = '#10b981'; // Green
-            if (city === 'beersheva') color = '#f97316'; // Orange
+            if (city === 'jerusalem') color = '#eab308';
+            if (city === 'telaviv') color = '#ef4444';
+            if (city === 'haifa') color = '#10b981';
+            if (city === 'beersheva') color = '#f97316';
 
-            // Update UI
             insightBox.innerText = text;
             insightBox.style.borderLeftColor = color;
 
-            // Render Chart
-            const ctx = document.getElementById('profileChartCanvas').getContext('2d');
-            
             if (profileChartInstance) {
                 profileChartInstance.destroy();
             }
@@ -463,39 +406,32 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        title: { display: true, text: 'התפלגות גילאים (באחוזים) לפי חתך נבחר' }
-                    },
-                    scales: {
-                        y: { beginAtZero: true, max: 80 }
-                    }
+                    plugins: { legend: { display: false }, title: { display: true, text: 'התפלגות גילאים (%)' } },
+                    scales: { y: { beginAtZero: true, max: 100 } }
                 }
             });
         }
 
-        // FOI Logic
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.querySelector(`.nav-btn[onclick="showTab('${tabId}')"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+            if(tabId === 'profile') setTimeout(updateProfileChart, 100);
+        }
+
         function updateFOI() {
             const showBodyCam = document.getElementById('chk_bodycam').checked;
             const showViolence = document.getElementById('chk_violence').checked;
             const showDemo = document.getElementById('chk_demo').checked;
             const showAdmin = document.getElementById('chk_admin').checked;
-
             let text = `לכבוד\nהממונה על חופש המידע\nמשטרת ישראל / המשרד לביטחון לאומי\n\nהנדון: בקשה לפי חוק חופש המידע, התשנ״ח-1998 – נתוני אלימות, אכיפה ושימוש במצלמות גוף באירועי ספורט\n\nשלום רב,\nאבקש לקבל לידיי את המידע המפורט להלן, המתייחס לשנים 2024-2025 (ועד למועד המענה):\n\n`;
-
-            if (showBodyCam) {
-                text += `1. נושא מצלמות הגוף (בהתייחס לנוהל משטרת ישראל 90.220.003.16):\n   א. כמה דוחות צפייה/תובנות (דוחות בקרה) נכתבו בעקבות אירועי ספורט בהם הופעל כוח על ידי שוטרים?\n   ב. בכמה מקרים של שימוש בכוח באירועי ספורט נמצא כי לא קיים תיעוד במצלמת הגוף?\n   ג. כמה מזכרים על "אי-קיום חומר תיעודי" נכתבו על ידי חוקרים/סיירים באירועי ספורט בהם הוגשה תלונה על אלימות שוטר?\n   ד. מהו משך הזמן הממוצע לשמירת צילומים מאירועי ספורט שאינם מוגדרים כאירועים פליליים חמורים?\n\n`;
-            }
-            if (showViolence) {
-                text += `2. שימוש בכוח ואלימות שוטרים במגרשים:\n   א. כמה "דוחות שימוש בכוח" מולאו על ידי שוטרים במהלך אירועי ספורט (כדורגל וכדורסל) בשנים הנ"ל?\n   ב. כמה תלונות הוגשו ליחידה לתלונות הציבור (ית"ץ) בגין התנהגות שוטרים באירועי ספורט?\n   ג. כמה מתוך תלונות אלו הועברו לטיפול במח"ש וכמה טופלו במישור המשמעתי/פיקודי?\n\n`;
-            }
-            if (showDemo) {
-                text += `3. פילוח דמוגרפי ואפיון עבירות:\n   א. אבקש לקבל את פילוח המעצרים והעיכובים במגרשי הכדורגל לפי שיוך קבוצתי (אוהדי איזו קבוצה) ולפי גיל (קטינים/בגירים)?\n   ב. במידה וקיים, אבקש פילוח לפי לאום/מוצא של העצורים, על מנת לבחון טענות לשיטור יתר כלפי אוכלוסיות ספציפיות?\n   ג. כמה כתבי אישום הוגשו בגין תקיפת שוטר במגרשים לעומת כתבי אישום שהוגשו נגד שוטרים בגין תקיפה במגרשים?\n\n`;
-            }
-            if (showAdmin) {
-                text += `4. הרחקות מנהליות (צווי הרחקה):\n   א. כמה צווי הרחקה מנהליים הוצאו על ידי קצין משטרה לאוהדי כדורגל?\n   ב. כמה מתוך מורחקים אלו הועמדו בסופו של דבר לדין פלילי (נתון זה נדרש לבחינת השימוש בכלי המנהלי כתחליף להליך פלילי ראייתי)?\n   ג. בכמה מקרים בוטל צו ההרחקה על ידי בית המשפט לאחר ערר שהגיש האוהד?\n\n`;
-            }
-            text += `אודה לקבלת המידע בפורמט דיגיטלי קריא (Excel/PDF).\nבברכה,\nאגם חן\nקליניקה לחופש מידע`;
+            if (showBodyCam) text += `1. נושא מצלמות הגוף...\n`;
+            if (showViolence) text += `2. שימוש בכוח ואלימות שוטרים...\n`;
+            if (showDemo) text += `3. פילוח דמוגרפי...\n`;
+            if (showAdmin) text += `4. הרחקות מנהליות...\n`;
+            text += `\nאודה לקבלת המידע בפורמט דיגיטלי קריא.\nבברכה,\nאגם חן`;
             document.getElementById('foiText').innerText = text;
         }
 
@@ -504,191 +440,90 @@
             navigator.clipboard.writeText(text).then(() => { alert('הטקסט הועתק ללוח!'); });
         }
 
-        // Initialize Charts when finished loading
         window.onload = function() {
             updateFOI();
-            // Start Profile Chart
             updateProfileChart();
             
             Chart.defaults.color = '#64748b';
             Chart.defaults.font.family = "'Segoe UI', sans-serif";
 
-            // --- גרף 1: עוגת גזענות ---
+            // --- Chart 1: Racism Pie ---
             const ctxPie = document.getElementById('racismPieChart');
             if (ctxPie) {
                 new Chart(ctxPie.getContext('2d'), {
                     type: 'doughnut',
                     data: {
                         labels: ['מכבי ת"א', 'בית"ר י-ם', 'מכבי נתניה', 'הפועל חיפה', 'ק"ש', 'אחרים'],
-                        datasets: [{
-                            data: [118, 115, 29, 28, 24, 53],
-                            backgroundColor: ['#eab308', '#1e293b', '#f97316', '#ef4444', '#3b82f6', '#cbd5e1'],
-                            borderColor: '#ffffff',
-                            borderWidth: 2
-                        }]
+                        datasets: [{ data: [118, 115, 29, 28, 24, 53], backgroundColor: ['#eab308', '#1e293b', '#f97316', '#ef4444', '#3b82f6', '#cbd5e1'], borderWidth: 2 }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { position: 'right', labels: { color: '#334155', font: { size: 13 }, padding: 20 } } },
-                        cutout: '50%'
-                    }
+                    options: { responsive: true, maintainAspectRatio: false, cutout: '50%', plugins: { legend: { position: 'right' } } }
                 });
             }
 
-            // --- גרף 2: פער האכיפה ---
+            // --- Chart 2: Bar Gap ---
             const ctxBar = document.getElementById('barChart');
             if (ctxBar) {
                 new Chart(ctxBar.getContext('2d'), {
                     type: 'bar',
                     data: {
-                        labels: ['תיקי חקירה שנפתחו', 'כתבי אישום (בכלל)', 'אירועי גזענות (במגרש)', 'אירועי אלימות (במגרש)', 'הרחקות'],
-                        datasets: [{
-                            data: [138, 32, 367, 165, 398],
-                            backgroundColor: ['#3b82f6', '#3b82f6', '#ef4444', '#ef4444', '#eab308'],
-                            barPercentage: 0.6,
-                            borderRadius: 6
-                        }]
+                        labels: ['תיקי חקירה', 'כתבי אישום', 'גזענות', 'אלימות', 'הרחקות'],
+                        datasets: [{ data: [138, 32, 367, 165, 398], backgroundColor: ['#3b82f6', '#3b82f6', '#ef4444', '#ef4444', '#eab308'], borderRadius: 6 }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false, 
-                        plugins: {
-                            legend: { display: false },
-                            title: { display: true, text: 'פער האכיפה: אירועים מול תיקים וכתבי אישום', color: '#0f172a', font: { size: 18 } },
-                        },
-                        scales: {
-                            y: { grid: { color: '#e2e8f0', borderDash: [5, 5] }, ticks: { color: '#64748b' } },
-                            x: { grid: { display: false }, ticks: { color: '#0f172a', font: { size: 13, weight: 'bold' } } }
-                        }
-                    }
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
                 });
             }
 
-            // --- גרף 3: התפלגות מעצרים (10 העבירות) ---
+            // --- Chart 3: Offenses ---
             const ctxOffenses = document.getElementById('offensesChart');
             if (ctxOffenses) {
                 new Chart(ctxOffenses.getContext('2d'), {
                     type: 'bar',
                     data: {
-                        labels: ['הפרת שלום הציבור', 'שימוש פחזני באש/חומר דליק', 'התנהגות פרועה במקום ציבורי', 'תקיפת שוטר בעת מילוי תפקידו', 'תקיפה באירוע ספורט', 'תגרה', 'הכנסת חפץ אסור (כללי)', 'הפרעת שוטר במילוי תפקידו', 'איסור כניסה לשדה המשחק', 'הכנסת אמצעים כימיים (אבוקות)'],
-                        datasets: [{
-                            label: 'מספר מעצרים',
-                            data: [65, 54, 53, 47, 41, 36, 36, 32, 25, 21],
-                            backgroundColor: ['#0f172a', '#ef4444', '#3b82f6', '#ef4444', '#3b82f6', '#3b82f6', '#cbd5e1', '#ef4444', '#cbd5e1', '#eab308'],
-                            borderRadius: 4,
-                            barPercentage: 0.7
-                        }]
+                        labels: ['הפרת סדר', 'אש/אבוקות', 'התנהגות פרועה', 'תקיפת שוטר', 'תקיפה', 'תגרה', 'חפץ אסור', 'הפרעת שוטר', 'איסור כניסה', 'אמצעים כימיים'],
+                        datasets: [{ label: 'מעצרים', data: [65, 54, 53, 47, 41, 36, 36, 32, 25, 21], backgroundColor: '#0f172a', borderRadius: 4 }]
                     },
-                    options: {
-                        indexAxis: 'y', 
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: { backgroundColor: '#0f172a' }
-                        },
-                        scales: {
-                            x: { position: 'top', grid: { color: '#f1f5f9' }, ticks: { font: { weight: 'bold' } } },
-                            y: { grid: { display: false }, ticks: { font: { weight: '600' } } }
-                        }
-                    }
+                    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
                 });
             }
 
-            // --- גרף 4: התפלגות גילאים ---
+            // --- Chart 4: Ages ---
             const ctxAges = document.getElementById('fansAgeChart');
             if (ctxAges) {
                 new Chart(ctxAges.getContext('2d'), {
                     type: 'bar',
                     data: {
-                        labels: ['קטינים (13-17)', 'חיילים (18-21)', 'צעירים (22-25)', 'בוגרים (26-30)', '31-40', '41-50', '50+'],
-                        datasets: [{
-                            label: 'מספר עצורים',
-                            data: [15, 174, 243, 119, 111, 10, 2],
-                            backgroundColor: ['#cbd5e1', '#ef4444', '#0f172a', '#3b82f6', '#3b82f6', '#cbd5e1', '#cbd5e1'],
-                            borderRadius: 6,
-                            barPercentage: 0.6
-                        }]
+                        labels: ['13-17', '18-21', '22-25', '26-30', '31-40', '41-50', '50+'],
+                        datasets: [{ data: [15, 174, 243, 119, 111, 10, 2], backgroundColor: '#3b82f6', borderRadius: 6 }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                            title: { display: false },
-                            tooltip: {
-                                backgroundColor: '#0f172a',
-                                callbacks: { label: function(context) { return context.raw + ' עצורים'; } }
-                            }
-                        },
-                        scales: {
-                            y: { grid: { color: '#e2e8f0', borderDash: [5, 5] }, ticks: { color: '#64748b' } },
-                            x: { grid: { display: false }, ticks: { color: '#0f172a', font: { size: 12, weight: 'bold' } } }
-                        }
-                    }
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
                 });
             }
 
-            // --- גרף 5 (חדש!): בועות ערים עם אימוג'ים ---
+            // --- Chart 5: Bubble Cities ---
             const ctxCities = document.getElementById('bubbleCitiesChart');
             if (ctxCities) {
                 new Chart(ctxCities.getContext('2d'), {
                     type: 'bubble',
                     data: {
                         datasets: [
-                            {
-                                label: 'ירושלים',
-                                data: [{x: 80, y: 50, r: 50}], 
-                                backgroundColor: 'rgba(255, 205, 86, 0.6)', // צהוב
-                                emoji: '🔥' // אבוקות/הפרת סדר
-                            },
-                            {
-                                label: 'תל אביב - יפו',
-                                data: [{x: 20, y: 60, r: 35}], 
-                                backgroundColor: 'rgba(255, 99, 132, 0.6)', // אדום
-                                emoji: '👊' // תקיפה/קטטה
-                            },
-                            {
-                                label: 'חיפה',
-                                data: [{x: 50, y: 90, r: 25}], 
-                                backgroundColor: 'rgba(75, 192, 192, 0.6)', // ירוק
-                                emoji: '🏟️' // אלימות במגרש
-                            },
-                            {
-                                label: 'באר שבע',
-                                data: [{x: 50, y: 10, r: 15}], 
-                                backgroundColor: 'rgba(255, 159, 64, 0.6)', // כתום
-                                emoji: '👮' // תקיפת שוטר
-                            },
-                            {
-                                label: 'פתח תקווה',
-                                data: [{x: 35, y: 75, r: 12}], 
-                                backgroundColor: 'rgba(54, 162, 235, 0.6)', // כחול
-                                emoji: '🧨' // אמל"ח/רימון עשן
-                            }
+                            { label: 'ירושלים', data: [{x: 80, y: 50, r: 50}], backgroundColor: 'rgba(255, 205, 86, 0.6)', emoji: '🔥' },
+                            { label: 'תל אביב', data: [{x: 20, y: 60, r: 35}], backgroundColor: 'rgba(255, 99, 132, 0.6)', emoji: '👊' },
+                            { label: 'חיפה', data: [{x: 50, y: 90, r: 25}], backgroundColor: 'rgba(75, 192, 192, 0.6)', emoji: '🏟️' },
+                            { label: 'ב"ש', data: [{x: 50, y: 10, r: 15}], backgroundColor: 'rgba(255, 159, 64, 0.6)', emoji: '👮' },
+                            { label: 'פ"ת', data: [{x: 35, y: 75, r: 12}], backgroundColor: 'rgba(54, 162, 235, 0.6)', emoji: '🧨' }
                         ]
                     },
                     options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
+                        responsive: true, maintainAspectRatio: false,
                         plugins: {
                             legend: { position: 'right' },
                             tooltip: {
                                 callbacks: {
-                                    label: function(context) {
-                                        let city = context.dataset.label;
-                                        let emoji = context.dataset.emoji;
-                                        let value = city === 'ירושלים' ? 421 : (city === 'תל אביב - יפו' ? 198 : (city === 'חיפה' ? 110 : 'פחות מ-40'));
-                                        return emoji + ' ' + city + ': ' + value + ' מעצרים';
-                                    }
+                                    label: function(c) { return c.dataset.emoji + ' ' + c.dataset.label + ': ' + (c.dataset.label==='ירושלים'?421:(c.dataset.label==='תל אביב'?198:110)) + ' מעצרים'; }
                                 }
                             }
                         },
-                        scales: {
-                            x: { display: false, min: 0, max: 100 }, 
-                            y: { display: false, min: 0, max: 100 }
-                        }
+                        scales: { x: { display: false, min: 0, max: 100 }, y: { display: false, min: 0, max: 100 } }
                     }
                 });
             }
