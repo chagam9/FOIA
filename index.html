@@ -289,35 +289,46 @@
         </div>
 
         <div id="overview" class="tab-content active">
-            <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--primary-blue);">אכיפה כנגד אוהדים (עונת 24/25)</h3>
-            <div class="dashboard-grid">
-                <div>
-                    <div class="kpi-grid">
-                        <div class="card" data-source="מקור: פרוטוקול הוועדה (ספט' 2025), עמ' 2">
-                            <div class="value orange">415</div>
-                            <div class="label">קנסות מנהליים</div>
-                        </div>
-                        <div class="card" data-source="מקור: פרוטוקול הוועדה (ספט' 2025), עמ' 1">
-                            <div class="value red">398</div>
-                            <div class="label">מורחקים מהמגרשים</div>
-                        </div>
-                        <div class="card" data-source="מקור: פרוטוקול הוועדה (ספט' 2025), עמ' 1">
-                            <div class="value" style="color: #64748b;">2</div>
-                            <div class="label">תיקי גזענות בלבד</div>
-                        </div>
-                        <div class="card" data-source="מקור: פרוטוקול הוועדה (ספט' 2025), עמ' 1">
-                            <div class="value yellow">110</div>
-                            <div class="label">תיקי אלימות שנפתחו</div>
-                        </div>
-                    </div>
-                    <div class="alert-box" data-source="מקור: דוח בועטים 24-25, עמ' 1 (367 קריאות) מול פרוטוקול הוועדה עמ' 1">
-                        <i class="fas fa-info-circle"></i> פער אדיר בין כמות הקריאות הגזעניות (367) לבין תיקי חקירה שנפתחו בנושא (2 בלבד).
-                    </div>
+            <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--primary-blue);">תמונת מצב אכיפה (עונת 24/25)</h3>
+            
+            <div class="kpi-grid">
+                <div class="card" data-source="מקור: פרוטוקול הוועדה (ספט' 2025), עמ' 2">
+                    <div class="value orange">415</div>
+                    <div class="label">קנסות מנהליים</div>
                 </div>
+                <div class="card" data-source="מקור: פרוטוקול הוועדה (ספט' 2025), עמ' 1">
+                    <div class="value red">398</div>
+                    <div class="label">מורחקים מהמגרשים</div>
+                </div>
+                <div class="card" data-source="מקור: פרוטוקול הוועדה (ספט' 2025), עמ' 1">
+                    <div class="value" style="color: #64748b;">2</div>
+                    <div class="label">תיקי גזענות בלבד</div>
+                </div>
+                <div class="card" data-source="מקור: פרוטוקול הוועדה (ספט' 2025), עמ' 1">
+                    <div class="value yellow">110</div>
+                    <div class="label">תיקי אלימות שנפתחו</div>
+                </div>
+            </div>
+
+            <div class="alert-box" style="margin-bottom: 20px;" data-source="מקור: דוח בועטים 24-25, עמ' 1 (367 קריאות) מול פרוטוקול הוועדה עמ' 1">
+                <i class="fas fa-info-circle"></i> פער אדיר בין כמות הקריאות הגזעניות (367) לבין תיקי חקירה שנפתחו בנושא (2 בלבד).
+            </div>
+
+            <div class="dashboard-grid">
                 <div class="card" data-source="מקור: דוח בועטים 24-25, עמ' 8 (טבלת סיכום)">
                     <h3 style="margin: 0 0 20px 0; font-size: 16px;">שיאני הגזענות (עונת 24/25)</h3>
                     <div style="height: 300px; position: relative;">
                         <canvas id="racismPieChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card" data-source="מקור: ניתוח נתוני מעצרים 2021-2025 (אקסל)">
+                    <h3 style="margin: 0 0 20px 0; font-size: 16px; text-align: right;">
+                        <i class="fas fa-city" style="margin-left: 5px; color: var(--accent-blue);"></i>
+                        מפת הבועות: הערים עם הכי הרבה מעצרים
+                    </h3>
+                    <div style="height: 300px; position: relative;">
+                        <canvas id="bubbleCitiesChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -495,132 +506,181 @@
             Chart.defaults.color = '#64748b';
             Chart.defaults.font.family = "'Segoe UI', sans-serif";
 
-            // גרף 1: עוגת גזענות
-            const ctxPie = document.getElementById('racismPieChart').getContext('2d');
-            new Chart(ctxPie, {
-                type: 'doughnut',
-                data: {
-                    labels: ['מכבי ת"א', 'בית"ר י-ם', 'מכבי נתניה', 'הפועל חיפה', 'ק"ש', 'אחרים'],
-                    datasets: [{
-                        data: [118, 115, 29, 28, 24, 53],
-                        backgroundColor: ['#eab308', '#1e293b', '#f97316', '#ef4444', '#3b82f6', '#cbd5e1'],
-                        borderColor: '#ffffff',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: 'right', labels: { color: '#334155', font: { size: 13 }, padding: 20 } } },
-                    cutout: '50%'
-                }
-            });
-
-            // גרף 2: פער האכיפה
-            const ctxBar = document.getElementById('barChart').getContext('2d');
-            new Chart(ctxBar, {
-                type: 'bar',
-                data: {
-                    labels: ['תיקי חקירה שנפתחו', 'כתבי אישום (בכלל)', 'אירועי גזענות (במגרש)', 'אירועי אלימות (במגרש)', 'הרחקות'],
-                    datasets: [{
-                        data: [138, 32, 367, 165, 398],
-                        backgroundColor: ['#3b82f6', '#3b82f6', '#ef4444', '#ef4444', '#eab308'],
-                        barPercentage: 0.6,
-                        borderRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false, 
-                    plugins: {
-                        legend: { display: false },
-                        title: { display: true, text: 'פער האכיפה: אירועים מול תיקים וכתבי אישום', color: '#0f172a', font: { size: 18 } },
+            // --- גרף 1: עוגת גזענות ---
+            const ctxPie = document.getElementById('racismPieChart');
+            if (ctxPie) {
+                new Chart(ctxPie.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['מכבי ת"א', 'בית"ר י-ם', 'מכבי נתניה', 'הפועל חיפה', 'ק"ש', 'אחרים'],
+                        datasets: [{
+                            data: [118, 115, 29, 28, 24, 53],
+                            backgroundColor: ['#eab308', '#1e293b', '#f97316', '#ef4444', '#3b82f6', '#cbd5e1'],
+                            borderColor: '#ffffff',
+                            borderWidth: 2
+                        }]
                     },
-                    scales: {
-                        y: { grid: { color: '#e2e8f0', borderDash: [5, 5] }, ticks: { color: '#64748b' } },
-                        x: { grid: { display: false }, ticks: { color: '#0f172a', font: { size: 13, weight: 'bold' } } }
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'right', labels: { color: '#334155', font: { size: 13 }, padding: 20 } } },
+                        cutout: '50%'
                     }
-                }
-            });
+                });
+            }
 
-            // גרף 3: התפלגות מעצרים (10 העבירות)
-            const ctxOffenses = document.getElementById('offensesChart').getContext('2d');
-            new Chart(ctxOffenses, {
-                type: 'bar',
-                data: {
-                    labels: ['הפרת שלום הציבור', 'שימוש פחזני באש/חומר דליק', 'התנהגות פרועה במקום ציבורי', 'תקיפת שוטר בעת מילוי תפקידו', 'תקיפה באירוע ספורט', 'תגרה', 'הכנסת חפץ אסור (כללי)', 'הפרעת שוטר במילוי תפקידו', 'איסור כניסה לשדה המשחק', 'הכנסת אמצעים כימיים (אבוקות)'],
-                    datasets: [{
-                        label: 'מספר מעצרים',
-                        data: [65, 54, 53, 47, 41, 36, 36, 32, 25, 21],
-                        backgroundColor: ['#0f172a', '#ef4444', '#3b82f6', '#ef4444', '#3b82f6', '#3b82f6', '#cbd5e1', '#ef4444', '#cbd5e1', '#eab308'],
-                        borderRadius: 4,
-                        barPercentage: 0.7
-                    }]
-                },
-                options: {
-                    indexAxis: 'y', 
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: { backgroundColor: '#0f172a' }
+            // --- גרף 2: פער האכיפה ---
+            const ctxBar = document.getElementById('barChart');
+            if (ctxBar) {
+                new Chart(ctxBar.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['תיקי חקירה שנפתחו', 'כתבי אישום (בכלל)', 'אירועי גזענות (במגרש)', 'אירועי אלימות (במגרש)', 'הרחקות'],
+                        datasets: [{
+                            data: [138, 32, 367, 165, 398],
+                            backgroundColor: ['#3b82f6', '#3b82f6', '#ef4444', '#ef4444', '#eab308'],
+                            barPercentage: 0.6,
+                            borderRadius: 6
+                        }]
                     },
-                    scales: {
-                        x: { position: 'top', grid: { color: '#f1f5f9' }, ticks: { font: { weight: 'bold' } } },
-                        y: { grid: { display: false }, ticks: { font: { weight: '600' } } }
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false, 
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: true, text: 'פער האכיפה: אירועים מול תיקים וכתבי אישום', color: '#0f172a', font: { size: 18 } },
+                        },
+                        scales: {
+                            y: { grid: { color: '#e2e8f0', borderDash: [5, 5] }, ticks: { color: '#64748b' } },
+                            x: { grid: { display: false }, ticks: { color: '#0f172a', font: { size: 13, weight: 'bold' } } }
+                        }
                     }
-                }
-            });
+                });
+            }
 
-            // גרף 4: התפלגות גילאים (חדש!)
-            const ctxAges = document.getElementById('fansAgeChart').getContext('2d');
-            new Chart(ctxAges, {
-                type: 'bar',
-                data: {
-                    labels: ['קטינים (13-17)', 'חיילים (18-21)', 'צעירים (22-25)', 'בוגרים (26-30)', '31-40', '41-50', '50+'],
-                    datasets: [{
-                        label: 'מספר עצורים',
-                        data: [15, 174, 243, 119, 111, 10, 2],
-                        backgroundColor: [
-                            '#cbd5e1', // אפור (קטינים)
-                            '#ef4444', // אדום (חיילים - גבוה)
-                            '#0f172a', // כחול כהה (השיא - צעירים)
-                            '#3b82f6', // כחול בהיר
-                            '#3b82f6',
-                            '#cbd5e1',
-                            '#cbd5e1'
-                        ],
-                        borderRadius: 6,
-                        barPercentage: 0.6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        title: { display: false },
-                        tooltip: {
-                            backgroundColor: '#0f172a',
-                            callbacks: {
-                                label: function(context) {
-                                    return context.raw + ' עצורים';
+            // --- גרף 3: התפלגות מעצרים (10 העבירות) ---
+            const ctxOffenses = document.getElementById('offensesChart');
+            if (ctxOffenses) {
+                new Chart(ctxOffenses.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['הפרת שלום הציבור', 'שימוש פחזני באש/חומר דליק', 'התנהגות פרועה במקום ציבורי', 'תקיפת שוטר בעת מילוי תפקידו', 'תקיפה באירוע ספורט', 'תגרה', 'הכנסת חפץ אסור (כללי)', 'הפרעת שוטר במילוי תפקידו', 'איסור כניסה לשדה המשחק', 'הכנסת אמצעים כימיים (אבוקות)'],
+                        datasets: [{
+                            label: 'מספר מעצרים',
+                            data: [65, 54, 53, 47, 41, 36, 36, 32, 25, 21],
+                            backgroundColor: ['#0f172a', '#ef4444', '#3b82f6', '#ef4444', '#3b82f6', '#3b82f6', '#cbd5e1', '#ef4444', '#cbd5e1', '#eab308'],
+                            borderRadius: 4,
+                            barPercentage: 0.7
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y', 
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { backgroundColor: '#0f172a' }
+                        },
+                        scales: {
+                            x: { position: 'top', grid: { color: '#f1f5f9' }, ticks: { font: { weight: 'bold' } } },
+                            y: { grid: { display: false }, ticks: { font: { weight: '600' } } }
+                        }
+                    }
+                });
+            }
+
+            // --- גרף 4: התפלגות גילאים ---
+            const ctxAges = document.getElementById('fansAgeChart');
+            if (ctxAges) {
+                new Chart(ctxAges.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['קטינים (13-17)', 'חיילים (18-21)', 'צעירים (22-25)', 'בוגרים (26-30)', '31-40', '41-50', '50+'],
+                        datasets: [{
+                            label: 'מספר עצורים',
+                            data: [15, 174, 243, 119, 111, 10, 2],
+                            backgroundColor: ['#cbd5e1', '#ef4444', '#0f172a', '#3b82f6', '#3b82f6', '#cbd5e1', '#cbd5e1'],
+                            borderRadius: 6,
+                            barPercentage: 0.6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: false },
+                            tooltip: {
+                                backgroundColor: '#0f172a',
+                                callbacks: { label: function(context) { return context.raw + ' עצורים'; } }
+                            }
+                        },
+                        scales: {
+                            y: { grid: { color: '#e2e8f0', borderDash: [5, 5] }, ticks: { color: '#64748b' } },
+                            x: { grid: { display: false }, ticks: { color: '#0f172a', font: { size: 12, weight: 'bold' } } }
+                        }
+                    }
+                });
+            }
+
+            // --- גרף 5 (חדש!): בועות ערים ---
+            const ctxCities = document.getElementById('bubbleCitiesChart');
+            if (ctxCities) {
+                new Chart(ctxCities.getContext('2d'), {
+                    type: 'bubble',
+                    data: {
+                        datasets: [
+                            {
+                                label: 'ירושלים',
+                                data: [{x: 50, y: 50, r: 50}], // Center, Big
+                                backgroundColor: '#ef4444' // Red
+                            },
+                            {
+                                label: 'תל אביב - יפו',
+                                data: [{x: 35, y: 55, r: 35}], // Left-Center, Medium
+                                backgroundColor: '#f97316' // Orange
+                            },
+                            {
+                                label: 'חיפה',
+                                data: [{x: 45, y: 80, r: 25}], // Top, Small-Medium
+                                backgroundColor: '#3b82f6' // Blue
+                            },
+                            {
+                                label: 'באר שבע',
+                                data: [{x: 60, y: 20, r: 15}], // Bottom-Right, Small
+                                backgroundColor: '#cbd5e1' // Grey
+                            },
+                            {
+                                label: 'פתח תקווה',
+                                data: [{x: 40, y: 60, r: 12}], // Near TLV
+                                backgroundColor: '#cbd5e1'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'right' },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        // Custom tooltip content
+                                        let city = context.dataset.label;
+                                        // Mapping radius back to approx real value for display context (just for show)
+                                        let value = city === 'ירושלים' ? 421 : (city === 'תל אביב - יפו' ? 198 : (city === 'חיפה' ? 110 : 'פחות מ-40'));
+                                        return city + ': ' + value + ' מעצרים';
+                                    }
                                 }
                             }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            grid: { color: '#e2e8f0', borderDash: [5, 5] },
-                            ticks: { color: '#64748b' }
                         },
-                        x: {
-                            grid: { display: false },
-                            ticks: { color: '#0f172a', font: { size: 12, weight: 'bold' } }
+                        scales: {
+                            x: { display: false, min: 0, max: 100 }, // Hide axes to look like a map
+                            y: { display: false, min: 0, max: 100 }
                         }
                     }
-                }
-            });
+                });
+            }
         };
     </script>
 </body>
