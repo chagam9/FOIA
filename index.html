@@ -156,6 +156,7 @@
 
         <div id="overview" class="tab-content active">
             <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--primary-blue);">תמונת מצב אכיפה (עונת 24/25)</h3>
+            
             <div class="kpi-grid">
                 <div class="card" data-source="מקור: פרוטוקול הוועדה (ספט' 2025), עמ' 2">
                     <div class="value orange">415</div>
@@ -174,9 +175,11 @@
                     <div class="label">תיקי אלימות שנפתחו</div>
                 </div>
             </div>
+
             <div class="alert-box" style="margin-bottom: 20px;" data-source="מקור: דוח בועטים 24-25, עמ' 1 (367 קריאות) מול פרוטוקול הוועדה עמ' 1">
                 <i class="fas fa-info-circle"></i> פער אדיר בין כמות הקריאות הגזעניות (367) לבין תיקי חקירה שנפתחו בנושא (2 בלבד).
             </div>
+
             <div class="dashboard-grid">
                 <div class="card" data-source="מקור: דוח בועטים 24-25, עמ' 8 (טבלת סיכום)">
                     <h3 style="margin: 0 0 20px 0; font-size: 16px;">שיאני הגזענות (עונת 24/25)</h3>
@@ -184,6 +187,7 @@
                         <canvas id="racismPieChart"></canvas>
                     </div>
                 </div>
+                
                 <div class="card" data-source="מקור: ניתוח נתוני מעצרים 2021-2025 (אקסל)">
                     <h3 style="margin: 0 0 20px 0; font-size: 16px; text-align: right;">
                         <i class="fas fa-city" style="margin-left: 5px; color: var(--accent-blue);"></i>
@@ -199,6 +203,7 @@
         <div id="profile" class="tab-content">
             <div class="card" style="min-height: 500px;">
                 <h3 style="margin: 0 0 20px 0; color: var(--primary-blue);">חקר נתונים: פרופיל העבריין (נתוני אמת)</h3>
+                
                 <div class="controls-container">
                     <div class="control-group">
                         <label for="citySelect">בחר עיר:</label>
@@ -208,6 +213,7 @@
                             <option value="telaviv">תל אביב - יפו</option>
                             <option value="haifa">חיפה</option>
                             <option value="beersheva">באר שבע</option>
+                            <option value="petah_tikva">פתח תקווה</option>
                         </select>
                     </div>
                     <div class="control-group">
@@ -218,12 +224,18 @@
                             <option value="assault">תקיפה/אלימות פיזית</option>
                             <option value="police">תקיפת/הפרעה לשוטר</option>
                             <option value="order">הפרת הסדר הציבורי</option>
+                            <option value="field">פריצה למגרש</option>
+                            <option value="banned_item">הכנסת חפץ אסור</option>
+                            <option value="property">היזק לרכוש (ונדליזם)</option>
+                            <option value="threat">איומים</option>
                         </select>
                     </div>
                 </div>
+
                 <div style="height: 350px; position: relative;">
                     <canvas id="profileChartCanvas"></canvas>
                 </div>
+
                 <div id="profileInsight" class="insight-box">
                     אנא בחר פרמטרים להצגת נתונים.
                 </div>
@@ -283,6 +295,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="card" style="margin-top: 20px; height: auto;" data-source="מקור: ניתוח נתוני מעצרים 2021-2025 (אקסל)">
                 <h3 style="margin: 0 0 20px 0; color: var(--primary-blue); text-align: right; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
                     <i class="fas fa-handcuffs" style="margin-left: 8px; color: var(--accent-red);"></i>
@@ -300,6 +313,7 @@
                     <canvas id="barChart"></canvas>
                 </div>
             </div>
+
             <div class="card" style="height: auto;" data-source="מקור: ניתוח נתוני מעצרים 2021-2025 (אקסל)">
                 <h3 style="margin: 0 0 20px 0; color: var(--primary-blue); text-align: right; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
                     <i class="fas fa-users" style="margin-left: 8px; color: var(--accent-blue);"></i>
@@ -315,14 +329,40 @@
             <div class="foi-container">
                 <div class="foi-options">
                     <h3 style="margin-top: 0; color: var(--primary-blue);">בחר נושאים לבקשה:</h3>
-                    <div class="option"><input type="checkbox" id="chk_bodycam" checked onchange="updateFOI()"><div><strong>א. מצלמות גוף (חובה)</strong><br><small style="color: var(--text-muted);">נתונים על הפעלה/אי-הפעלה, שמירת חומרים ונהלים.</small></div></div>
-                    <div class="option"><input type="checkbox" id="chk_violence" checked onchange="updateFOI()"><div><strong>ב. אלימות שוטרים במגרשים</strong><br><small style="color: var(--text-muted);">מספר דוחות שימוש בכוח ספציפית ביציעים.</small></div></div>
-                    <div class="option"><input type="checkbox" id="chk_demo" onchange="updateFOI()"><div><strong>ג. פילוח דמוגרפי (הצעה)</strong><br><small style="color: var(--text-muted);">ניסיון לחלץ נתונים על אכיפת יתר כלפי מיעוטים.</small></div></div>
-                    <div class="option"><input type="checkbox" id="chk_admin" onchange="updateFOI()"><div><strong>ד. הרחקות מנהליות (הצעה)</strong><br><small style="color: var(--text-muted);">יחס בין הרחקות לכתבי אישום (מדד שרירותיות).</small></div></div>
+                    <div class="option">
+                        <input type="checkbox" id="chk_bodycam" checked onchange="updateFOI()">
+                        <div>
+                            <strong>א. מצלמות גוף (חובה)</strong><br>
+                            <small style="color: var(--text-muted);">נתונים על הפעלה/אי-הפעלה, שמירת חומרים ונהלים.</small>
+                        </div>
+                    </div>
+                    <div class="option">
+                        <input type="checkbox" id="chk_violence" checked onchange="updateFOI()">
+                        <div>
+                            <strong>ב. אלימות שוטרים במגרשים</strong><br>
+                            <small style="color: var(--text-muted);">מספר דוחות שימוש בכוח ספציפית ביציעים.</small>
+                        </div>
+                    </div>
+                    <div class="option">
+                        <input type="checkbox" id="chk_demo" onchange="updateFOI()">
+                        <div>
+                            <strong>ג. פילוח דמוגרפי (הצעה)</strong><br>
+                            <small style="color: var(--text-muted);">ניסיון לחלץ נתונים על אכיפת יתר כלפי מיעוטים.</small>
+                        </div>
+                    </div>
+                    <div class="option">
+                        <input type="checkbox" id="chk_admin" onchange="updateFOI()">
+                        <div>
+                            <strong>ד. הרחקות מנהליות (הצעה)</strong><br>
+                            <small style="color: var(--text-muted);">יחס בין הרחקות לכתבי אישום (מדד שרירותיות).</small>
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <div class="foi-preview" id="foiText" data-source="מקור: קובץ 'טיוטה אלימות בספורט.docx'"></div>
-                    <button class="action-btn" onclick="copyToClipboard()"><i class="fas fa-copy"></i> העתק טקסט ללוח</button>
+                    <button class="action-btn" onclick="copyToClipboard()">
+                        <i class="fas fa-copy"></i> העתק טקסט ללוח
+                    </button>
                 </div>
             </div>
         </div>
@@ -332,38 +372,69 @@
         const realData = {
     "all": {
         "all": { "data": [2.2, 25.8, 36.1, 17.7, 16.5, 1.5, 0.3], "text": "מבוסס על 674 מקרים. הקבוצה הבולטת: 22-25 (36%)." },
-        "pyro": { "data": [3.0, 27.3, 25.8, 25.8, 18.2, 0.0, 0.0], "text": "מבוסס על 66 מקרים. הקבוצה הבולטת: 18-21 (27%)." },
-        "assault": { "data": [3.0, 25.8, 37.1, 12.1, 16.7, 3.8, 1.5], "text": "מבוסס על 132 מקרים. הקבוצה הבולטת: 22-25 (37%)." },
+        "pyro": { "data": [3.1, 27.7, 26.2, 26.2, 16.9, 0.0, 0.0], "text": "מבוסס על 65 מקרים. הקבוצה הבולטת: 18-21 (28%)." },
+        "assault": { "data": [3.1, 26.4, 38.0, 10.1, 17.1, 3.9, 1.6], "text": "מבוסס על 129 מקרים. הקבוצה הבולטת: 22-25 (38%)." },
         "police": { "data": [1.1, 31.8, 33.0, 23.9, 10.2, 0.0, 0.0], "text": "מבוסס על 88 מקרים. הקבוצה הבולטת: 22-25 (33%)." },
-        "order": { "data": [2.4, 26.8, 33.1, 18.9, 18.1, 0.8, 0.0], "text": "מבוסס על 127 מקרים. הקבוצה הבולטת: 22-25 (33%)." }
+        "order": { "data": [2.4, 26.8, 33.1, 18.9, 18.1, 0.8, 0.0], "text": "מבוסס על 127 מקרים. הקבוצה הבולטת: 22-25 (33%)." },
+        "field": { "data": [0.0, 24.0, 44.0, 4.0, 20.0, 8.0, 0.0], "text": "מבוסס על 25 מקרים. הקבוצה הבולטת: 22-25 (44%)." },
+        "banned_item": { "data": [4.9, 28.4, 37.0, 12.3, 16.0, 1.2, 0.0], "text": "מבוסס על 81 מקרים. הקבוצה הבולטת: 22-25 (37%)." },
+        "property": { "data": [0.0, 4.3, 26.1, 43.5, 26.1, 0.0, 0.0], "text": "מבוסס על 23 מקרים. הקבוצה הבולטת: 26-30 (43%)." },
+        "threat": { "data": [0.0, 6.2, 43.8, 37.5, 12.5, 0.0, 0.0], "text": "מבוסס על 16 מקרים. הקבוצה הבולטת: 22-25 (44%)." }
     },
     "jerusalem": {
         "all": { "data": [3.4, 19.1, 42.7, 28.1, 6.7, 0.0, 0.0], "text": "מבוסס על 178 מקרים. הקבוצה הבולטת: 22-25 (43%)." },
         "pyro": { "data": [0.0, 11.8, 52.9, 29.4, 5.9, 0.0, 0.0], "text": "מבוסס על 17 מקרים. הקבוצה הבולטת: 22-25 (53%)." },
-        "assault": { "data": [7.4, 18.5, 44.4, 25.9, 3.7, 0.0, 0.0], "text": "מבוסס על 27 מקרים. הקבוצה הבולטת: 22-25 (44%)." },
+        "assault": { "data": [8.0, 20.0, 48.0, 20.0, 4.0, 0.0, 0.0], "text": "מבוסס על 25 מקרים. הקבוצה הבולטת: 22-25 (48%)." },
         "police": { "data": [3.0, 36.4, 30.3, 24.2, 6.1, 0.0, 0.0], "text": "מבוסס על 33 מקרים. הקבוצה הבולטת: 18-21 (36%)." },
-        "order": { "data": [6.5, 23.9, 28.3, 28.3, 13.0, 0.0, 0.0], "text": "מבוסס על 46 מקרים. הקבוצה הבולטת: 22-25 (28%)." }
+        "order": { "data": [6.5, 23.9, 28.3, 28.3, 13.0, 0.0, 0.0], "text": "מבוסס על 46 מקרים. הקבוצה הבולטת: 22-25 (28%)." },
+        "field": { "data": [0.0, 0.0, 50.0, 25.0, 25.0, 0.0, 0.0], "text": "מבוסס על 4 מקרים. הקבוצה הבולטת: 22-25 (50%)." },
+        "banned_item": { "data": [0.0, 7.7, 69.2, 23.1, 0.0, 0.0, 0.0], "text": "מבוסס על 13 מקרים. הקבוצה הבולטת: 22-25 (69%)." },
+        "property": { "data": [0.0, 0.0, 30.0, 60.0, 10.0, 0.0, 0.0], "text": "מבוסס על 10 מקרים. הקבוצה הבולטת: 26-30 (60%)." },
+        "threat": { "data": [0.0, 20.0, 40.0, 40.0, 0.0, 0.0, 0.0], "text": "מבוסס על 5 מקרים. הקבוצה הבולטת: 22-25 (40%)." }
     },
     "telaviv": {
         "all": { "data": [4.4, 25.8, 38.4, 11.3, 18.9, 1.3, 0.0], "text": "מבוסס על 159 מקרים. הקבוצה הבולטת: 22-25 (38%)." },
         "pyro": { "data": [9.5, 33.3, 23.8, 23.8, 9.5, 0.0, 0.0], "text": "מבוסס על 21 מקרים. הקבוצה הבולטת: 18-21 (33%)." },
-        "assault": { "data": [4.1, 26.5, 40.8, 8.2, 18.4, 2.0, 0.0], "text": "מבוסס על 49 מקרים. הקבוצה הבולטת: 22-25 (41%)." },
+        "assault": { "data": [4.2, 27.1, 41.7, 6.2, 18.8, 2.1, 0.0], "text": "מבוסס על 48 מקרים. הקבוצה הבולטת: 22-25 (42%)." },
         "police": { "data": [0.0, 25.0, 43.8, 18.8, 12.5, 0.0, 0.0], "text": "מבוסס על 16 מקרים. הקבוצה הבולטת: 22-25 (44%)." },
-        "order": { "data": [0.0, 24.0, 40.0, 8.0, 28.0, 0.0, 0.0], "text": "מבוסס על 25 מקרים. הקבוצה הבולטת: 22-25 (40%)." }
+        "order": { "data": [0.0, 24.0, 40.0, 8.0, 28.0, 0.0, 0.0], "text": "מבוסס על 25 מקרים. הקבוצה הבולטת: 22-25 (40%)." },
+        "field": { "data": [0.0, 40.0, 20.0, 0.0, 20.0, 20.0, 0.0], "text": "מבוסס על 5 מקרים. הקבוצה הבולטת: 18-21 (40%)." },
+        "banned_item": { "data": [18.2, 27.3, 36.4, 9.1, 9.1, 0.0, 0.0], "text": "מבוסס על 11 מקרים. הקבוצה הבולטת: 22-25 (36%)." },
+        "property": { "data": [0.0, 0.0, 0.0, 100.0, 0.0, 0.0, 0.0], "text": "מבוסס על 1 מקרים. הקבוצה הבולטת: 26-30 (100%)." },
+        "threat": { "data": [0.0, 0.0, 50.0, 33.3, 16.7, 0.0, 0.0], "text": "מבוסס על 6 מקרים. הקבוצה הבולטת: 22-25 (50%)." }
     },
     "haifa": {
         "all": { "data": [1.3, 29.4, 19.6, 19.0, 28.8, 2.0, 0.0], "text": "מבוסס על 153 מקרים. הקבוצה הבולטת: 18-21 (29%)." },
         "pyro": { "data": [0.0, 38.9, 5.6, 22.2, 33.3, 0.0, 0.0], "text": "מבוסס על 18 מקרים. הקבוצה הבולטת: 18-21 (39%)." },
         "assault": { "data": [0.0, 23.8, 23.8, 14.3, 38.1, 0.0, 0.0], "text": "מבוסס על 21 מקרים. הקבוצה הבולטת: 31-40 (38%)." },
         "police": { "data": [0.0, 25.0, 33.3, 16.7, 25.0, 0.0, 0.0], "text": "מבוסס על 12 מקרים. הקבוצה הבולטת: 22-25 (33%)." },
-        "order": { "data": [0.0, 29.2, 20.8, 20.8, 25.0, 4.2, 0.0], "text": "מבוסס על 24 מקרים. הקבוצה הבולטת: 18-21 (29%)." }
+        "order": { "data": [0.0, 29.2, 20.8, 20.8, 25.0, 4.2, 0.0], "text": "מבוסס על 24 מקרים. הקבוצה הבולטת: 18-21 (29%)." },
+        "field": { "data": [0.0, 0.0, 40.0, 0.0, 40.0, 20.0, 0.0], "text": "מבוסס על 5 מקרים. הקבוצה הבולטת: 22-25 (40%)." },
+        "banned_item": { "data": [6.9, 44.8, 10.3, 13.8, 20.7, 3.4, 0.0], "text": "מבוסס על 29 מקרים. הקבוצה הבולטת: 18-21 (45%)." },
+        "property": { "data": [0.0, 10.0, 20.0, 30.0, 40.0, 0.0, 0.0], "text": "מבוסס על 10 מקרים. הקבוצה הבולטת: 31-40 (40%)." },
+        "threat": { "data": [0.0, 0.0, 0.0, 66.7, 33.3, 0.0, 0.0], "text": "מבוסס על 3 מקרים. הקבוצה הבולטת: 26-30 (67%)." }
     },
     "beersheva": {
         "all": { "data": [0.0, 34.6, 63.0, 2.5, 0.0, 0.0, 0.0], "text": "מבוסס על 81 מקרים. הקבוצה הבולטת: 22-25 (63%)." },
-        "pyro": { "data": [0, 0, 0, 0, 0, 0, 0], "text": "אין נתונים לחתך זה." },
+        "pyro": { "data": [0,0,0,0,0,0,0], "text": "אין נתונים לחתך זה." },
         "assault": { "data": [0.0, 36.4, 54.5, 9.1, 0.0, 0.0, 0.0], "text": "מבוסס על 11 מקרים. הקבוצה הבולטת: 22-25 (55%)." },
         "police": { "data": [0.0, 50.0, 50.0, 0.0, 0.0, 0.0, 0.0], "text": "מבוסס על 6 מקרים. הקבוצה הבולטת: 18-21 (50%)." },
-        "order": { "data": [0.0, 31.6, 63.2, 5.3, 0.0, 0.0, 0.0], "text": "מבוסס על 19 מקרים. הקבוצה הבולטת: 22-25 (63%)." }
+        "order": { "data": [0.0, 31.6, 63.2, 5.3, 0.0, 0.0, 0.0], "text": "מבוסס על 19 מקרים. הקבוצה הבולטת: 22-25 (63%)." },
+        "field": { "data": [0.0, 33.3, 66.7, 0.0, 0.0, 0.0, 0.0], "text": "מבוסס על 9 מקרים. הקבוצה הבולטת: 22-25 (67%)." },
+        "banned_item": { "data": [0.0, 33.3, 66.7, 0.0, 0.0, 0.0, 0.0], "text": "מבוסס על 18 מקרים. הקבוצה הבולטת: 22-25 (67%)." },
+        "property": { "data": [0,0,0,0,0,0,0], "text": "אין נתונים לחתך זה." },
+        "threat": { "data": [0,0,0,0,0,0,0], "text": "אין נתונים לחתך זה." }
+    },
+    "petah_tikva": {
+        "all": { "data": [0.0, 0.0, 36.4, 9.1, 54.5, 0.0, 0.0], "text": "מבוסס על 11 מקרים. הקבוצה הבולטת: 31-40 (55%)." },
+        "pyro": { "data": [0,0,0,0,0,0,0], "text": "אין נתונים לחתך זה." },
+        "assault": { "data": [0.0, 0.0, 50.0, 25.0, 25.0, 0.0, 0.0], "text": "מבוסס על 4 מקרים. הקבוצה הבולטת: 22-25 (50%)." },
+        "police": { "data": [0.0, 0.0, 0.0, 0.0, 100.0, 0.0, 0.0], "text": "מבוסס על 2 מקרים. הקבוצה הבולטת: 31-40 (100%)." },
+        "order": { "data": [0,0,0,0,0,0,0], "text": "אין נתונים לחתך זה." },
+        "field": { "data": [0,0,0,0,0,0,0], "text": "אין נתונים לחתך זה." },
+        "banned_item": { "data": [0.0, 0.0, 33.3, 0.0, 66.7, 0.0, 0.0], "text": "מבוסס על 3 מקרים. הקבוצה הבולטת: 31-40 (67%)." },
+        "property": { "data": [0.0, 0.0, 100.0, 0.0, 0.0, 0.0, 0.0], "text": "מבוסס על 1 מקרים. הקבוצה הבולטת: 22-25 (100%)." },
+        "threat": { "data": [0,0,0,0,0,0,0], "text": "אין נתונים לחתך זה." }
     }
 };
 
@@ -384,6 +455,7 @@
             if (city === 'telaviv') color = '#ef4444';
             if (city === 'haifa') color = '#10b981';
             if (city === 'beersheva') color = '#f97316';
+            if (city === 'petah_tikva') color = '#3b82f6'; // Same as 'all' or blue
 
             insightBox.innerText = text;
             insightBox.style.borderLeftColor = color;
