@@ -389,9 +389,19 @@
         </div>
 
         <div id="fans" class="tab-content">
-            <div class="card" style="height: 500px;" data-source="מקורות: פרוטוקול הוועדה עמ' 1-2 (חקירות ואישומים), דוח בועטים עמ' 1 (אירועים)">
+            <div class="card" style="margin-bottom: 20px; height: 500px;" data-source="מקורות: פרוטוקול הוועדה עמ' 1-2 (חקירות ואישומים), דוח בועטים עמ' 1 (אירועים)">
                 <div style="position: relative; width: 100%; height: 100%;">
                     <canvas id="barChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card" style="height: auto;" data-source="מקור: ניתוח נתוני מעצרים 2021-2025 (אקסל)">
+                <h3 style="margin: 0 0 20px 0; color: var(--primary-blue); text-align: right; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+                    <i class="fas fa-users" style="margin-left: 8px; color: var(--accent-blue);"></i>
+                    פילוח גילאי העצורים
+                </h3>
+                <div style="height: 400px; position: relative;">
+                    <canvas id="fansAgeChart"></canvas>
                 </div>
             </div>
         </div>
@@ -533,7 +543,7 @@
                 }
             });
 
-            // גרף 3: התפלגות מעצרים (החדש!)
+            // גרף 3: התפלגות מעצרים (10 העבירות)
             const ctxOffenses = document.getElementById('offensesChart').getContext('2d');
             new Chart(ctxOffenses, {
                 type: 'bar',
@@ -558,6 +568,56 @@
                     scales: {
                         x: { position: 'top', grid: { color: '#f1f5f9' }, ticks: { font: { weight: 'bold' } } },
                         y: { grid: { display: false }, ticks: { font: { weight: '600' } } }
+                    }
+                }
+            });
+
+            // גרף 4: התפלגות גילאים (חדש!)
+            const ctxAges = document.getElementById('fansAgeChart').getContext('2d');
+            new Chart(ctxAges, {
+                type: 'bar',
+                data: {
+                    labels: ['קטינים (13-17)', 'חיילים (18-21)', 'צעירים (22-25)', 'בוגרים (26-30)', '31-40', '41-50', '50+'],
+                    datasets: [{
+                        label: 'מספר עצורים',
+                        data: [15, 174, 243, 119, 111, 10, 2],
+                        backgroundColor: [
+                            '#cbd5e1', // אפור (קטינים)
+                            '#ef4444', // אדום (חיילים - גבוה)
+                            '#0f172a', // כחול כהה (השיא - צעירים)
+                            '#3b82f6', // כחול בהיר
+                            '#3b82f6',
+                            '#cbd5e1',
+                            '#cbd5e1'
+                        ],
+                        borderRadius: 6,
+                        barPercentage: 0.6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: false },
+                        tooltip: {
+                            backgroundColor: '#0f172a',
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw + ' עצורים';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            grid: { color: '#e2e8f0', borderDash: [5, 5] },
+                            ticks: { color: '#64748b' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#0f172a', font: { size: 12, weight: 'bold' } }
+                        }
                     }
                 }
             });
