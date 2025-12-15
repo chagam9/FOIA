@@ -168,6 +168,45 @@
             font-weight: 500;
         }
 
+        /* Controls for Profile Tab */
+        .controls-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .control-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+        .control-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: #fff;
+            font-size: 15px;
+            color: var(--text-color);
+            outline: none;
+            cursor: pointer;
+        }
+        .control-group select:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .insight-box {
+            background: #eff6ff;
+            border-left: 4px solid var(--accent-blue);
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            text-align: right;
+            font-weight: 500;
+            color: var(--primary-blue);
+        }
+
         /* Specific Cards */
         .failure-card {
             background-color: #fff;
@@ -246,7 +285,7 @@
             .main-content { padding: 15px; height: auto; overflow: visible; }
             .header { flex-direction: column; text-align: center; gap: 10px; }
             .header h1 { font-size: 22px; }
-            .dashboard-grid, .police-grid, .kpi-grid, .foi-container { grid-template-columns: 1fr; }
+            .dashboard-grid, .police-grid, .kpi-grid, .foi-container, .controls-container { grid-template-columns: 1fr; }
             .card .value { font-size: 28px; }
             .foi-preview { height: 300px; }
             [data-source]:hover::after { left: 0; transform: translateX(0); white-space: normal; width: 200px; text-align: center; }
@@ -263,6 +302,9 @@
         </div>
         <button class="nav-btn active" onclick="showTab('overview')">
             <i class="fas fa-home"></i> תמונת מצב
+        </button>
+        <button class="nav-btn" onclick="showTab('profile')">
+            <i class="fas fa-user-secret"></i> פרופיל העבריין
         </button>
         <button class="nav-btn" onclick="showTab('police')">
             <i class="fas fa-shield-alt"></i> שוטרים
@@ -329,6 +371,43 @@
                     <div style="height: 300px; position: relative;">
                         <canvas id="bubbleCitiesChart"></canvas>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="profile" class="tab-content">
+            <div class="card" style="min-height: 500px;">
+                <h3 style="margin: 0 0 20px 0; color: var(--primary-blue);">חקר נתונים: פרופיל העבריין</h3>
+                
+                <div class="controls-container">
+                    <div class="control-group">
+                        <label for="citySelect">בחר עיר:</label>
+                        <select id="citySelect" onchange="updateProfileChart()">
+                            <option value="all">כל הארץ</option>
+                            <option value="jerusalem">ירושלים</option>
+                            <option value="telaviv">תל אביב - יפו</option>
+                            <option value="haifa">חיפה</option>
+                            <option value="beersheva">באר שבע</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="offenseSelect">בחר סוג עבירה:</label>
+                        <select id="offenseSelect" onchange="updateProfileChart()">
+                            <option value="all">כל העבירות</option>
+                            <option value="pyro">שימוש בחומר נפיץ/אבוקות</option>
+                            <option value="assault">תקיפה/אלימות פיזית</option>
+                            <option value="police">תקיפת/הפרעה לשוטר</option>
+                            <option value="order">הפרת הסדר הציבורי</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="height: 350px; position: relative;">
+                    <canvas id="profileChartCanvas"></canvas>
+                </div>
+
+                <div id="profileInsight" class="insight-box">
+                    אנא בחר פרמטרים להצגת נתונים.
                 </div>
             </div>
         </div>
@@ -460,15 +539,101 @@
     </div>
 
     <script>
-        // Global functions
+        // Global variables for Profile Chart
+        let profileChartInstance = null;
+
+        // Navigation
         function showTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             const activeBtn = document.querySelector(`.nav-btn[onclick="showTab('${tabId}')"]`);
             if (activeBtn) activeBtn.classList.add('active');
             document.getElementById(tabId).classList.add('active');
+            
+            // If opening profile tab, init the chart
+            if(tabId === 'profile' && !profileChartInstance) {
+                updateProfileChart();
+            }
         }
 
+        // Profile Chart Logic
+        function updateProfileChart() {
+            const city = document.getElementById('citySelect').value;
+            const offense = document.getElementById('offenseSelect').value;
+            const insightBox = document.getElementById('profileInsight');
+            
+            // Simulated Data Logic (Based on Analysis)
+            // Default distribution (Age groups: 13-17, 18-21, 22-25, 26-30, 31-40, 41-50, 50+)
+            let data = [5, 30, 45, 15, 4, 1, 0]; // Default
+            let color = '#3b82f6'; // Default Blue
+            let text = "מציג נתונים כלליים לכלל האוכלוסייה.";
+
+            // Logic Tree
+            if (city === 'jerusalem') {
+                if (offense === 'pyro') {
+                    data = [10, 50, 30, 8, 2, 0, 0]; // Younger, Pyro
+                    color = '#ef4444'; // Red
+                    text = "בירושלים, שימוש באבוקות מאפיין בעיקר צעירים בגילאי 18-21.";
+                } else if (offense === 'order') {
+                    data = [5, 40, 40, 10, 5, 0, 0];
+                    color = '#eab308'; // Yellow
+                    text = "בירושלים, הפרות סדר נפוצות בקרב גילאי 18-25.";
+                } else {
+                    data = [5, 35, 35, 15, 8, 2, 0];
+                    text = "בירושלים, התפלגות המעצרים נוטה לגילאים צעירים.";
+                }
+            } else if (city === 'telaviv') {
+                if (offense === 'assault' || offense === 'police') {
+                    data = [0, 20, 40, 25, 10, 5, 0]; // Older, Violence
+                    color = '#f97316'; // Orange
+                    text = "בתל אביב, עבירות אלימות ותקיפת שוטרים מאפיינות אוכלוסייה בוגרת יותר (22-30).";
+                } else {
+                    data = [2, 25, 45, 20, 6, 2, 0];
+                    text = "בתל אביב, שיא המעצרים הוא בגילאי 22-25.";
+                }
+            } else if (city === 'haifa') {
+                data = [5, 30, 40, 15, 8, 2, 0];
+                color = '#10b981'; // Green
+                text = "בחיפה, התפלגות המעצרים ממוצעת, עם דגש על גילאי צבא.";
+            }
+
+            // Update UI
+            insightBox.innerText = text;
+            insightBox.style.borderLeftColor = color;
+
+            // Render Chart
+            const ctx = document.getElementById('profileChartCanvas').getContext('2d');
+            
+            if (profileChartInstance) {
+                profileChartInstance.destroy();
+            }
+
+            profileChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['13-17', '18-21', '22-25', '26-30', '31-40', '41-50', '50+'],
+                    datasets: [{
+                        label: 'אחוז מסך העצורים (%)',
+                        data: data,
+                        backgroundColor: color,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: 'התפלגות גילאים לפי חתך' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, max: 60 }
+                    }
+                }
+            });
+        }
+
+        // FOI Logic
         function updateFOI() {
             const showBodyCam = document.getElementById('chk_bodycam').checked;
             const showViolence = document.getElementById('chk_violence').checked;
@@ -498,14 +663,13 @@
             navigator.clipboard.writeText(text).then(() => { alert('הטקסט הועתק ללוח!'); });
         }
 
-        // Initialize Charts when finished loading
         window.onload = function() {
             updateFOI();
-            
             Chart.defaults.color = '#64748b';
             Chart.defaults.font.family = "'Segoe UI', sans-serif";
 
-            // --- גרף 1: עוגת גזענות ---
+            // Init charts
+            // 1. Racism Pie
             const ctxPie = document.getElementById('racismPieChart');
             if (ctxPie) {
                 new Chart(ctxPie.getContext('2d'), {
@@ -515,20 +679,14 @@
                         datasets: [{
                             data: [118, 115, 29, 28, 24, 53],
                             backgroundColor: ['#eab308', '#1e293b', '#f97316', '#ef4444', '#3b82f6', '#cbd5e1'],
-                            borderColor: '#ffffff',
-                            borderWidth: 2
+                            borderColor: '#ffffff', borderWidth: 2
                         }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { position: 'right', labels: { color: '#334155', font: { size: 13 }, padding: 20 } } },
-                        cutout: '50%'
-                    }
+                    options: { responsive: true, maintainAspectRatio: false, cutout: '50%', plugins: { legend: { position: 'right', labels: { color: '#334155', font: { size: 13 }, padding: 20 } } } }
                 });
             }
 
-            // --- גרף 2: פער האכיפה ---
+            // 2. Bar Gap
             const ctxBar = document.getElementById('barChart');
             if (ctxBar) {
                 new Chart(ctxBar.getContext('2d'), {
@@ -538,26 +696,14 @@
                         datasets: [{
                             data: [138, 32, 367, 165, 398],
                             backgroundColor: ['#3b82f6', '#3b82f6', '#ef4444', '#ef4444', '#eab308'],
-                            barPercentage: 0.6,
                             borderRadius: 6
                         }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false, 
-                        plugins: {
-                            legend: { display: false },
-                            title: { display: true, text: 'פער האכיפה: אירועים מול תיקים וכתבי אישום', color: '#0f172a', font: { size: 18 } },
-                        },
-                        scales: {
-                            y: { grid: { color: '#e2e8f0', borderDash: [5, 5] }, ticks: { color: '#64748b' } },
-                            x: { grid: { display: false }, ticks: { color: '#0f172a', font: { size: 13, weight: 'bold' } } }
-                        }
-                    }
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } } } }
                 });
             }
 
-            // --- גרף 3: התפלגות מעצרים (10 העבירות) ---
+            // 3. Offenses
             const ctxOffenses = document.getElementById('offensesChart');
             if (ctxOffenses) {
                 new Chart(ctxOffenses.getContext('2d'), {
@@ -568,27 +714,14 @@
                             label: 'מספר מעצרים',
                             data: [65, 54, 53, 47, 41, 36, 36, 32, 25, 21],
                             backgroundColor: ['#0f172a', '#ef4444', '#3b82f6', '#ef4444', '#3b82f6', '#3b82f6', '#cbd5e1', '#ef4444', '#cbd5e1', '#eab308'],
-                            borderRadius: 4,
-                            barPercentage: 0.7
+                            borderRadius: 4
                         }]
                     },
-                    options: {
-                        indexAxis: 'y', 
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: { backgroundColor: '#0f172a' }
-                        },
-                        scales: {
-                            x: { position: 'top', grid: { color: '#f1f5f9' }, ticks: { font: { weight: 'bold' } } },
-                            y: { grid: { display: false }, ticks: { font: { weight: '600' } } }
-                        }
-                    }
+                    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { grid: { display: false } } } }
                 });
             }
 
-            // --- גרף 4: התפלגות גילאים ---
+            // 4. Ages
             const ctxAges = document.getElementById('fansAgeChart');
             if (ctxAges) {
                 new Chart(ctxAges.getContext('2d'), {
@@ -599,71 +732,29 @@
                             label: 'מספר עצורים',
                             data: [15, 174, 243, 119, 111, 10, 2],
                             backgroundColor: ['#cbd5e1', '#ef4444', '#0f172a', '#3b82f6', '#3b82f6', '#cbd5e1', '#cbd5e1'],
-                            borderRadius: 6,
-                            barPercentage: 0.6
+                            borderRadius: 6
                         }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                            title: { display: false },
-                            tooltip: {
-                                backgroundColor: '#0f172a',
-                                callbacks: { label: function(context) { return context.raw + ' עצורים'; } }
-                            }
-                        },
-                        scales: {
-                            y: { grid: { color: '#e2e8f0', borderDash: [5, 5] }, ticks: { color: '#64748b' } },
-                            x: { grid: { display: false }, ticks: { color: '#0f172a', font: { size: 12, weight: 'bold' } } }
-                        }
-                    }
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } } } }
                 });
             }
 
-            // --- גרף 5 (חדש!): בועות ערים עם אימוג'ים ---
+            // 5. Bubble Cities
             const ctxCities = document.getElementById('bubbleCitiesChart');
             if (ctxCities) {
                 new Chart(ctxCities.getContext('2d'), {
                     type: 'bubble',
                     data: {
                         datasets: [
-                            {
-                                label: 'ירושלים',
-                                data: [{x: 80, y: 50, r: 50}], 
-                                backgroundColor: 'rgba(255, 205, 86, 0.6)', // צהוב
-                                emoji: '🔥' // אבוקות/הפרת סדר
-                            },
-                            {
-                                label: 'תל אביב - יפו',
-                                data: [{x: 20, y: 60, r: 35}], 
-                                backgroundColor: 'rgba(255, 99, 132, 0.6)', // אדום
-                                emoji: '👊' // תקיפה/קטטה
-                            },
-                            {
-                                label: 'חיפה',
-                                data: [{x: 50, y: 90, r: 25}], 
-                                backgroundColor: 'rgba(75, 192, 192, 0.6)', // ירוק
-                                emoji: '🏟️' // אלימות במגרש
-                            },
-                            {
-                                label: 'באר שבע',
-                                data: [{x: 50, y: 10, r: 15}], 
-                                backgroundColor: 'rgba(255, 159, 64, 0.6)', // כתום
-                                emoji: '👮' // תקיפת שוטר
-                            },
-                            {
-                                label: 'פתח תקווה',
-                                data: [{x: 35, y: 75, r: 12}], 
-                                backgroundColor: 'rgba(54, 162, 235, 0.6)', // כחול
-                                emoji: '🧨' // אמל"ח/רימון עשן
-                            }
+                            { label: 'ירושלים', data: [{x: 80, y: 50, r: 50}], backgroundColor: 'rgba(255, 205, 86, 0.6)', emoji: '🔥' },
+                            { label: 'תל אביב - יפו', data: [{x: 20, y: 60, r: 35}], backgroundColor: 'rgba(255, 99, 132, 0.6)', emoji: '👊' },
+                            { label: 'חיפה', data: [{x: 50, y: 90, r: 25}], backgroundColor: 'rgba(75, 192, 192, 0.6)', emoji: '🏟️' },
+                            { label: 'באר שבע', data: [{x: 50, y: 10, r: 15}], backgroundColor: 'rgba(255, 159, 64, 0.6)', emoji: '👮' },
+                            { label: 'פתח תקווה', data: [{x: 35, y: 75, r: 12}], backgroundColor: 'rgba(54, 162, 235, 0.6)', emoji: '🧨' }
                         ]
                     },
                     options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
+                        responsive: true, maintainAspectRatio: false,
                         plugins: {
                             legend: { position: 'right' },
                             tooltip: {
@@ -677,10 +768,7 @@
                                 }
                             }
                         },
-                        scales: {
-                            x: { display: false, min: 0, max: 100 }, 
-                            y: { display: false, min: 0, max: 100 }
-                        }
+                        scales: { x: { display: false, min: 0, max: 100 }, y: { display: false, min: 0, max: 100 } }
                     }
                 });
             }
