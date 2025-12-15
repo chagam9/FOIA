@@ -498,6 +498,7 @@
             navigator.clipboard.writeText(text).then(() => { alert('הטקסט הועתק ללוח!'); });
         }
 
+        // Initialize Charts when finished loading
         window.onload = function() {
             updateFOI();
             
@@ -621,7 +622,7 @@
                 });
             }
 
-            // --- גרף 5 (חדש!): בועות ערים ---
+            // --- גרף 5 (חדש!): בועות ערים עם אימוג'ים ---
             const ctxCities = document.getElementById('bubbleCitiesChart');
             if (ctxCities) {
                 new Chart(ctxCities.getContext('2d'), {
@@ -631,27 +632,32 @@
                             {
                                 label: 'ירושלים',
                                 data: [{x: 80, y: 50, r: 50}], 
-                                backgroundColor: 'rgba(255, 205, 86, 0.6)' // Yellow
+                                backgroundColor: 'rgba(255, 205, 86, 0.6)', // צהוב
+                                emoji: '🔥' // אבוקות/הפרת סדר
                             },
                             {
                                 label: 'תל אביב - יפו',
                                 data: [{x: 20, y: 60, r: 35}], 
-                                backgroundColor: 'rgba(255, 99, 132, 0.6)' // Red
+                                backgroundColor: 'rgba(255, 99, 132, 0.6)', // אדום
+                                emoji: '👊' // תקיפה/קטטה
                             },
                             {
                                 label: 'חיפה',
                                 data: [{x: 50, y: 90, r: 25}], 
-                                backgroundColor: 'rgba(75, 192, 192, 0.6)' // Green
+                                backgroundColor: 'rgba(75, 192, 192, 0.6)', // ירוק
+                                emoji: '🏟️' // אלימות במגרש
                             },
                             {
                                 label: 'באר שבע',
                                 data: [{x: 50, y: 10, r: 15}], 
-                                backgroundColor: 'rgba(255, 159, 64, 0.6)' // Orange
+                                backgroundColor: 'rgba(255, 159, 64, 0.6)', // כתום
+                                emoji: '👮' // תקיפת שוטר
                             },
                             {
                                 label: 'פתח תקווה',
                                 data: [{x: 35, y: 75, r: 12}], 
-                                backgroundColor: 'rgba(54, 162, 235, 0.6)' // Blue
+                                backgroundColor: 'rgba(54, 162, 235, 0.6)', // כחול
+                                emoji: '🧨' // אמל"ח/רימון עשן
                             }
                         ]
                     },
@@ -663,17 +669,16 @@
                             tooltip: {
                                 callbacks: {
                                     label: function(context) {
-                                        // Custom tooltip content
                                         let city = context.dataset.label;
-                                        // Mapping radius back to approx real value for display context (just for show)
+                                        let emoji = context.dataset.emoji;
                                         let value = city === 'ירושלים' ? 421 : (city === 'תל אביב - יפו' ? 198 : (city === 'חיפה' ? 110 : 'פחות מ-40'));
-                                        return city + ': ' + value + ' מעצרים';
+                                        return emoji + ' ' + city + ': ' + value + ' מעצרים';
                                     }
                                 }
                             }
                         },
                         scales: {
-                            x: { display: false, min: 0, max: 100 }, // Hide axes to look like a map
+                            x: { display: false, min: 0, max: 100 }, 
                             y: { display: false, min: 0, max: 100 }
                         }
                     }
