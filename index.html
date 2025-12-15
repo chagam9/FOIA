@@ -237,7 +237,6 @@
         .tab-content.active { display: block; animation: fadeIn 0.4s; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Mobile */
         @media (max-width: 768px) {
             body { flex-direction: column; height: auto; overflow-y: auto; }
             .sidebar { width: 100%; height: auto; padding: 10px; border-left: none; border-bottom: 1px solid var(--border-color); flex-direction: row; overflow-x: auto; white-space: nowrap; align-items: center; gap: 10px; position: sticky; top: 0; background: white; z-index: 100; }
@@ -461,7 +460,7 @@
     </div>
 
     <script>
-        // פונקציות גלובליות מוגדרות מחוץ ל-window.onload כדי למנוע קריסה
+        // Global functions
         function showTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
@@ -499,7 +498,6 @@
             navigator.clipboard.writeText(text).then(() => { alert('הטקסט הועתק ללוח!'); });
         }
 
-        // טעינת הגרפים רק כשהכל מוכן
         window.onload = function() {
             updateFOI();
             
@@ -632,28 +630,28 @@
                         datasets: [
                             {
                                 label: 'ירושלים',
-                                data: [{x: 50, y: 50, r: 50}], // Center, Big
-                                backgroundColor: '#ef4444' // Red
+                                data: [{x: 80, y: 50, r: 50}], 
+                                backgroundColor: 'rgba(255, 205, 86, 0.6)' // Yellow
                             },
                             {
                                 label: 'תל אביב - יפו',
-                                data: [{x: 35, y: 55, r: 35}], // Left-Center, Medium
-                                backgroundColor: '#f97316' // Orange
+                                data: [{x: 20, y: 60, r: 35}], 
+                                backgroundColor: 'rgba(255, 99, 132, 0.6)' // Red
                             },
                             {
                                 label: 'חיפה',
-                                data: [{x: 45, y: 80, r: 25}], // Top, Small-Medium
-                                backgroundColor: '#3b82f6' // Blue
+                                data: [{x: 50, y: 90, r: 25}], 
+                                backgroundColor: 'rgba(75, 192, 192, 0.6)' // Green
                             },
                             {
                                 label: 'באר שבע',
-                                data: [{x: 60, y: 20, r: 15}], // Bottom-Right, Small
-                                backgroundColor: '#cbd5e1' // Grey
+                                data: [{x: 50, y: 10, r: 15}], 
+                                backgroundColor: 'rgba(255, 159, 64, 0.6)' // Orange
                             },
                             {
                                 label: 'פתח תקווה',
-                                data: [{x: 40, y: 60, r: 12}], // Near TLV
-                                backgroundColor: '#cbd5e1'
+                                data: [{x: 35, y: 75, r: 12}], 
+                                backgroundColor: 'rgba(54, 162, 235, 0.6)' // Blue
                             }
                         ]
                     },
