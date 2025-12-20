@@ -1,0 +1,291 @@
+import pandas as pd
+import json
+import os
+import glob
+import math
+
+# Configuration
+DATA_DIR = 'data_files'
+OUTPUT_FILE = 'data.json'
+
+# MAPPINGS
+CITY_MAP = {
+    'ירושלים': 'jerusalem',
+    'תל אביב - יפו': 'telaviv',
+    'חיפה': 'haifa',
+    'באר שבע': 'beersheva',
+    'פתח תקווה': 'petah_tikva'
+}
+
+OFFENSE_MAP = {
+    'תגרה': 'assault',
+    'תקיפה': 'assault',
+    'אלימות פיזית': 'assault',
+    'החזקת סכין': 'banned_item',
+    'הכנסת חפץ אסור': 'banned_item',
+    'שימוש בחומר נפיץ': 'pyro',
+    'אבוקות': 'pyro',
+    'זיקוקין': 'pyro',
+    'תקיפת שוטר': 'police',
+    'הפרעה לשוטר': 'police',
+    'הפרת הסדר הציבורי': 'order',
+    'התנהגות פרועה במקום צבורי': 'order', # From file analysis
+    'כניסה לשדה המשחק': 'field',
+    'איסור כניסה למקום': 'field',
+    'היזק לרכוש': 'property',
+    'איומים': 'threat'
+}
+
+# Age Bins
+def get_age_group(age):
+    if pd.isna(age): return 'Unknown'
+    age = int(age)
+    if 13 <= age <= 17: return '13-17'
+    if 18 <= age <= 21: return '18-21'
+    if 22 <= age <= 25: return '22-25'
+    if 26 <= age <= 30: return '26-30'
+    if 31 <= age <= 40: return '31-40'
+    if 41 <= age <= 50: return '41-50'
+    if age > 50: return '50+'
+    return 'Other'
+
+DEFAULT_GROUPS = ['13-17', '18-21', '22-25', '26-30', '31-40', '41-50', '50+']
+
+def process_arrests(filepath):
+    """Processes a single arrests Excel file."""
+    print(f"Processing arrests file: {filepath}")
+    
+    # 1. Read Arrests Clean Sheet
+    try:
+        df = pd.read_excel(filepath, sheet_name=0) # Assuming first sheet is always 'מעצרים נקי' or similar
+    except Exception as e:
+        print(f"Error reading first sheet of {filepath}: {e}")
+        return [], 0
+        
+    # Standardize columns
+    # We found: ['תאריך מעצר', 'תאור סמל חוק', 'עבירה', 'גיל', 'ישוב עבירה מחושב', 'Column1']
+    # Mapping to standard names
+    df.rename(columns={
+        'ישוב עבירה מחושב': 'city_he',
+        'עבירה': 'offense_he',
+        'גיל': 'age',
+        'תאור סמל חוק': 'law_desc' # Backup for offense mapping if needed
+    }, inplace=True)
+    
+    processed_records = []
+    
+    for _, row in df.iterrows():
+        city_he = str(row.get('city_he', '')).strip()
+        offense_he = str(row.get('offense_he', '')).strip()
+        law_desc = str(row.get('law_desc', '')).strip()
+        age = row.get('age')
+        
+        # Map City
+        city_key = CITY_MAP.get(city_he, 'other')
+        if city_key == 'other':
+            # Try partial matching or specific known issues
+            pass
+            
+        # Map Offense
+        offense_key = OFFENSE_MAP.get(offense_he, 'other')
+        if offense_key == 'other':
+            # Try mapping from law description if offense is generic
+            offense_key = OFFENSE_MAP.get(law_desc, 'other')
+            
+        # If 'other' offense, we might still want to count it in 'all' but maybe not specific categories
+        # For now, let's keep everything
+        
+        processed_records.append({
+            'city': city_key,
+            'offense': offense_key,
+            'age_group': get_age_group(age)
+        })
+        
+    # 2. Read Indictments Sheet (for total gap model)
+    total_indictments = 0
+    try:
+        df_indict = pd.read_excel(filepath, sheet_name='כתבי אישום')
+        # Look for the total row or sum the column
+        # Found column: 'כמות תיקים עם כ"א לפי תאריך כתב אישום'
+        col_name = 'כמות תיקים עם כ"א לפי תאריך כתב אישום'
+        if col_name in df_indict.columns:
+             # Usually row 0 is total, but safer to sum numeric values excluding the 'Total' text row if present
+             # In inspection: row 0 was "סה"כ" with value 57.
+             # Let's filter for year rows or just take the explicit total if we can identify it.
+             # Actually, simpler: Sum all rows where 'שנת כתב אישום' is a number
+             
+             # Converting to numeric, coercing errors to NaN
+             df_indict[col_name] = pd.to_numeric(df_indict[col_name], errors='coerce')
+             
+             # If we trust the "Total" row exists and is correct:
+             total_row = df_indict[df_indict['שנת כתב אישום'].astype(str).str.contains('סה"כ', na=False)]
+             if not total_row.empty:
+                 total_indictments = total_row.iloc[0][col_name]
+             else:
+                 total_indictments = df_indict[col_name].sum()
+    except Exception as e:
+        print(f"Warning: Could not read Indictments sheet in {filepath}: {e}")
+
+    return processed_records, total_indictments
+
+def process_extra_sheets(filepath):
+    """Processes optional sheets for status and closing grounds."""
+    meta_stats = {
+        'status_counts': {},
+        'closing_counts': {}
+    }
+    
+    # 1. Status Sheet
+    try:
+        df_status = pd.read_excel(filepath, sheet_name='סטטוס תיק נקי')
+        col = 'סטטוס תיק כולל החלטה שיפוטית'
+        if col in df_status.columns:
+            counts = df_status[col].value_counts().to_dict()
+            meta_stats['status_counts'] = counts
+    except Exception:
+        pass # Sheet might not exist
+        
+    # 2. Closing Grounds Sheet
+    try:
+        df_closing = pd.read_excel(filepath, sheet_name='עילות סגירת תיק נקי')
+        col = 'תאור סיבת סגירת תיק'
+        if col in df_closing.columns:
+            counts = df_closing[col].value_counts().to_dict()
+            meta_stats['closing_counts'] = counts
+    except Exception:
+        pass
+        
+    return meta_stats
+
+def aggregate_data(all_records):
+    """Aggregates raw records into the structure required by Chart.js"""
+    
+    # Structure:
+    # city -> offense -> { data: [%, %, ...], counts: [n, n, ...], total: N, text: "..." }
+    
+    # Initialize
+    output = {}
+    cities = ['all'] + list(CITY_MAP.values())
+    offenses = ['all'] + list(set(OFFENSE_MAP.values()))
+    
+    # Helper to init a node
+    def init_node():
+        return {
+            'counts': {g: 0 for g in DEFAULT_GROUPS},
+            'total': 0
+        }
+
+    # Build hierarchy
+    tree = {c: {o: init_node() for o in offenses} for c in cities}
+    
+    for r in all_records:
+        c = r['city']
+        o = r['offense']
+        g = r['age_group']
+        
+        # Skip unknown age groups for chart clarity? Or keep them? 
+        # The chart expects specific labels. Let's map 'Other' or 'Unknown' to nothing or handle them.
+        if g not in DEFAULT_GROUPS: continue
+
+        # Add to specific City & specific Offense
+        if c in tree: # valid city
+             if o in tree[c]:
+                 tree[c][o]['counts'][g] += 1
+                 tree[c][o]['total'] += 1
+             # Add to 'all' offenses for this city
+             tree[c]['all']['counts'][g] += 1
+             tree[c]['all']['total'] += 1
+        
+        # Add to 'all' Cities
+        if o in tree['all']:
+             tree['all'][o]['counts'][g] += 1
+             tree['all'][o]['total'] += 1
+        # Add to 'all' Cities & 'all' Offenses
+        tree['all']['all']['counts'][g] += 1
+        tree['all']['all']['total'] += 1
+
+    # Convert to final lists
+    final_output = {}
+    for city, offenses_data in tree.items():
+        final_output[city] = {}
+        for offense, node in offenses_data.items():
+            total = node['total']
+            counts_list = [node['counts'][g] for g in DEFAULT_GROUPS]
+            if total > 0:
+                data_list = [round((x / total) * 100, 1) for x in counts_list]
+                
+                # Find max group for text
+                max_val = max(counts_list)
+                max_idx = counts_list.index(max_val)
+                top_group = DEFAULT_GROUPS[max_idx]
+                pct = data_list[max_idx]
+                
+                text = f"מבוסס על {total} מקרים. הקבוצה הבולטת: {top_group} ({pct}%)."
+            else:
+                data_list = [0] * len(DEFAULT_GROUPS)
+                text = "אין נתונים לחתך זה."
+            
+            final_output[city][offense] = {
+                "data": data_list,
+                "counts": counts_list,
+                "total": total,
+                "text": text
+            }
+            
+    return final_output
+
+def main():
+    all_arrest_records = []
+    total_indictments_global = 0
+    global_meta = {'status_counts': {}, 'closing_counts': {}}
+    
+    # 1. Scan for files
+    files = glob.glob(os.path.join(DATA_DIR, '*.xlsx'))
+    print(f"Found {len(files)} Excel files.")
+    
+    for f in files:
+        filename = os.path.basename(f)
+        if filename.startswith('arrests'):
+            records, ind_count = process_arrests(f)
+            extra_stats = process_extra_sheets(f)
+            
+            all_arrest_records.extend(records)
+            total_indictments_global += ind_count
+            
+            # Merge dictionary counts
+            for key, val in extra_stats['status_counts'].items():
+                global_meta['status_counts'][key] = global_meta['status_counts'].get(key, 0) + val
+            for key, val in extra_stats['closing_counts'].items():
+                global_meta['closing_counts'][key] = global_meta['closing_counts'].get(key, 0) + val
+            
+        # Here we can add elif filename.startswith('costs') ...
+        
+    print(f"Total arrest records processed: {len(all_arrest_records)}")
+    print(f"Total indictments found: {total_indictments_global}")
+    
+    # 2. Aggregate
+    final_json_data = aggregate_data(all_arrest_records)
+    
+    # Add the global indictment count directly to relevant sections or meta
+    final_json_data['meta'] = {
+        'total_indictments': total_indictments_global,
+        'total_arrests': len(all_arrest_records),
+        'status_distribution': global_meta['status_counts'],
+        'closing_reasons': global_meta['closing_counts']
+    }
+    
+    class NpEncoder(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, (int, float)):
+                return obj
+            if hasattr(obj, 'item'): # numpy types
+                return obj.item()
+            return super(NpEncoder, self).default(obj)
+
+    # 3. Export
+    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
+        json.dump(final_json_data, f, ensure_ascii=False, indent=4, cls=NpEncoder)
+        print(f"Successfully generated {OUTPUT_FILE}")
+
+if __name__ == "__main__":
+    main()
