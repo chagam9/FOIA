@@ -606,6 +606,71 @@
                 transform: translateX(0);
             }
         }
+
+        /* Map Bubble Styles */
+        .map-bubble {
+            position: absolute;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            /* Center on the coordinate */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            animation: pulse-bubble 2s infinite;
+        }
+
+        .map-bubble:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            z-index: 10;
+        }
+
+        .map-bubble .count {
+            pointer-events: none;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .map-bubble .tooltip {
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(30, 41, 59, 0.9);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .map-bubble:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @keyframes pulse-bubble {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+            }
+        }
     </style>
 </head>
 
@@ -874,20 +939,15 @@
                 <p style="margin-bottom: 30px; color: #64748b;">גודל הבועה מייצג את כמות המעצרים בעיר</p>
 
                 <div id="israelMapContainer"
-                    style="width: 100%; max-width: 500px; height: 600px; position: relative; background: #f8fafc; border-radius: 16px;">
-                    <!-- SVG Map will be injected here or hardcoded -->
-                    <svg viewBox="0 0 400 800"
-                        style="width: 100%; height: 100%; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));">
-                        <!-- Simplified Israel Silhouette -->
-                        <path
-                            d="M130,50 L150,50 L160,80 L180,90 L170,120 L190,130 L190,180 L160,200 L150,250 L160,300 L150,350 L180,400 L170,450 L150,550 L130,650 L140,750 L120,780 L100,750 L80,680 L70,600 L60,500 L50,450 L40,350 L40,300 L50,250 L40,200 L60,150 L80,120 L100,100 Z"
-                            fill="#cbd5e1" stroke="white" stroke-width="2" />
+                    style="width: 100%; max-width: 400px; position: relative; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);">
+                    <!-- Map Image Background -->
+                    <img src="israel_map_political.png" alt="Israel Map"
+                        style="width: 100%; display: block; height: auto;">
 
-                        <!-- Cities Bubbles Group -->
-                        <g id="mapBubbles">
-                            <!-- Will be populated by JS -->
-                        </g>
-                    </svg>
+                    <!-- Bubbles Overlay Layer -->
+                    <div id="mapBubbles" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+                        <!-- Bubbles injected by JS -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -1045,78 +1105,61 @@
         }
 
         function updateMapViz() {
-            const mapBubblesGroup = document.getElementById('mapBubbles');
-            if (mapBubblesGroup && realData) {
-                mapBubblesGroup.innerHTML = '';
+            const mapBubblesContainer = document.getElementById('mapBubbles');
+            if (mapBubblesContainer && realData) {
+                mapBubblesContainer.innerHTML = '';
 
-                // Coordinate Mapping (Approximate for visual representation)
-                // ViewBox is 0 0 400 800
-                const cityCoords = {
-                    'jerusalem': { x: 230, y: 460, color: '#f59e0b' }, // Jerusalem
-                    'telaviv': { x: 180, y: 410, color: '#ef4444' },   // Tel Aviv
-                    'haifa': { x: 210, y: 250, color: '#3b82f6' },     // Haifa
-                    'beersheva': { x: 190, y: 600, color: '#f97316' }, // Beer Sheva
-                    'petah_tikva': { x: 200, y: 400, color: '#10b981' } // Petah Tikva
+                // Responsive Percentages (Top/Left) based on the specific map image aspect ratio
+                // Estimation for standard vertical Israel map:
+                // Responsive Percentages (Top/Left) calibrated for new map image
+                const cityPositions = {
+                    'jerusalem': { top: 38, left: 52, color: '#f59e0b' },
+                    'telaviv': { top: 32, left: 35, color: '#ef4444' },
+                    'haifa': { top: 12, left: 42, color: '#3b82f6' },
+                    'beersheva': { top: 58, left: 48, color: '#f97316' },
+                    'petah_tikva': { top: 32, left: 40, color: '#10b981' }
                 };
 
-                const cityKeys = Object.keys(cityCoords);
+                // Increase map size visual
+                const mapContainer = document.getElementById('israelMapContainer');
+                if (mapContainer) mapContainer.style.maxWidth = '600px';
+
+                const cityKeys = Object.keys(cityPositions);
 
                 cityKeys.forEach(key => {
                     if (realData[key] && realData[key]['all']) {
                         const total = realData[key]['all'].total;
-                        const coords = cityCoords[key];
+                        const pos = cityPositions[key];
 
-                        // Scale radius: simple stats mapping
-                        // Max expected ~600, min ~10.
-                        const radius = Math.max(10, Math.sqrt(total) * 2.5);
+                        // Dynamic Size
+                        const size = Math.max(30, Math.sqrt(total) * 4); // px size
 
-                        // Colors using the palette
-                        // Pulse Effect via CSS class? Or simpler SVG animation
+                        const bubble = document.createElement('div');
+                        bubble.className = "map-bubble";
+                        bubble.style.width = `${size}px`;
+                        bubble.style.height = `${size}px`;
+                        bubble.style.backgroundColor = pos.color;
+                        bubble.style.left = `${pos.left}%`;
+                        bubble.style.top = `${pos.top}%`;
 
-                        const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-                        group.style.cursor = 'pointer';
+                        // Tooltip logic
+                        bubble.innerHTML = `
+                            <span class="count">${total}</span>
+                            <div class="tooltip">
+                                <strong>${key === 'jerusalem' ? 'ירושלים' :
+                                key === 'telaviv' ? 'תל אביב' :
+                                    key === 'haifa' ? 'חיפה' :
+                                        key === 'beersheva' ? 'באר שבע' : 'פתח תקווה'}</strong><br>
+                                ${total} מעצרים
+                            </div>
+                        `;
 
-                        // Circle
-                        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                        circle.setAttribute("cx", coords.x);
-                        circle.setAttribute("cy", coords.y);
-                        circle.setAttribute("r", radius);
-                        circle.setAttribute("fill", coords.color);
-                        circle.setAttribute("fill-opacity", "0.6");
-                        circle.setAttribute("stroke", "#fff");
-                        circle.setAttribute("stroke-width", "2");
-
-                        // Animation: Pulse
-                        const animate = document.createElementNS("http://www.w3.org/2000/svg", "animate");
-                        animate.setAttribute("attributeName", "r");
-                        animate.setAttribute("values", `${radius};${radius + 3};${radius}`);
-                        animate.setAttribute("dur", "2s");
-                        animate.setAttribute("repeatCount", "indefinite");
-                        circle.appendChild(animate);
-
-                        // Tooltip (Simple Title)
-                        const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
-                        title.textContent = `${key}: ${total} מעצרים`;
-                        circle.appendChild(title);
-
-                        // Text Label
-                        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                        text.setAttribute("x", coords.x);
-                        text.setAttribute("y", coords.y + 4);
-                        text.setAttribute("text-anchor", "middle");
-                        text.setAttribute("fill", "#fff");
-                        text.setAttribute("font-size", "12px");
-                        text.setAttribute("font-weight", "bold");
-                        text.setAttribute("pointer-events", "none");
-                        text.textContent = total;
-
-                        group.appendChild(circle);
-                        group.appendChild(text);
-                        mapBubblesGroup.appendChild(group);
+                        mapBubblesContainer.appendChild(bubble);
                     }
                 });
             }
         }
+
 
 
         window.onload = function () {

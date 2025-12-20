@@ -12,6 +12,7 @@ OUTPUT_FILE = 'data.json'
 CITY_MAP = {
     'ירושלים': 'jerusalem',
     'תל אביב - יפו': 'telaviv',
+    'תל אביב יפו': 'telaviv',
     'חיפה': 'haifa',
     'באר שבע': 'beersheva',
     'פתח תקווה': 'petah_tikva'
@@ -101,6 +102,9 @@ def process_arrests(filepath):
             'age_group': get_age_group(age)
         })
         
+        if 'חיפה' in city_he and city_key == 'haifa':
+             pass
+        
     # 2. Read Indictments Sheet (for total gap model)
     total_indictments = 0
     try:
@@ -140,7 +144,10 @@ def process_extra_sheets(filepath):
         df_status = pd.read_excel(filepath, sheet_name='סטטוס תיק נקי')
         col = 'סטטוס תיק כולל החלטה שיפוטית'
         if col in df_status.columns:
-            counts = df_status[col].value_counts().to_dict()
+            # Filter NaNs and empty strings
+            valid_stats = df_status[col].dropna().astype(str)
+            valid_stats = valid_stats[valid_stats.str.strip() != '']
+            counts = valid_stats.value_counts().to_dict()
             meta_stats['status_counts'] = counts
     except Exception:
         pass # Sheet might not exist
@@ -150,7 +157,10 @@ def process_extra_sheets(filepath):
         df_closing = pd.read_excel(filepath, sheet_name='עילות סגירת תיק נקי')
         col = 'תאור סיבת סגירת תיק'
         if col in df_closing.columns:
-            counts = df_closing[col].value_counts().to_dict()
+             # Filter NaNs and empty strings
+            valid_closing = df_closing[col].dropna().astype(str)
+            valid_closing = valid_closing[valid_closing.str.strip() != '']
+            counts = valid_closing.value_counts().to_dict()
             meta_stats['closing_counts'] = counts
     except Exception:
         pass
@@ -276,10 +286,19 @@ def main():
     
     class NpEncoder(json.JSONEncoder):
         def default(self, obj):
+            import numpy as np
             if isinstance(obj, (int, float)):
+                if math.isnan(obj) or math.isinf(obj):
+                    return None
                 return obj
-            if hasattr(obj, 'item'): # numpy types
-                return obj.item()
+            if isinstance(obj, np.integer):
+                return int(obj)
+            if isinstance(obj, np.floating):
+                if np.isnan(obj) or np.isinf(obj):
+                    return None
+                return float(obj)
+            if isinstance(obj, np.ndarray):
+                return obj.tolist()
             return super(NpEncoder, self).default(obj)
 
     # 3. Export
