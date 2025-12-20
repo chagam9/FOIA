@@ -19,22 +19,85 @@ CITY_MAP = {
 }
 
 OFFENSE_MAP = {
+    # Assault / Violence
     'תגרה': 'assault',
     'תקיפה': 'assault',
     'אלימות פיזית': 'assault',
+    'תקיפה הגורמת חבלה ממש': 'assault',
+    'תקיפה סתם': 'assault',
+    'תקיפה סתם ע\'י שניים או יותר': 'assault',
+    'תקיפה במקום בו מתקיים אירוע ספורט': 'assault',
+    'תקיפה וחבלה ממשית ע\'י שניים או יותר': 'assault',
+    'חבלה ע\'י שניים או יותר': 'assault',
+    'חבלה חמורה': 'assault',
+    'אלימות בספורט': 'assault',
+    'תקיפת קטין וגרימת חבלה של ממש': 'assault',
+
+    # Banned Items
     'החזקת סכין': 'banned_item',
     'הכנסת חפץ אסור': 'banned_item',
+    'איסור הכנסת חפץ אסור לאירוע ספורט': 'banned_item',
+    'הכנסת חפץ לאירוע ספורט המפורט בתוספת השלישית': 'banned_item',
+    'החזקת אגרופן או סכין שלא כדין': 'banned_item',
+    'איסור הכנסת חפץ אסור מסוג מכלול האמצעים הכימיים שה': 'banned_item',
+    'איסור ידויי חפץ': 'banned_item',
+    'רכישה, נשיאה או הובלת נשק בלא רשות על פי דין': 'banned_item',
+    'החזקת חלק, אבזר או תחמושת שאינם חלק מהותי בנשק': 'banned_item',
+
+    # Pyrotechnics
     'שימוש בחומר נפיץ': 'pyro',
     'אבוקות': 'pyro',
     'זיקוקין': 'pyro',
+    'שמוש פחזני באש או בחומר דליק': 'pyro',
+    'הפעלת נשק או זיקוקין בדרך צבורית': 'pyro',
+    'גרימת פיצוץ חומר נפץ': 'pyro',
+    'הנחת חומר נפיץ או נוזל שלא כדין': 'pyro',
+    'שיגור חומר נפיץ לאחר שלא כדין': 'pyro',
+    'נסיון לחבול בחומר נפיץ': 'pyro',
+    'היזק מכוון בחומר נפיץ': 'pyro',
+    'טפול בלתי זהיר בחומר נפץ': 'pyro',
+    'הצתה': 'pyro',
+
+    # Police
     'תקיפת שוטר': 'police',
     'הפרעה לשוטר': 'police',
+    'תקיפת שוטר בעת מלוי תפקידו': 'police',
+    'תקיפת שוטר כשהתוקף מזוין בנשק חם/קר': 'police',
+    'תקיפת שוטר כדי להכשילו בתפקידו': 'police',
+    'תקיפת שוטר ע\'י שלושה או יותר': 'police',
+    'הפרעת שוטר במלוי תפקידו': 'police',
+    'הפרעה לשוטר בנסיבות מחמירות': 'police',
+    'העלבת עובד ציבור': 'police', # Often grouped
+    'הפרעה לעובד ציבור': 'police',
+    'תקיפת עובד ציבור': 'police',
+
+    # Public Order
     'הפרת הסדר הציבורי': 'order',
-    'התנהגות פרועה במקום צבורי': 'order', # From file analysis
+    'התנהגות פרועה במקום צבורי': 'order',
+    'התנהגות העלולה להפר שלום הציבור': 'order',
+    'מהומה במקום ציבורי': 'order',
+    'השתתפות בהתפרעות': 'order',
+    
+    # Field Invasion
     'כניסה לשדה המשחק': 'field',
     'איסור כניסה למקום': 'field',
+    'איסור כניסה לשדה המשחק': 'field',
+    'הסגת גבול פלילית': 'field',
+
+    # Property
     'היזק לרכוש': 'property',
-    'איומים': 'threat'
+    'היזק לרכוש במזיד': 'property',
+    'חבלה במזיד ברכב': 'property',
+    'יידוי אבן/חפץ לעבר רכב במטרה לפגוע': 'property',
+
+    # Threats / Other
+    'איומים': 'threat',
+    'גניבה': 'other',
+    'החזקת נכס חשוד כגנוב': 'other',
+    'קשירת קשר לעשות פשע': 'other',
+    'שיבוש מהלכי משפט': 'other',
+    'התחזות כאדם אחר במטרה להונות': 'other',
+    'הפרת הוראה חוקית': 'other'
 }
 
 # Age Bins
@@ -89,12 +152,23 @@ def process_arrests(filepath):
             
         # Map Offense
         offense_key = OFFENSE_MAP.get(offense_he, 'other')
+        
+        # Fallback to law description if offense is generic or not found
         if offense_key == 'other':
-            # Try mapping from law description if offense is generic
-            offense_key = OFFENSE_MAP.get(law_desc, 'other')
+            for key, val in OFFENSE_MAP.items():
+                if key in law_desc:
+                    offense_key = val
+                    break
             
-        # If 'other' offense, we might still want to count it in 'all' but maybe not specific categories
-        # For now, let's keep everything
+            # Special case for Sports Violence Law
+            if 'איסור אלימות בספורט' in law_desc:
+                 # If we still don't know, assume it's relevant to order or banned items, 
+                 # but usually specific offenses are listed. Let's map general "Violence in Sport" law to 'order' if nothing else matches.
+                 if offense_key == 'other':
+                     offense_key = 'order'
+
+        # If still 'other' and it's not a general 'other' (like theft), we might want to log it?
+        # For now, we keep it.
         
         processed_records.append({
             'city': city_key,
