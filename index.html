@@ -750,15 +750,7 @@
                     </div>
                 </div>
 
-                <div class="card" data-source="מקור: ניתוח נתוני מעצרים 2021-2025 (אקסל)">
-                    <h3 style="margin: 0 0 20px 0; font-size: 16px; text-align: right;">
-                        <i class="fas fa-city" style="margin-left: 5px; color: var(--accent-blue);"></i>
-                        מפת הבועות: הערים עם הכי הרבה מעצרים
-                    </h3>
-                    <div style="height: 300px; position: relative;">
-                        <canvas id="bubbleCitiesChart"></canvas>
-                    </div>
-                </div>
+
             </div>
         </div>
 
@@ -1114,10 +1106,10 @@
                 // Responsive Percentages (Top/Left) calibrated for new map image
                 const cityPositions = {
                     'jerusalem': { top: 38, left: 52, color: '#f59e0b' },
-                    'telaviv': { top: 32, left: 35, color: '#ef4444' },
-                    'haifa': { top: 12, left: 42, color: '#3b82f6' },
+                    'telaviv': { top: 32, left: 34, color: '#ef4444' }, // Adjusted Right
+                    'haifa': { top: 10, left: 45, color: '#3b82f6' }, // Adjusted Right
                     'beersheva': { top: 58, left: 48, color: '#f97316' },
-                    'petah_tikva': { top: 32, left: 40, color: '#10b981' }
+                    'petah_tikva': { top: 32, left: 38, color: '#10b981' } // Adjusted Right
                 };
 
                 // Increase map size visual
@@ -1222,34 +1214,7 @@
                 });
             }
 
-            // --- Chart 5: Bubble Cities ---
-            const ctxCities = document.getElementById('bubbleCitiesChart');
-            if (ctxCities) {
-                new Chart(ctxCities.getContext('2d'), {
-                    type: 'bubble',
-                    data: {
-                        datasets: [
-                            { label: 'ירושלים', data: [{ x: 80, y: 50, r: 50 }], backgroundColor: 'rgba(255, 205, 86, 0.6)', emoji: '🔥' },
-                            { label: 'תל אביב', data: [{ x: 20, y: 60, r: 35 }], backgroundColor: 'rgba(255, 99, 132, 0.6)', emoji: '👊' },
-                            { label: 'חיפה', data: [{ x: 50, y: 90, r: 25 }], backgroundColor: 'rgba(75, 192, 192, 0.6)', emoji: '🏟️' },
-                            { label: 'ב"ש', data: [{ x: 50, y: 10, r: 15 }], backgroundColor: 'rgba(255, 159, 64, 0.6)', emoji: '👮' },
-                            { label: 'פ"ת', data: [{ x: 35, y: 75, r: 12 }], backgroundColor: 'rgba(54, 162, 235, 0.6)', emoji: '🧨' }
-                        ]
-                    },
-                    options: {
-                        responsive: true, maintainAspectRatio: false,
-                        plugins: {
-                            legend: { position: 'right' },
-                            tooltip: {
-                                callbacks: {
-                                    label: function (c) { return c.dataset.emoji + ' ' + c.dataset.label + ': ' + (c.dataset.label === 'ירושלים' ? 421 : (c.dataset.label === 'תל אביב' ? 198 : 110)) + ' מעצרים'; }
-                                }
-                            }
-                        },
-                        scales: { x: { display: false, min: 0, max: 100 }, y: { display: false, min: 0, max: 100 } }
-                    }
-                });
-            }
+
         };
     </script>
 </body>
