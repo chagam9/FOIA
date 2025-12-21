@@ -34,7 +34,11 @@
         body {
             font-family: 'Heebo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
-            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.85)), url('site_background.png');
+            /* OLED Vignette: Deep radial gradient on top of the image */
+            background-image:
+                radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.4) 70%, #000000 100%),
+                linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
+                url('site_background.png');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -163,10 +167,18 @@
         }
 
         .header h1 {
-            font-size: 28px;
+            font-size: 32px;
+            /* Larger */
             margin: 0;
-            font-weight: 900;
-            letter-spacing: -0.5px;
+            font-weight: 800;
+            /* Extra Bold */
+            letter-spacing: -1px;
+            background: linear-gradient(180deg, #FFFFFF 0%, #cbd5e1 100%);
+            /* Metallic White Gradient */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            /* Deep shadow to separate from background */
         }
 
         .header p {
@@ -245,11 +257,26 @@
         }
 
         .card .value {
-            font-size: 48px;
+            font-size: 56px;
+            /* Increased size for impact */
             font-weight: 200;
             margin: 10px 0;
             font-family: 'Heebo', sans-serif;
-            letter-spacing: -1px;
+            letter-spacing: -2px;
+            /* Tighter editorial tracking */
+            color: #ffffff;
+            /* Pure White */
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+            /* Subtle diffuse glow */
+        }
+
+        .card .label {
+            font-size: 14px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.5);
+            /* Dimmed for contrast */
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
         .card .value.orange {
@@ -1303,6 +1330,17 @@
                     `רק כ-<b>${globalRate}%</b> מהמעצרים מבשילים לכדי כתב אישום או הליך פלילי (${globalIndict} מתוך ${globalTotal}).`;
             }
 
+            // Gradient function for dynamic color assignment
+            function getGradient(ctx, colorHex) {
+                const gradient = ctx.createLinearGradient(0, 400, 0, 0);
+                gradient.addColorStop(0, colorHex + '33'); // 20% opacity using hex alpha
+                gradient.addColorStop(1, colorHex);
+                return gradient;
+            }
+
+            const colorsHex = ['#fb923c', '#38bdf8', '#f87171', '#38bdf8', '#fb923c', '#fb923c'];
+            const gradients = colorsHex.map(c => getGradient(ctx, c));
+
             effectivenessChartInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -1310,7 +1348,7 @@
                     datasets: [{
                         label: 'סיכוי לכתב אישום (%)',
                         data: dataPercents,
-                        backgroundColor: colors,
+                        backgroundColor: gradients,
                         borderRadius: 4
                     }]
                 },
@@ -1331,10 +1369,12 @@
                         y: {
                             beginAtZero: true,
                             max: 100,
-                            title: { display: true, text: 'אחוז (%)' }
+                            title: { display: true, text: 'אחוז (%)' },
+                            grid: { color: 'rgba(255,255,255,0.05)' }
                         },
                         x: {
-                            ticks: { font: { size: 11 } }
+                            ticks: { font: { size: 11 } },
+                            grid: { display: false }
                         }
                     }
                 }
@@ -1354,48 +1394,42 @@
             keys.forEach(key => {
                 if (stats[key] && stats[key].total > 0) {
                     const s = stats[key];
-                    // Calculate percentages or raw counts? Stacked percentage is better for comparison quality.
-                    // But raw counts show the magnitude. The user wants to see "The Black Hole".
-                    // Let's go with Raw Counts to emphasize the Volume of closed cases.
-
                     labels.push(OFFENSE_LABELS_HE[key] || key);
                     lackEvidenceData.push(s.lack_evidence);
                     lackGuiltData.push(s.lack_guilt);
-                    otherData.push(s.other); // or total - (ev+guilt)
+                    otherData.push(s.other);
                 }
             });
+
+            // Create Gradients
+            const gradEvidence = ctx.createLinearGradient(0, 400, 0, 0);
+            gradEvidence.addColorStop(0, 'rgba(239, 68, 68, 0.2)'); // Red Faded
+            gradEvidence.addColorStop(1, '#ef4444'); // Red
+
+            const gradGuilt = ctx.createLinearGradient(0, 400, 0, 0);
+            gradGuilt.addColorStop(0, 'rgba(16, 185, 129, 0.2)'); // Green Faded
+            gradGuilt.addColorStop(1, '#10b981'); // Green
+
+            const gradOther = ctx.createLinearGradient(0, 400, 0, 0);
+            gradOther.addColorStop(0, 'rgba(100, 116, 139, 0.2)'); // Gray Faded
+            gradOther.addColorStop(1, '#64748b'); // Gray
 
             closingReasonsChartInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: labels,
                     datasets: [
-                        {
-                            label: 'חוסר ראיות',
-                            data: lackEvidenceData,
-                            backgroundColor: '#ef4444', // Red
-                            borderRadius: 4
-                        },
-                        {
-                            label: 'חוסר אשמה',
-                            data: lackGuiltData,
-                            backgroundColor: '#10b981', // Green
-                            borderRadius: 4
-                        },
-                        {
-                            label: 'אחר',
-                            data: otherData,
-                            backgroundColor: '#64748b', // Gray
-                            borderRadius: 4
-                        }
+                        { label: 'חוסר ראיות', data: lackEvidenceData, backgroundColor: gradEvidence, borderRadius: 4, borderWidth: 0 },
+                        { label: 'חוסר אשמה', data: lackGuiltData, backgroundColor: gradGuilt, borderRadius: 4, borderWidth: 0 },
+                        { label: 'אחר', data: otherData, backgroundColor: gradOther, borderRadius: 4, borderWidth: 0 }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        x: { stacked: true, ticks: { color: '#94a3b8' } },
-                        y: { stacked: true, ticks: { color: '#94a3b8' }, title: { display: true, text: 'מספר תיקים שנסגרו' } }
+                        x: { stacked: true, ticks: { color: '#94a3b8' }, grid: { display: false } },
+                        y: { stacked: true, ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' }, title: { display: true, text: 'מספר תיקים שנסגרו' } }
                     },
                     plugins: {
                         legend: { position: 'bottom', labels: { color: '#cbd5e1' } },
@@ -1405,36 +1439,38 @@
             });
         }
 
-        function renderComparisonChart(stats) {
-            if (!stats) return;
+        function renderOffensesChart(stats) {
+            if (!stats || Object.keys(stats).length === 0) return;
+            const labels = Object.keys(stats);
+            const data = Object.values(stats);
+            const ctx = document.getElementById('offensesChart').getContext('2d');
 
-            const ctx = document.getElementById('comparisonChart').getContext('2d');
+            // Create Neon Blue Gradient
+            const gradientBlue = ctx.createLinearGradient(0, 0, 400, 0); // Left to Right since indexAxis is y
+            gradientBlue.addColorStop(0, 'rgba(56, 189, 248, 0.2)'); // Faded Sky
+            gradientBlue.addColorStop(1, '#38bdf8'); // Bright Sky
 
             new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: [`ישראל ${stats.israel.flag}`, `אנגליה ${stats.england.flag}`],
+                    labels: labels,
                     datasets: [{
-                        label: 'מעצרים לכל 100,000 צופים',
-                        data: [stats.israel.rate, stats.england.rate],
-                        backgroundColor: ['#0038b8', '#cf142b'],
-                        borderRadius: 8
+                        label: 'מעצרים',
+                        data: data,
+                        backgroundColor: gradientBlue,
+                        borderRadius: 4,
+                        barPercentage: 0.6,
+                        borderWidth: 0
                     }]
                 },
                 options: {
+                    indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        title: { display: true, text: 'מעצרים לכל 100,000 צופים' },
-                        tooltip: {
-                            callbacks: {}
-                        }
-                    },
+                    plugins: { legend: { display: false } },
                     scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+                        x: { grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y: { grid: { display: false } }
                     }
                 }
             });
@@ -1511,13 +1547,28 @@
             // --- Chart 3: Offenses ---
             const ctxOffenses = document.getElementById('offensesChart');
             if (ctxOffenses) {
-                new Chart(ctxOffenses.getContext('2d'), {
+                const ctx = ctxOffenses.getContext('2d');
+                // Neon Gradient
+                const gradientBlue = ctx.createLinearGradient(0, 0, 400, 0);
+                gradientBlue.addColorStop(0, 'rgba(56, 189, 248, 0.2)');
+                gradientBlue.addColorStop(1, '#38bdf8');
+
+                new Chart(ctx, {
                     type: 'bar',
                     data: {
                         labels: ['הפרת סדר', 'אש/אבוקות', 'התנהגות פרועה', 'תקיפת שוטר', 'תקיפה', 'תגרה', 'חפץ אסור', 'הפרעת שוטר', 'איסור כניסה', 'אמצעים כימיים'],
-                        datasets: [{ label: 'מעצרים', data: [65, 54, 53, 47, 41, 36, 36, 32, 25, 21], backgroundColor: '#38bdf8', borderRadius: 4 }]
+                        datasets: [{ label: 'מעצרים', data: [65, 54, 53, 47, 41, 36, 36, 32, 25, 21], backgroundColor: gradientBlue, borderRadius: 4 }]
                     },
-                    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { grid: { color: 'rgba(255,255,255,0.05)' } },
+                            y: { grid: { display: false } }
+                        }
+                    }
                 });
             }
 
