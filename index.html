@@ -982,6 +982,11 @@
                 <div style="position: relative; width: 100%; height: 400px;">
                     <canvas id="comparisonChart"></canvas>
                 </div>
+                <div class="insight-box"
+                    style="margin-top: 20px; background-color: #fff7ed; border-color: #fdba74; color: #9a3412;">
+                    <i class="fas fa-gavel"></i> <strong>כתבי אישום:</strong> בהולנד 54% מהמעצרים מבשילים לכתב אישום,
+                    בישראל רק 28.8%.
+                </div>
             </div>
         </div>
 
@@ -1222,15 +1227,41 @@
 
             const ctx = document.getElementById('comparisonChart').getContext('2d');
 
+            const labels = [];
+            const data = [];
+            const colors = [];
+
+            // Israel
+            labels.push(`ישראל ${stats.israel.flag}`);
+            data.push(stats.israel.rate);
+            colors.push('#0038b8');
+
+            // England
+            labels.push(`אנגליה ${stats.england.flag}`);
+            data.push(stats.england.rate);
+            colors.push('#cf142b');
+
+            // Netherlands
+            if (stats.netherlands) {
+                labels.push(`הולנד ${stats.netherlands.flag}`);
+                data.push(stats.netherlands.rate);
+                colors.push('#f97316'); // Orange
+            }
+
+            if (comparisonChartInstance) {
+                comparisonChartInstance.destroy();
+            }
+
             comparisonChartInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: [`ישראל ${stats.israel.flag}`, `אנגליה ${stats.england.flag}`],
+                    labels: labels,
                     datasets: [{
                         label: 'מעצרים לכל 100,000 צופים',
-                        data: [stats.israel.rate, stats.england.rate],
-                        backgroundColor: ['#0038b8', '#cf142b'],
-                        borderRadius: 8
+                        data: data,
+                        backgroundColor: colors,
+                        borderRadius: 8,
+                        barPercentage: 0.6
                     }]
                 },
                 options: {
@@ -1238,12 +1269,15 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: { display: false },
-                        title: { display: true, text: 'מספר מעצרים לכל 100,000 צופים (2024)' },
+                        title: { display: true, text: 'מעצרים לכל 100,000 צופים' },
                         tooltip: {
                             callbacks: {
                                 footer: function (tooltipItems) {
-                                    if (tooltipItems[0].dataIndex === 0) { // Israel
-                                        return `מבוסס על ${stats.israel.arrests} מעצרים מתוך ${stats.israel.audience.toLocaleString()} צופים`;
+                                    if (tooltipItems[0].label.includes('ישראל')) {
+                                        return `מבוסס על ${stats.israel.arrests} מעצרים`;
+                                    }
+                                    if (tooltipItems[0].label.includes('הולנד')) {
+                                        return `מבוסס על ${stats.netherlands.arrests} מעצרים (${stats.netherlands.indictment_rate}% כתבי אישום)`;
                                     }
                                     return '';
                                 }
@@ -1253,7 +1287,10 @@
                     scales: {
                         y: {
                             beginAtZero: true,
-                            title: { display: true, text: 'מעצרים ל-100k צופים' }
+                            grid: { color: 'rgba(255,255,255,0.05)' }
+                        },
+                        x: {
+                            grid: { display: false }
                         }
                     }
                 }

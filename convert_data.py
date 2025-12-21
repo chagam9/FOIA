@@ -515,6 +515,14 @@ def main():
             'rate': 4.2,
             'flag': '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
             'label': 'אנגליה'
+        },
+        'netherlands': {
+            'rate': round((323 / 8000000) * 100000, 2),
+            'flag': '🇳🇱',
+            'label': 'הולנד',
+            'arrests': 323,
+            'audience': 8000000,
+            'indictment_rate': 54
         }
     }
 
