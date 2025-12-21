@@ -296,6 +296,60 @@ def process_indictment_stats(filepath):
         
     return stats
 
+def process_closing_reason_stats(filepath):
+    """
+    Processes 'Closing Reasons' sheet to aggregate reasons by offense.
+    Key insight: "Lack of Evidence" vs "Lack of Guilt" vs "Other" per offense.
+    """
+    stats = {}
+    try:
+        df = pd.read_excel(filepath, sheet_name='עילות סגירת תיק נקי')
+        
+        # Renaissance columns
+        df.rename(columns={
+            'עבירה': 'offense_he',
+            'תאור סמל חוק': 'law_desc',
+            'תאור סיבת סגירת תיק': 'reason'
+        }, inplace=True)
+        
+        # Init stats
+        known_offenses = list(set(OFFENSE_MAP.values()))
+        # Structure: offense -> { reason_category -> count }
+        stats = {off: {'total': 0, 'lack_evidence': 0, 'lack_guilt': 0, 'other': 0} for off in known_offenses}
+        stats['other'] = {'total': 0, 'lack_evidence': 0, 'lack_guilt': 0, 'other': 0}
+
+        for _, row in df.iterrows():
+            offense_he = str(row.get('offense_he', '')).strip()
+            law_desc = str(row.get('law_desc', '')).strip()
+            reason = str(row.get('reason', '')).strip()
+            
+            # Map Offense (Reuse logic - could refactor to helper but extensive enough here)
+            offense_key = OFFENSE_MAP.get(offense_he, 'other')
+            if offense_key == 'other':
+                 for key, val in OFFENSE_MAP.items():
+                    if key in law_desc:
+                        offense_key = val
+                        break
+                 if 'איסור אלימות בספורט' in law_desc and offense_key == 'other':
+                    offense_key = 'order'
+
+            # Map Reason
+            category = 'other'
+            if 'חוסר ראיות' in reason:
+                category = 'lack_evidence'
+            elif 'חוסר אשמה' in reason:
+                category = 'lack_guilt'
+            
+            # Update
+            if offense_key in stats:
+                stats[offense_key]['total'] += 1
+                stats[offense_key][category] += 1
+    
+    except Exception as e:
+        print(f"Error processing Closing Stats: {e}")
+        
+    return stats
+
 def aggregate_data(all_records):
     """Aggregates raw records into the structure required by Chart.js"""
     
@@ -418,6 +472,7 @@ def main():
     # Since we are outside the loop, we'll pick the first relevant file.
     target_file = files[0] # Simplification
     final_json_data['indictment_stats'] = process_indictment_stats(target_file)
+    final_json_data['closing_stats'] = process_closing_reason_stats(target_file)
     
     class NpEncoder(json.JSONEncoder):
         def default(self, obj):
