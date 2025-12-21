@@ -10,39 +10,41 @@
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #020617;
-            /* Slate 950 - Deepest Dark */
-            --card-bg: rgba(30, 41, 59, 0.4);
-            /* Slate 800 - Transparent */
-            --sidebar-bg: rgba(15, 23, 42, 0.8);
-            --text-color: #f1f5f9;
-            /* Slate 100 */
-            --text-muted: #94a3b8;
-            /* Slate 400 */
-            --border-color: rgba(255, 255, 255, 0.08);
+            --bg-color: #000000;
+            /* Pure Black Base */
+            --card-bg: rgba(255, 255, 255, 0.05);
+            /* Ultra Subtle Glass */
+            --sidebar-bg: rgba(20, 20, 20, 0.6);
+            --text-color: rgba(255, 255, 255, 0.92);
+            /* Primary Text */
+            --text-muted: rgba(255, 255, 255, 0.55);
+            /* Secondary Text */
+            --border-color: rgba(255, 255, 255, 0.12);
+            /* Crisp Glass Border */
 
-            /* Neon Accents */
-            --primary-blue: #38bdf8;
-            /* Sky 400 */
-            --accent-blue: #60a5fa;
-            --accent-green: #34d399;
-            --accent-red: #f87171;
-            --accent-orange: #fb923c;
-            --accent-yellow: #facc15;
+            /* Apple Human Interface Colors (Dark Mode) */
+            --primary-blue: #0A84FF;
+            --accent-blue: #64D2FF;
+            --accent-green: #30D158;
+            --accent-red: #FF453A;
+            --accent-orange: #FF9F0A;
+            --accent-yellow: #FFD60A;
         }
 
         body {
-            font-family: 'Heebo', sans-serif;
+            font-family: 'Heebo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             background-image:
-                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(248, 113, 113, 0.1) 0px, transparent 50%);
+                radial-gradient(at 0% 0%, rgba(10, 132, 255, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(94, 92, 230, 0.15) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(48, 209, 88, 0.1) 0px, transparent 50%);
             color: var(--text-color);
             margin: 0;
             padding: 0;
             display: flex;
             height: 100vh;
             overflow: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
         /* Tooltip Styles */
@@ -226,27 +228,28 @@
         /* Cards */
         .card {
             background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border-radius: 16px;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 20px;
             padding: 25px;
             text-align: center;
             border: 1px solid var(--border-color);
-            transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+            box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.25);
         }
 
         .card .value {
-            font-size: 42px;
-            font-weight: 300;
+            font-size: 48px;
+            font-weight: 200;
             margin: 10px 0;
             font-family: 'Heebo', sans-serif;
-            letter-spacing: -2px;
+            letter-spacing: -1px;
         }
 
         .card .value.orange {
@@ -271,9 +274,9 @@
 
         .card .label {
             color: var(--text-muted);
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
             text-transform: uppercase;
         }
 
@@ -637,7 +640,7 @@
             bottom: 110%;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(30, 41, 59, 0.9);
+            background: rgba(30, 41, 59, 0.6);
             color: #fff;
             padding: 8px 12px;
             border-radius: 6px;
