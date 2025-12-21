@@ -135,7 +135,8 @@ def process_arrests(filepath):
         'גיל': 'age',
         'גיל': 'age',
         'תאור סמל חוק': 'law_desc',
-        'Column1': 'quantity' # The quantity column
+        'Column1': 'quantity', # The quantity column
+        'תאריך מעצר': 'date'
     }, inplace=True)
     
     processed_records = []
@@ -145,6 +146,15 @@ def process_arrests(filepath):
         offense_he = str(row.get('offense_he', '')).strip()
         law_desc = str(row.get('law_desc', '')).strip()
         age = row.get('age')
+        
+        # Extract Year
+        date_val = row.get('date')
+        year = None
+        if pd.notna(date_val):
+            try:
+                year = pd.to_datetime(date_val).year
+            except:
+                pass
         
         # Get Quantity (default 1)
         qty = 1
@@ -190,7 +200,8 @@ def process_arrests(filepath):
             'city': city_key,
             'offense': offense_key,
             'age_group': get_age_group(age),
-            'weight': qty  # Add weight
+            'weight': qty, # Add weight
+            'year': year # Add year
         })
         
         if 'חיפה' in city_he and city_key == 'haifa':
@@ -484,6 +495,27 @@ def main():
         'total_arrests': sum([r.get('weight', 1) for r in all_arrest_records]), # Sum weights
         'status_distribution': global_meta['status_counts'],
         'closing_reasons': global_meta['closing_counts']
+    }
+
+    # 3. International Comparison (2024)
+    # Filter for 2024 records
+    arrests_2024 = sum(r['weight'] for r in all_arrest_records if r.get('year') == 2024)
+    israel_audience_2024 = 2000000
+    israel_rate = (arrests_2024 / israel_audience_2024) * 100000 if israel_audience_2024 > 0 else 0
+    
+    final_json_data['comparison_stats'] = {
+        'israel': {
+            'rate': round(israel_rate, 2),
+            'arrests': int(arrests_2024),
+            'audience': israel_audience_2024,
+            'flag': '🇮🇱',
+            'label': 'ישראל'
+        },
+        'england': {
+            'rate': 4.2,
+            'flag': '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+            'label': 'אנגליה'
+        }
     }
 
 
