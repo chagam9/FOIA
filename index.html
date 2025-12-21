@@ -973,8 +973,7 @@
 
         <div id="comparison" class="tab-content">
             <div class="card" style="margin-bottom: 20px; height: 500px;">
-                <h3 style="margin: 0 0 20px 0; font-size: 20px; color: var(--primary-blue);">ישראל מול אנגליה: השוואת
-                    מעצרים (2024)</h3>
+                <h3 style="margin: 0 0 20px 0; font-size: 20px; color: var(--primary-blue);">השוואת מעצרים (2024)</h3>
                 <div class="insight-box" style="margin-bottom: 20px; text-align: right;">
                     <i class="fas fa-globe"></i> <strong>השוואה מנורמלת:</strong> הגרף מציג את מספר המעצרים לכל 100,000
                     צופים, כדי לאפשר השוואה הוגנת בין הליגות למרות ההבדל בכמות הקהל.
@@ -986,6 +985,11 @@
                     style="margin-top: 20px; background-color: #fff7ed; border-color: #fdba74; color: #9a3412;">
                     <i class="fas fa-gavel"></i> <strong>כתבי אישום:</strong> בהולנד 54% מהמעצרים מבשילים לכתב אישום,
                     בישראל רק 28.8%.
+                </div>
+                <div class="insight-box"
+                    style="margin-top: 10px; background-color: #fef9c3; border-color: #fde047; color: #854d0e;">
+                    <i class="fas fa-file-contract"></i> <strong>ספרד:</strong> 1675 סנקציות מנהליות, משמע שספרד
+                    מתעדפת עונשים מנהליים על פני מעצרים.
                 </div>
             </div>
         </div>
@@ -1241,11 +1245,17 @@
             data.push(stats.england.rate);
             colors.push('#cf142b');
 
-            // Netherlands
             if (stats.netherlands) {
                 labels.push(`הולנד ${stats.netherlands.flag}`);
                 data.push(stats.netherlands.rate);
                 colors.push('#f97316'); // Orange
+            }
+
+            // Spain
+            if (stats.spain) {
+                labels.push(`ספרד ${stats.spain.flag}`);
+                data.push(stats.spain.rate);
+                colors.push('#eab308'); // Yellow
             }
 
             if (comparisonChartInstance) {
@@ -1278,6 +1288,9 @@
                                     }
                                     if (tooltipItems[0].label.includes('הולנד')) {
                                         return `מבוסס על ${stats.netherlands.arrests} מעצרים (${stats.netherlands.indictment_rate}% כתבי אישום)`;
+                                    }
+                                    if (tooltipItems[0].label.includes('ספרד')) {
+                                        return `מבוסס על ${stats.spain.arrests} מעצרים (${stats.spain.admin_sanctions} סנקציות מנהליות)`;
                                     }
                                     return '';
                                 }

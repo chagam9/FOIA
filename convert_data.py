@@ -523,6 +523,14 @@ def main():
             'arrests': 323,
             'audience': 8000000,
             'indictment_rate': 54
+        },
+        'spain': {
+            'rate': round((90 / 15700000) * 100000, 2),
+            'flag': '🇪🇸',
+            'label': 'ספרד',
+            'arrests': 90,
+            'audience': 15700000,
+            'admin_sanctions': 1675
         }
     }
 
