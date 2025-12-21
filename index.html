@@ -736,6 +736,13 @@
                 </div>
             </div>
 
+            <!-- Enhanced Indictment Insight -->
+            <div id="indictmentInsightBox" class="alert-box"
+                style="margin-bottom: 20px; background-color: #f0fdf4; border-color: #bbf7d0; color: #166534; display: none;">
+                <i class="fas fa-gavel"></i> <span id="indictmentText">רק כ-XX% מהמעצרים מבשילים לכדי כתב אישום או הליך
+                    פלילי.</span>
+            </div>
+
             <div class="alert-box" style="margin-bottom: 20px;"
                 data-source="מקור: דוח בועטים 24-25, עמ' 1 (367 קריאות) מול פרוטוקול הוועדה עמ' 1">
                 <i class="fas fa-info-circle"></i> פער אדיר בין כמות הקריאות הגזעניות (367) לבין תיקי חקירה שנפתחו בנושא
@@ -743,14 +750,19 @@
             </div>
 
             <div class="dashboard-grid">
+                <div class="card">
+                    <h3 style="margin: 0 0 20px 0; font-size: 16px;">אפקטיביות האכיפה (סיכוי לכתב אישום)</h3>
+                    <div style="height: 300px; position: relative;">
+                        <canvas id="effectivenessChart"></canvas>
+                    </div>
+                </div>
+
                 <div class="card" data-source="מקור: דוח בועטים 24-25, עמ' 8 (טבלת סיכום)">
                     <h3 style="margin: 0 0 20px 0; font-size: 16px;">שיאני הגזענות (עונת 24/25)</h3>
                     <div style="height: 300px; position: relative;">
                         <canvas id="racismPieChart"></canvas>
                     </div>
                 </div>
-
-
             </div>
         </div>
 
@@ -1152,6 +1164,115 @@
             }
         }
 
+        let effectivenessChartInstance = null;
+        // realData is already declared globally, so no need to redeclare here.
+
+        // Translate keys to Hebrew for display
+        const OFFENSE_LABELS_HE = {
+            'assault': 'אלימות/תקיפה',
+            'pyro': 'פירוטכניקה',
+            'police': 'תקיפת שוטר',
+            'order': 'הפרת סדר',
+            'field': 'פריצה למגרש',
+            'banned_item': 'חפץ אסור',
+            'property': 'ונדליזם',
+            'threat': 'איומים',
+            'other': 'אחר'
+        };
+
+        function renderEffectivenessChart(stats) {
+            const ctx = document.getElementById('effectivenessChart').getContext('2d');
+
+            // Prepare Data
+            const labels = [];
+            const dataPercents = [];
+            const colors = [];
+
+            let totalCases = 0;
+            let totalIndictments = 0;
+
+            // Sort by percentage descending? Or fixed order?
+            // Let's use specific relevant keys
+            const keys = ['assault', 'pyro', 'police', 'order', 'field', 'banned_item'];
+
+            keys.forEach(key => {
+                if (stats[key]) {
+                    const total = stats[key].total || 0;
+                    const indict = stats[key].indict || 0;
+                    totalCases += total;
+                    totalIndictments += indict;
+
+                    if (total > 5) { // Threshold to avoid noisy data
+                        const pct = (indict / total) * 100;
+                        labels.push(OFFENSE_LABELS_HE[key] || key);
+                        dataPercents.push(pct.toFixed(1));
+
+                        // Dynamic Color: High > Red, Low > Green/Blue
+                        if (pct > 50) colors.push('#ef4444'); // Red
+                        else if (pct > 25) colors.push('#f97316'); // Orange
+                        else colors.push('#3b82f6'); // Blue
+                    }
+                }
+            });
+
+            // Calculate Global Rate
+            // We can also sum up from stats['other'] if we want truly global
+            // But relying on what we iterated gives a good "Major Offenses" rate. 
+            // Better to use the full sum from the stats object for the text.
+            let globalTotal = 0;
+            let globalIndict = 0;
+            Object.values(stats).forEach(v => {
+                globalTotal += v.total;
+                globalIndict += v.indict;
+            });
+
+            const globalRate = globalTotal > 0 ? ((globalIndict / globalTotal) * 100).toFixed(1) : 0;
+
+            // Update Text Insight
+            const viewBox = document.getElementById('indictmentInsightBox');
+            if (viewBox) {
+                viewBox.style.display = 'block';
+                document.getElementById('indictmentText').innerHTML =
+                    `רק כ-<b>${globalRate}%</b> מהמעצרים מבשילים לכדי כתב אישום או הליך פלילי (${globalIndict} מתוך ${globalTotal}).`;
+            }
+
+            effectivenessChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'סיכוי לכתב אישום (%)',
+                        data: dataPercents,
+                        backgroundColor: colors,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return context.parsed.y + '% סיכוי לכתב אישום';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: { display: true, text: 'אחוז (%)' }
+                        },
+                        x: {
+                            ticks: { font: { size: 11 } }
+                        }
+                    }
+                }
+            });
+        }
 
 
         window.onload = function () {
@@ -1168,6 +1289,11 @@
                     if (realData.meta) {
                         // Cleaned up unused charts
                         updateMapViz();
+                    }
+
+                    // Initialize Charts requiring Data
+                    if (realData.indictment_stats) {
+                        renderEffectivenessChart(realData.indictment_stats);
                     }
 
                     // --- Chart 1: Racism Pie (Static for now) ---

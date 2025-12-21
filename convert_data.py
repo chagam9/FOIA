@@ -241,6 +241,61 @@ def process_extra_sheets(filepath):
         
     return meta_stats
 
+def process_indictment_stats(filepath):
+    """
+    Processes the 'Status' sheet to calculate Indictment Rate per Offense.
+    Indictment = 'פרקליטות-תביעות' or 'החלטה שיפוטית'
+    """
+    stats = {}
+    
+    try:
+        df = pd.read_excel(filepath, sheet_name='סטטוס תיק נקי')
+        
+        # Standardize columns (same as arrests sheet)
+        df.rename(columns={
+            'עבירה': 'offense_he',
+            'תאור סמל חוק': 'law_desc',
+            'סטטוס תיק כולל החלטה שיפוטית': 'status'
+        }, inplace=True)
+        
+        # Initialize stats for known offenses
+        known_offenses = list(set(OFFENSE_MAP.values()))
+        stats = {off: {'total': 0, 'indict': 0} for off in known_offenses}
+        stats['other'] = {'total': 0, 'indict': 0} # Catch-all
+        
+        for _, row in df.iterrows():
+            offense_he = str(row.get('offense_he', '')).strip()
+            law_desc = str(row.get('law_desc', '')).strip()
+            status = str(row.get('status', '')).strip()
+            
+            # Map Offense
+            offense_key = OFFENSE_MAP.get(offense_he, 'other')
+            if offense_key == 'other':
+                # Fallback to law description
+                for key, val in OFFENSE_MAP.items():
+                    if key in law_desc:
+                        offense_key = val
+                        break
+                if 'איסור אלימות בספורט' in law_desc and offense_key == 'other':
+                    offense_key = 'order' # Default for general sports violence law
+            
+            # Determine Indictment Status
+            is_indictment = status in ['פרקליטות-תביעות', 'החלטה שיפוטית']
+            
+            # Update stats
+            if offense_key in stats:
+                stats[offense_key]['total'] += 1
+                if is_indictment:
+                    stats[offense_key]['indict'] += 1
+            else:
+                 # Should be caught by 'other', but safety check
+                 pass
+
+    except Exception as e:
+        print(f"Error processing Indictment Stats: {e}")
+        
+    return stats
+
 def aggregate_data(all_records):
     """Aggregates raw records into the structure required by Chart.js"""
     
