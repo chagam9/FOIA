@@ -412,6 +412,12 @@ def main():
         'status_distribution': global_meta['status_counts'],
         'closing_reasons': global_meta['closing_counts']
     }
+
+    # Process Indictment Stats (using the last file found - assuming single file for now or merge)
+    # We need to process the file again or do it in the loop. 
+    # Since we are outside the loop, we'll pick the first relevant file.
+    target_file = files[0] # Simplification
+    final_json_data['indictment_stats'] = process_indictment_stats(target_file)
     
     class NpEncoder(json.JSONEncoder):
         def default(self, obj):
