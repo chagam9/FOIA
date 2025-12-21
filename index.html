@@ -693,8 +693,8 @@
         <button class="nav-btn" onclick="showTab('map')">
             <i class="fas fa-map-marker-alt"></i> מפה
         </button>
-        <button class="nav-btn" onclick="showTab('fans')">
-            <i class="fas fa-bullhorn"></i> אוהדים
+        <button class="nav-btn" onclick="showTab('comparison')">
+            <i class="fas fa-globe"></i> השוואה בינלאומית
         </button>
         <button class="nav-btn" onclick="showTab('foi')">
             <i class="fas fa-file-signature"></i> חופש מידע
@@ -777,16 +777,7 @@
                     </div>
                 </div>
 
-                <div class="card" style="grid-column: span 2; margin-top: 20px;">
-                    <h3 style="margin: 0 0 10px 0; font-size: 18px; color: var(--primary-blue);">השוואה בינלאומית (2024)
-                    </h3>
-                    <div class="insight-box" style="margin-bottom: 20px; text-align: right;">
-                        <i class="fas fa-globe"></i> השוואה מנורמלת: מספר מעצרים לכל 100,000 צופים.
-                    </div>
-                    <div style="height: 350px; position: relative;">
-                        <canvas id="comparisonChart"></canvas>
-                    </div>
-                </div>
+
 
 
             </div>
@@ -953,11 +944,16 @@
             </div>
         </div>
 
-        <div id="fans" class="tab-content">
-            <div class="card" style="margin-bottom: 20px; height: 500px;"
-                data-source="מקורות: פרוטוקול הוועדה עמ' 1-2 (חקירות ואישומים), דוח בועטים עמ' 1 (אירועים)">
-                <div style="position: relative; width: 100%; height: 100%;">
-                    <canvas id="barChart"></canvas>
+        <div id="comparison" class="tab-content">
+            <div class="card" style="margin-bottom: 20px; height: 500px;">
+                <h3 style="margin: 0 0 20px 0; font-size: 20px; color: var(--primary-blue);">ישראל מול אנגליה: השוואת
+                    מעצרים (2024)</h3>
+                <div class="insight-box" style="margin-bottom: 20px; text-align: right;">
+                    <i class="fas fa-globe"></i> <strong>השוואה מנורמלת:</strong> הגרף מציג את מספר המעצרים לכל 100,000
+                    צופים, כדי לאפשר השוואה הוגנת בין הליגות למרות ההבדל בכמות הקהל.
+                </div>
+                <div style="position: relative; width: 100%; height: 400px;">
+                    <canvas id="comparisonChart"></canvas>
                 </div>
             </div>
         </div>
@@ -1432,14 +1428,7 @@
                         legend: { display: false },
                         title: { display: true, text: 'מעצרים לכל 100,000 צופים' },
                         tooltip: {
-                            callbacks: {
-                                footer: function (tooltipItems) {
-                                    if (tooltipItems[0].dataIndex === 0) { // Israel
-                                        return `מבוסס על ${stats.israel.arrests} מעצרים מתוך ${stats.israel.audience.toLocaleString()} צופים`;
-                                    }
-                                    return '';
-                                }
-                            }
+                            callbacks: {}
                         }
                     },
                     scales: {
