@@ -133,7 +133,9 @@ def process_arrests(filepath):
         'ישוב עבירה מחושב': 'city_he',
         'עבירה': 'offense_he',
         'גיל': 'age',
-        'תאור סמל חוק': 'law_desc' # Backup for offense mapping if needed
+        'גיל': 'age',
+        'תאור סמל חוק': 'law_desc',
+        'Column1': 'quantity' # The quantity column
     }, inplace=True)
     
     processed_records = []
@@ -143,6 +145,20 @@ def process_arrests(filepath):
         offense_he = str(row.get('offense_he', '')).strip()
         law_desc = str(row.get('law_desc', '')).strip()
         age = row.get('age')
+        
+        # Get Quantity (default 1)
+        qty = 1
+        raw_qty = row.get('quantity')
+        if pd.notna(raw_qty):
+            try:
+                qty = int(float(raw_qty))
+            except:
+                qty = 1
+        
+        # Filter outlier (User request)
+        if qty > 200: 
+            print(f"Skipping outlier row with quantity {qty}")
+            continue
         
         # Map City
         city_key = CITY_MAP.get(city_he, 'other')
@@ -173,7 +189,8 @@ def process_arrests(filepath):
         processed_records.append({
             'city': city_key,
             'offense': offense_key,
-            'age_group': get_age_group(age)
+            'age_group': get_age_group(age),
+            'weight': qty  # Add weight
         })
         
         if 'חיפה' in city_he and city_key == 'haifa':
@@ -376,6 +393,8 @@ def aggregate_data(all_records):
         o = r['offense']
         g = r['age_group']
         
+        w = r.get('weight', 1) # Get weight
+        
         # Skip unknown age groups for chart clarity? Or keep them? 
         # The chart expects specific labels. Let's map 'Other' or 'Unknown' to nothing or handle them.
         if g not in DEFAULT_GROUPS: continue
@@ -383,19 +402,19 @@ def aggregate_data(all_records):
         # Add to specific City & specific Offense
         if c in tree: # valid city
              if o in tree[c]:
-                 tree[c][o]['counts'][g] += 1
-                 tree[c][o]['total'] += 1
+                 tree[c][o]['counts'][g] += w
+                 tree[c][o]['total'] += w
              # Add to 'all' offenses for this city
-             tree[c]['all']['counts'][g] += 1
-             tree[c]['all']['total'] += 1
+             tree[c]['all']['counts'][g] += w
+             tree[c]['all']['total'] += w
         
         # Add to 'all' Cities
         if o in tree['all']:
-             tree['all'][o]['counts'][g] += 1
-             tree['all'][o]['total'] += 1
+             tree['all'][o]['counts'][g] += w
+             tree['all'][o]['total'] += w
         # Add to 'all' Cities & 'all' Offenses
-        tree['all']['all']['counts'][g] += 1
-        tree['all']['all']['total'] += 1
+        tree['all']['all']['counts'][g] += w
+        tree['all']['all']['total'] += w
 
     # Convert to final lists
     final_output = {}
@@ -462,10 +481,11 @@ def main():
     # Add the global indictment count directly to relevant sections or meta
     final_json_data['meta'] = {
         'total_indictments': total_indictments_global,
-        'total_arrests': len(all_arrest_records),
+        'total_arrests': sum([r.get('weight', 1) for r in all_arrest_records]), # Sum weights
         'status_distribution': global_meta['status_counts'],
         'closing_reasons': global_meta['closing_counts']
     }
+
 
     # Process Indictment Stats (using the last file found - assuming single file for now or merge)
     # We need to process the file again or do it in the loop. 
