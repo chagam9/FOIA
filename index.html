@@ -1258,6 +1258,13 @@
                 colors.push('#eab308'); // Yellow
             }
 
+            // France
+            if (stats.france) {
+                labels.push(`צרפת ${stats.france.flag}`);
+                data.push(stats.france.rate);
+                colors.push('#2563eb'); // Royal Blue
+            }
+
             if (comparisonChartInstance) {
                 comparisonChartInstance.destroy();
             }
@@ -1291,6 +1298,9 @@
                                     }
                                     if (tooltipItems[0].label.includes('ספרד')) {
                                         return `מבוסס על ${stats.spain.arrests} מעצרים (${stats.spain.admin_sanctions} סנקציות מנהליות)`;
+                                    }
+                                    if (tooltipItems[0].label.includes('צרפת')) {
+                                        return [`מבוסס על ${stats.france.arrests} מעצרים`, `מקור: ${stats.france.report_name}`];
                                     }
                                     return '';
                                 }

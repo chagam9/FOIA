@@ -531,6 +531,13 @@ def main():
             'arrests': 90,
             'audience': 15700000,
             'admin_sanctions': 1675
+        },
+        'france': {
+            'rate': round((613 / 12290125) * 100000, 2),
+            'flag': '🇫🇷',
+            'label': 'צרפת',
+            'arrests': 613,
+            'report_name': 'RAPPORT D’ACTIVITÉS N°3 – Instance Nationale du Supportérisme (INS)'
         }
     }
 
