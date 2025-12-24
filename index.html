@@ -698,10 +698,87 @@
                 box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
             }
         }
+
+        /* Login Overlay */
+        #login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 0.5s ease;
+        }
+
+        #login-box {
+            background-color: rgba(20, 20, 20, 0.9);
+            padding: 40px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            box-shadow: 0 0 50px rgba(0, 56, 184, 0.3);
+            backdrop-filter: blur(20px);
+        }
+
+        #login-input {
+            padding: 12px;
+            font-size: 18px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            margin-bottom: 20px;
+            width: 200px;
+            text-align: center;
+            background: #111;
+            color: white;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        #login-input:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 15px rgba(10, 132, 255, 0.2);
+        }
+
+        #login-btn {
+            padding: 12px 30px;
+            font-size: 16px;
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        #login-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 
 <body>
+
+    <!-- Login Overlay -->
+    <div id="login-overlay">
+        <div id="login-box">
+            <h2 style="color: white; margin-bottom: 10px; font-weight: 300; font-size: 1.5rem;">כניסה למערכת</h2>
+            <h1 style="color: var(--primary-blue); margin-bottom: 30px; margin-top:0; font-size: 2rem;">דוח אלימות
+                בספורט</h1>
+            <input type="password" id="login-input" placeholder="קוד גישה">
+            <br>
+            <button id="login-btn" onclick="checkLogin()">אישור</button>
+            <p id="login-error" style="color: var(--accent-red); display: none; margin-top: 15px; font-size: 14px;">
+                <i class="fas fa-exclamation-circle"></i> קוד שגוי
+            </p>
+        </div>
+    </div>
 
     <div class="sidebar">
         <div class="logo">
@@ -1535,6 +1612,45 @@
                 }
             });
         }
+
+        // --- Login Logic ---
+        function checkLogin() {
+            const input = document.getElementById('login-input');
+            const code = input.value;
+            if (code === '1234') {
+                const overlay = document.getElementById('login-overlay');
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 500);
+                sessionStorage.setItem('site_access', 'granted');
+            } else {
+                const errorMsg = document.getElementById('login-error');
+                errorMsg.style.display = 'block';
+                errorMsg.classList.add('shake'); // Optional animation class if added
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        // Check Access on Load
+        document.addEventListener('DOMContentLoaded', function () {
+            const input = document.getElementById('login-input');
+            if (input) {
+                input.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        checkLogin();
+                    }
+                });
+                // Focus input automatically
+                setTimeout(() => input.focus(), 100);
+            }
+
+            if (sessionStorage.getItem('site_access') === 'granted') {
+                const overlay = document.getElementById('login-overlay');
+                if (overlay) overlay.style.display = 'none';
+            }
+        });
 
         window.onload = function () {
             // Fetch data
