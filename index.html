@@ -693,7 +693,7 @@
         const SCOPES = 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/gmail.send';
         const SPREADSHEET_ID = '1UYD6JAdXouNbNtNpiTIHg03ghNK64uwzSYKhUGhQZkI';
         const RANGE = 'A2:R';
-        const CONTACTS_RANGE = 'M38:N48'; // Table range for contacts (Name, Email)
+        const CONTACTS_RANGE = 'M39:N50'; // Data only range (skip headers at M38)
         let emailList = []; // Array of { name, email } 
         let tokenClient;
         let gAccessToken = null;
@@ -755,13 +755,13 @@
                 if (result.values) {
                     result.values.forEach(row => {
                         if (row[0] && row[1]) {
-                            emailList.push({ name: row[0], email: row[1] });
+                            emailList.push({ name: String(row[0]).trim(), email: String(row[1]).trim() });
                         }
                     });
                 }
                 renderEmailList();
             } catch (err) {
-                console.error("Fetch Emails (M38:N48) Error:", err);
+                console.error("Fetch Emails (M39:N50) Error:", err);
                 emailList = [];
                 renderEmailList();
             }
@@ -822,11 +822,11 @@
         async function saveEmailsToSheet() {
             if (!gAccessToken || !CURRENT_SHEET_NAME) return;
             try {
-                // Prepare values for the range M38:N48
-                const values = emailList.slice(0, 11).map(e => [e.name, e.email]);
+                // Prepare values for the range M39:N50 (approx 12 rows)
+                const values = emailList.slice(0, 12).map(e => [e.name, e.email]);
 
-                // Pad with empty rows if less than 11 entries to clear old data
-                while (values.length < 11) {
+                // Pad with empty rows if less than 12 entries to clear old data
+                while (values.length < 12) {
                     values.push(["", ""]);
                 }
 
@@ -837,7 +837,7 @@
                     body: JSON.stringify({ values: values })
                 });
             } catch (err) {
-                console.error("Save Emails (M38:N48) Error:", err);
+                console.error("Save Emails Error:", err);
             }
         }
 
@@ -853,8 +853,8 @@
                 ? dashboardData[groupIndex].items[taskIndex]
                 : dashboardData[groupIndex].items[taskIndex].subitems[subIndex];
 
-            const targetName = task.secondOwner;
-            const contact = emailList.find(c => c.name === targetName);
+            const targetName = String(task.secondOwner || "").trim();
+            const contact = emailList.find(c => c.name.trim() === targetName);
             const targetEmail = contact ? contact.email : (targetName.includes('@') ? targetName : null);
 
             if (!targetEmail) {
@@ -1503,6 +1503,10 @@
                 console.log("Raw Sheets Data (first 5 rows):", rows.slice(0, 5));
                 dashboardData = parseRowsToDashboard(rows);
                 console.log("Parsed Dashboard Data:", dashboardData);
+
+                // Auto-fetch contacts to ensure emailList is ready for sendTaskEmail
+                await fetchEmails();
+
                 renderTable();
 
             } catch (err) {
