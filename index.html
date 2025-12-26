@@ -693,7 +693,7 @@
         const SCOPES = 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/gmail.send';
         const SPREADSHEET_ID = '1UYD6JAdXouNbNtNpiTIHg03ghNK64uwzSYKhUGhQZkI';
         const RANGE = 'A2:R';
-        const CONTACTS_CELL = 'Z1'; // Cell for storing contacts JSON
+        const CONTACTS_RANGE = 'M38:N48'; // Table range for contacts (Name, Email)
         let emailList = []; // Array of { name, email } 
         let tokenClient;
         let gAccessToken = null;
@@ -745,22 +745,23 @@
         async function fetchEmails() {
             if (!gAccessToken) return;
             try {
-                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/'${CURRENT_SHEET_NAME}'!${CONTACTS_CELL}`;
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/'${CURRENT_SHEET_NAME}'!${CONTACTS_RANGE}`;
                 const response = await fetch(url, {
                     headers: { 'Authorization': `Bearer ${gAccessToken}` }
                 });
                 const result = await response.json();
 
-                if (result.values && result.values[0] && result.values[0][0]) {
-                    try {
-                        emailList = JSON.parse(result.values[0][0]);
-                    } catch (e) { emailList = []; }
-                } else {
-                    emailList = [];
+                emailList = [];
+                if (result.values) {
+                    result.values.forEach(row => {
+                        if (row[0] && row[1]) {
+                            emailList.push({ name: row[0], email: row[1] });
+                        }
+                    });
                 }
                 renderEmailList();
             } catch (err) {
-                console.error("Fetch Emails (Z1) Error:", err);
+                console.error("Fetch Emails (M38:N48) Error:", err);
                 emailList = [];
                 renderEmailList();
             }
@@ -821,14 +822,22 @@
         async function saveEmailsToSheet() {
             if (!gAccessToken || !CURRENT_SHEET_NAME) return;
             try {
-                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/'${CURRENT_SHEET_NAME}'!${CONTACTS_CELL}?valueInputOption=USER_ENTERED`;
+                // Prepare values for the range M38:N48
+                const values = emailList.slice(0, 11).map(e => [e.name, e.email]);
+
+                // Pad with empty rows if less than 11 entries to clear old data
+                while (values.length < 11) {
+                    values.push(["", ""]);
+                }
+
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/'${CURRENT_SHEET_NAME}'!${CONTACTS_RANGE}?valueInputOption=USER_ENTERED`;
                 await fetch(url, {
                     method: 'PUT',
                     headers: { 'Authorization': `Bearer ${gAccessToken}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ values: [[JSON.stringify(emailList)]] })
+                    body: JSON.stringify({ values: values })
                 });
             } catch (err) {
-                console.error("Save Emails (Z1) Error:", err);
+                console.error("Save Emails (M38:N48) Error:", err);
             }
         }
 
