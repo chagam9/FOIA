@@ -744,21 +744,27 @@
 
         async function fetchEmails() {
             if (!gAccessToken) return;
+            console.log("Fetching emails from:", CONTACTS_RANGE, "on sheet:", CURRENT_SHEET_NAME);
             try {
                 const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/'${CURRENT_SHEET_NAME}'!${CONTACTS_RANGE}`;
                 const response = await fetch(url, {
                     headers: { 'Authorization': `Bearer ${gAccessToken}` }
                 });
                 const result = await response.json();
+                console.log("Raw emails fetch result:", result);
 
                 emailList = [];
                 if (result.values) {
                     result.values.forEach(row => {
                         if (row[0] && row[1]) {
-                            emailList.push({ name: String(row[0]).trim(), email: String(row[1]).trim() });
+                            emailList.push({
+                                name: String(row[0]).trim(),
+                                email: String(row[1]).trim()
+                            });
                         }
                     });
                 }
+                console.log("Final Loaded emailList:", emailList);
                 renderEmailList();
             } catch (err) {
                 console.error("Fetch Emails (M39:N50) Error:", err);
@@ -853,11 +859,17 @@
                 ? dashboardData[groupIndex].items[taskIndex]
                 : dashboardData[groupIndex].items[taskIndex].subitems[subIndex];
 
-            const targetName = String(task.secondOwner || "").trim();
-            const contact = emailList.find(c => c.name.trim() === targetName);
+            const targetName = String(task.secondOwner || "").trim().toLowerCase();
+            console.log("Email Send Request - Target Name:", targetName);
+            console.log("Searchable emailList:", emailList);
+
+            const contact = emailList.find(c => c.name.trim().toLowerCase() === targetName);
+            console.log("Match Found:", contact);
+
             const targetEmail = contact ? contact.email : (targetName.includes('@') ? targetName : null);
 
             if (!targetEmail) {
+                console.warn("No email found for:", targetName);
                 alert("אנא בחר איש קשר (מייל) למשימה לפני השליחה.");
                 return;
             }
