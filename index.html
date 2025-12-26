@@ -693,7 +693,7 @@
         const SCOPES = 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/gmail.send';
         const SPREADSHEET_ID = '1UYD6JAdXouNbNtNpiTIHg03ghNK64uwzSYKhUGhQZkI';
         const RANGE = 'A2:R';
-        const CONTACTS_RANGE = 'M39:N50'; // Data only range (skip headers at M38)
+        const CONTACTS_RANGE = 'M38:N50'; // Starting from the header to be safe, logic will skip headers
         let emailList = []; // Array of { name, email } 
         let tokenClient;
         let gAccessToken = null;
@@ -744,32 +744,34 @@
 
         async function fetchEmails() {
             if (!gAccessToken) return;
-            console.log("Fetching emails from:", CONTACTS_RANGE, "on sheet:", CURRENT_SHEET_NAME);
+            console.log("Fetching emails from:", CONTACTS_RANGE);
             try {
                 const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/'${CURRENT_SHEET_NAME}'!${CONTACTS_RANGE}`;
                 const response = await fetch(url, {
                     headers: { 'Authorization': `Bearer ${gAccessToken}` }
                 });
                 const result = await response.json();
-                console.log("Raw emails fetch result:", result);
+                console.log("Raw contacts result:", result);
 
                 emailList = [];
                 if (result.values) {
                     result.values.forEach(row => {
-                        if (row[0] && row[1]) {
-                            emailList.push({
-                                name: String(row[0]).trim(),
-                                email: String(row[1]).trim()
-                            });
+                        const name = String(row[0] || "").trim();
+                        const email = String(row[1] || "").trim();
+
+                        // Skip header rows or empty rows
+                        if (name && email &&
+                            !name.includes("אני קשר") &&
+                            !name.toLowerCase().includes("name") &&
+                            email.includes("@")) {
+                            emailList.push({ name, email });
                         }
                     });
                 }
-                console.log("Final Loaded emailList:", emailList);
+                console.log("Processed emailList:", emailList);
                 renderEmailList();
             } catch (err) {
-                console.error("Fetch Emails (M39:N50) Error:", err);
-                emailList = [];
-                renderEmailList();
+                console.error("Fetch Emails Error:", err);
             }
         }
 
