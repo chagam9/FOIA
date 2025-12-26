@@ -693,7 +693,8 @@
         const SCOPES = 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/gmail.send';
         const SPREADSHEET_ID = '1UYD6JAdXouNbNtNpiTIHg03ghNK64uwzSYKhUGhQZkI';
         const RANGE = 'A2:R';
-        const CONTACTS_RANGE = 'M38:N50'; // Starting from the header to be safe, logic will skip headers
+        const CONTACTS_RANGE = 'M38:N50'; // Fetch includes header, logic skips it
+        const CONTACTS_SAVE_RANGE = 'M39:N50'; // Save starts from data row
         let emailList = []; // Array of { name, email } 
         let tokenClient;
         let gAccessToken = null;
@@ -744,34 +745,47 @@
 
         async function fetchEmails() {
             if (!gAccessToken) return;
-            console.log("Fetching emails from:", CONTACTS_RANGE);
+            const sheetPart = CURRENT_SHEET_NAME ? `'${CURRENT_SHEET_NAME}'!` : '';
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${sheetPart}${CONTACTS_RANGE}`;
+
+            console.log("--- DEBUG: Fetching Emails Start ---");
+            console.log("URL:", url);
+
             try {
-                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/'${CURRENT_SHEET_NAME}'!${CONTACTS_RANGE}`;
                 const response = await fetch(url, {
                     headers: { 'Authorization': `Bearer ${gAccessToken}` }
                 });
                 const result = await response.json();
-                console.log("Raw contacts result:", result);
+                console.log("JSON Result from Sheets:", result);
 
                 emailList = [];
                 if (result.values) {
-                    result.values.forEach(row => {
-                        const name = String(row[0] || "").trim();
-                        const email = String(row[1] || "").trim();
+                    result.values.forEach((row, idx) => {
+                        const name = (row[0] || "").toString().trim();
+                        const email = (row[1] || "").toString().trim();
 
-                        // Skip header rows or empty rows
-                        if (name && email &&
-                            !name.includes("אני קשר") &&
-                            !name.toLowerCase().includes("name") &&
-                            email.includes("@")) {
-                            emailList.push({ name, email });
+                        console.log(`[EmailList Row ${idx}]: Name="${name}", Email="${email}"`);
+
+                        if (name && email && email.includes("@")) {
+                            // Skip headers like "אני קשר", "איש קשר", "Name", "email"
+                            const isHeader = name.toLowerCase() === "name" ||
+                                name.includes("קשר") ||
+                                email.toLowerCase() === "email";
+
+                            if (isHeader) {
+                                console.log("   -> Skipping as header row.");
+                            } else {
+                                emailList.push({ name, email });
+                                console.log("   -> Added to active list.");
+                            }
                         }
                     });
                 }
-                console.log("Processed emailList:", emailList);
+                console.log("FINAL emailList Loaded:", emailList);
+                console.log("--- DEBUG: Fetching Emails End ---");
                 renderEmailList();
             } catch (err) {
-                console.error("Fetch Emails Error:", err);
+                console.error("Critical Fetch Error in fetchEmails:", err);
             }
         }
 
@@ -838,7 +852,7 @@
                     values.push(["", ""]);
                 }
 
-                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/'${CURRENT_SHEET_NAME}'!${CONTACTS_RANGE}?valueInputOption=USER_ENTERED`;
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/'${CURRENT_SHEET_NAME}'!${CONTACTS_SAVE_RANGE}?valueInputOption=USER_ENTERED`;
                 await fetch(url, {
                     method: 'PUT',
                     headers: { 'Authorization': `Bearer ${gAccessToken}`, 'Content-Type': 'application/json' },
@@ -866,13 +880,14 @@
             console.log("Searchable emailList:", emailList);
 
             const contact = emailList.find(c => c.name.trim().toLowerCase() === targetName);
-            console.log("Match Found:", contact);
+            console.log("Match Found in emailList:", contact);
 
             const targetEmail = contact ? contact.email : (targetName.includes('@') ? targetName : null);
+            console.log("Target Email Selected:", targetEmail);
 
             if (!targetEmail) {
-                console.warn("No email found for:", targetName);
-                alert("אנא בחר איש קשר (מייל) למשימה לפני השליחה.");
+                console.warn("No email found for owner name:", targetName);
+                alert(`לא נמצא מייל עבור "${targetName}".\nוודא שהשם מופיע בטבלת אנשי הקשר (עמודות M-N) ושיש לידו מייל תקין.`);
                 return;
             }
 
@@ -999,7 +1014,7 @@
                                  <td style="text-align: center; color: var(--text-tertiary); font-size: 12px;">
                                     <div style="display: flex; align-items: center; gap: 4px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 2px;">
                                         <input type="text" list="emailOptions" value="${item.secondOwner || ''}" 
-                                               onchange="updateFreeText(${item.rowIndex}, '${item.secondOwnerCol}', this.value)" 
+                                               onchange="item.secondOwner = this.value; updateFreeText(${item.rowIndex}, '${item.secondOwnerCol}', this.value)" 
                                                style="background: transparent; border: none; color: inherit; font-size: 11px; width: 80px; outline: none; cursor: pointer;" 
                                                placeholder="...">
                                         <button onclick="sendTaskEmail(${groupIndex}, ${itemIndex}, null)" style="background: transparent; border: none; color: #3498db; cursor: pointer; font-size: 12px;" title="Send Email">
@@ -1051,7 +1066,7 @@
                                              <td style="text-align: center; color: var(--text-tertiary); font-size: 12px;">
                                                 <div style="display: flex; align-items: center; gap: 4px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px; padding: 2px;">
                                                     <input type="text" list="emailOptions" value="${sub.secondOwner || ''}" 
-                                                           onchange="updateFreeText(${sub.rowIndex}, '${sub.secondOwnerCol}', this.value)" 
+                                                           onchange="sub.secondOwner = this.value; updateFreeText(${sub.rowIndex}, '${sub.secondOwnerCol}', this.value)" 
                                                            style="background: transparent; border: none; color: inherit; font-size: 10px; width: 70px; outline: none; cursor: pointer;" 
                                                            placeholder="...">
                                                     <button onclick="sendTaskEmail(${groupIndex}, ${itemIndex}, ${subIndex})" style="background: transparent; border: none; color: #3498db; cursor: pointer; font-size: 11px;" title="Send Email">
@@ -1539,19 +1554,19 @@
             // Default Mapping (Name=A, Sub=B, Link=C, Status=D, Priority=E, Note=F, Creation=H, Date=I, Monthly=J)
             let colMap = { name: 0, subitem: 1, link: 2, status: 3, priority: 4, note: 5, creation: 7, date: 8, monthly: 9 };
 
-            for (let i = 0; i < Math.min(rows.length, 20); i++) {
+            for (let i = 0; i < Math.min(rows.length, 60); i++) {
                 const rowStr = rows[i].map(c => c.toLowerCase()).join(" ");
-                // Check for English OR Hebrew keywords
-                if ((rowStr.includes("name") || rowStr.includes("משימה")) &&
-                    (rowStr.includes("status") || rowStr.includes("סטטוס") || rowStr.includes("priority") || rowStr.includes("עדיפות"))) {
+                // Check for keywords in row 37-style headers: "2", "Creation Date", "Deadline Date", "seconed owner"
+                if ((rowStr.includes("name") || rowStr.includes("משימה") || rowStr.includes("task") || rowStr.includes("seconed owner") || (rows[i][0] === "2" || rows[i][1] === "2")) &&
+                    (rowStr.includes("status") || rowStr.includes("סטטוס") || rowStr.includes("priority") || rowStr.includes("עדיפות") || rowStr.includes("date"))) {
 
                     headerRowIndex = i;
                     rows[i].forEach((cell, idx) => {
                         const c = cell.toLowerCase().trim();
-                        // Name
-                        if (c === "name" || c === "task name" || c === "item" || c.includes("משימה")) colMap.name = idx;
+                        // Name (Recognizing "2" in Column G as well)
+                        if (c === "name" || c === "task name" || c === "item" || c.includes("משימה") || c.includes("task") || (c === "2" && idx < 15)) colMap.name = idx;
                         // Subitems
-                        else if (c.includes("subitems") || c.includes("sub-item") || c.includes("תת") || c.includes("תתי")) colMap.subitem = idx;
+                        else if (c.includes("subitem") || c.includes("sub-item") || c.includes("תת") || c.includes("תתי")) colMap.subitem = idx;
                         // Link
                         else if (c.includes("link") || c.includes("url") || c.includes("קישור")) colMap.link = idx;
                         // Status
@@ -1566,15 +1581,15 @@
                         else if (c.includes("note") || c.includes("הערות") || c.includes("notes")) colMap.note = idx;
                         // Creation Date
                         else if (c.includes("created") || c.includes("creation") || c.includes("נוצר") || c.includes("תאריך יצירה")) colMap.creation = idx;
-                        // Second Owner
-                        else if (c.includes("second owner") || c.includes("seconed owner") || c.includes("בעלים 2") || c.includes("נוסף") || c.includes("בעלים נוסף")) colMap.secondOwner = idx;
+                        // Second Owner - Broadening detection to ensure Column K or similar is caught
+                        else if (c.includes("second owner") || c.includes("seconed owner") || c.includes("owner 2") || c.includes("owner2") || c.includes("בעלים 2") || c.includes("נוסף") || c.includes("בעלים נוסף") || c.includes("owner")) colMap.secondOwner = idx;
                     });
                     console.log("Detected Columns:", colMap);
                     break;
                 }
             }
 
-            const START_ROW = 2; // Approximation
+            const START_ROW = 1; // Base index for calculation
             const iterStart = headerRowIndex !== -1 ? headerRowIndex + 1 : 0;
             const statusColLetter = indexToColumnLetter(colMap.status);
             const priorityColLetter = indexToColumnLetter(colMap.priority);
@@ -1585,7 +1600,7 @@
             const creationColLetter = indexToColumnLetter(colMap.creation !== undefined ? colMap.creation : 7);
 
             rows.slice(iterStart).forEach((row, index) => {
-                const globalRowIndex = START_ROW + iterStart + index;
+                const globalRowIndex = iterStart + index + 1; // Correct Sheets 1-based indexing
                 const colName = String(row[colMap.name] || "").trim();
                 const colSub = String(row[colMap.subitem] || "").trim();
 
