@@ -789,7 +789,7 @@
             <span>BI קליניקה</span>
             <span
                 style="font-size: 10px; color: #00ff00; font-family: monospace; border: 1px solid #00ff00; padding: 2px 4px; border-radius: 4px; margin-right: 8px;">Ver
-                1.02</span>
+                1.03</span>
         </div>
         <button class="nav-btn active" onclick="showTab('overview')">
             <i class="fas fa-home"></i> תמונת מצב
@@ -1079,628 +1079,765 @@
                 </div>
             </div>
 
-            <div id="fines" class="tab-content">
-                <div class="card" style="margin-bottom: 20px;">
-                    <h3 style="margin: 0 0 20px 0; font-size: 20px; color: var(--primary-blue);">הכנסות ההתאחדות מקנסות
-                        (2018-2022)</h3>
-                    <div style="position: relative; width: 100%; height: 400px;">
-                        <canvas id="finesChart"></canvas>
-                    </div>
-                    <div class="insight-source" style="text-align: left; margin-top: 10px;">
-                        מקור: הוועדה לבחינת רפורמה בדרכי המאבק בהתפרעויות במשחקי הכדורגל בישראל
-                    </div>
+        </div>
+    </div>
 
-                    <div class="insights-grid" style="grid-template-columns: repeat(3, 1fr); margin-top: 30px;">
-                        <div class="insight-card">
-                            <div class="insight-icon"><i class="fas fa-wallet" style="color: var(--accent-green);"></i>
-                            </div>
-                            <div class="insight-title" id="fines-total">9.1M ₪</div>
-                            <div class="insight-desc">סך הכל הכנסות מקנסות ב-4 עונות</div>
-                        </div>
-                        <div class="insight-card">
-                            <div class="insight-icon"><i class="fas fa-users" style="color: var(--accent-orange);"></i>
-                            </div>
-                            <div class="insight-title" id="fines-fans-share">84%</div>
-                            <div class="insight-desc">מהעמדות לדין קשורות ישירות לאוהדים</div>
-                        </div>
-                        <div class="insight-card">
-                            <div class="insight-icon"><i class="fas fa-level-down-alt"
-                                    style="color: var(--accent-yellow);"></i>
-                            </div>
-                            <div class="insight-title" id="fines-lower-share">51%</div>
-                            <div class="insight-desc">מהעמדות לדין בליגות נמוכות נגרמו עקב אוהדים</div>
-                        </div>
-                    </div>
-                </div>
+    <div id="fines" class="tab-content">
+        <div class="card" style="margin-bottom: 20px;">
+            <h3 style="margin: 0 0 20px 0; font-size: 20px; color: var(--primary-blue);">הכנסות ההתאחדות מקנסות
+                (2018-2022)</h3>
+            <div style="position: relative; width: 100%; height: 400px;">
+                <canvas id="finesChart"></canvas>
+            </div>
+            <div class="insight-source" style="text-align: left; margin-top: 10px;">
+                מקור: הוועדה לבחינת רפורמה בדרכי המאבק בהתפרעויות במשחקי הכדורגל בישראל
             </div>
 
-            <!-- NEW TAB: MAP -->
-            <div id="map" class="tab-content">
-                <div class="card"
-                    style="min-height: 600px; display: flex; flex-direction: column; align-items: center;">
-                    <h2 style="color: var(--primary-blue); margin-bottom: 20px;">מפת המעצרים הארצית</h2>
-                    <p style="margin-bottom: 30px; color: #64748b;">גודל הבועה מייצג את כמות המעצרים בעיר</p>
-
-                    <div id="israelMapContainer"
-                        style="width: 100%; max-width: 400px; position: relative; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);">
-                        <!-- Map Image Background -->
-                        <img src="israel_map_political.png" alt="Israel Map"
-                            style="width: 100%; display: block; height: auto; filter: invert(1) hue-rotate(180deg) contrast(1.2);">
-
-                        <!-- Bubbles Overlay Layer -->
-                        <div id="mapBubbles" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-                            <!-- Bubbles injected by JS -->
-                        </div>
+            <div class="insights-grid" style="grid-template-columns: repeat(3, 1fr); margin-top: 30px;">
+                <div class="insight-card">
+                    <div class="insight-icon"><i class="fas fa-wallet" style="color: var(--accent-green);"></i>
                     </div>
+                    <div class="insight-title" id="fines-total">9.1M ₪</div>
+                    <div class="insight-desc">סך הכל הכנסות מקנסות ב-4 עונות</div>
                 </div>
-            </div>
-
-            <div id="foi" class="tab-content">
-                <div class="foi-container">
-                    <h3 style="margin-top: 0; color: var(--primary-blue);">בחר נושאים לבקשה:</h3>
-                    <div class="option">
-                        <input type="checkbox" id="chk_bodycam" checked onchange="updateFOI()">
-                        <div>
-                            <strong>א. מצלמות גוף (חובה)</strong><br>
-                            <small style="color: var(--text-muted);">נתונים על הפעלה/אי-הפעלה, שמירת חומרים
-                                ונהלים.</small>
-                        </div>
+                <div class="insight-card">
+                    <div class="insight-icon"><i class="fas fa-users" style="color: var(--accent-orange);"></i>
                     </div>
-                    <div class="option">
-                        <input type="checkbox" id="chk_violence" checked onchange="updateFOI()">
-                        <div>
-                            <strong>ב. אלימות שוטרים במגרשים</strong><br>
-                            <small style="color: var(--text-muted);">מספר דוחות שימוש בכוח ספציפית ביציעים.</small>
-                        </div>
-                    </div>
-                    <div class="option">
-                        <input type="checkbox" id="chk_demo" onchange="updateFOI()">
-                        <div>
-                            <strong>ג. פילוח דמוגרפי (הצעה)</strong><br>
-                            <small style="color: var(--text-muted);">ניסיון לחלץ נתונים על אכיפת יתר כלפי
-                                מיעוטים.</small>
-                        </div>
-                    </div>
-                    <div class="option">
-                        <input type="checkbox" id="chk_admin" onchange="updateFOI()">
-                        <div>
-                            <strong>ד. הרחקות מנהליות (הצעה)</strong><br>
-                            <small style="color: var(--text-muted);">יחס בין הרחקות לכתבי אישום (מדד שרירותיות).</small>
-                        </div>
-                    </div>
+                    <div class="insight-title" id="fines-fans-share">84%</div>
+                    <div class="insight-desc">מהעמדות לדין קשורות ישירות לאוהדים</div>
                 </div>
-                <div>
-                    <div class="foi-preview" id="foiText" data-source="מקור: קובץ 'טיוטה אלימות בספורט.docx'"></div>
-                    <button class="action-btn" onclick="copyToClipboard()">
-                        <i class="fas fa-copy"></i> העתק טקסט ללוח
-                    </button>
+                <div class="insight-card">
+                    <div class="insight-icon"><i class="fas fa-level-down-alt" style="color: var(--accent-yellow);"></i>
+                    </div>
+                    <div class="insight-title" id="fines-lower-share">51%</div>
+                    <div class="insight-desc">מהעמדות לדין בליגות נמוכות נגרמו עקב אוהדים</div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <script>
-            let realData = {}; // Will be populated from JSON
+    <!-- NEW TAB: MAP -->
+    <div id="map" class="tab-content">
+        <div class="card" style="min-height: 600px; display: flex; flex-direction: column; align-items: center;">
+            <h2 style="color: var(--primary-blue); margin-bottom: 20px;">מפת המעצרים הארצית</h2>
+            <p style="margin-bottom: 30px; color: #64748b;">גודל הבועה מייצג את כמות המעצרים בעיר</p>
 
-            let profileChartInstance = null;
+            <div id="israelMapContainer"
+                style="width: 100%; max-width: 400px; position: relative; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);">
+                <!-- Map Image Background -->
+                <img src="israel_map_political.png" alt="Israel Map"
+                    style="width: 100%; display: block; height: auto; filter: invert(1) hue-rotate(180deg) contrast(1.2);">
 
-            function updateProfileChart() {
-                if (!realData || Object.keys(realData).length === 0) return;
+                <!-- Bubbles Overlay Layer -->
+                <div id="mapBubbles" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+                    <!-- Bubbles injected by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
 
-                const city = document.getElementById('citySelect').value;
-                const offense = document.getElementById('offenseSelect').value;
-                const insightBox = document.getElementById('profileInsight');
-                const counterBox = document.getElementById('totalCounter');
-                const ctx = document.getElementById('profileChartCanvas').getContext('2d');
+    <div id="foi" class="tab-content">
+        <div class="foi-container">
+            <h3 style="margin-top: 0; color: var(--primary-blue);">בחר נושאים לבקשה:</h3>
+            <div class="option">
+                <input type="checkbox" id="chk_bodycam" checked onchange="updateFOI()">
+                <div>
+                    <strong>א. מצלמות גוף (חובה)</strong><br>
+                    <small style="color: var(--text-muted);">נתונים על הפעלה/אי-הפעלה, שמירת חומרים
+                        ונהלים.</small>
+                </div>
+            </div>
+            <div class="option">
+                <input type="checkbox" id="chk_violence" checked onchange="updateFOI()">
+                <div>
+                    <strong>ב. אלימות שוטרים במגרשים</strong><br>
+                    <small style="color: var(--text-muted);">מספר דוחות שימוש בכוח ספציפית ביציעים.</small>
+                </div>
+            </div>
+            <div class="option">
+                <input type="checkbox" id="chk_demo" onchange="updateFOI()">
+                <div>
+                    <strong>ג. פילוח דמוגרפי (הצעה)</strong><br>
+                    <small style="color: var(--text-muted);">ניסיון לחלץ נתונים על אכיפת יתר כלפי
+                        מיעוטים.</small>
+                </div>
+            </div>
+            <div class="option">
+                <input type="checkbox" id="chk_admin" onchange="updateFOI()">
+                <div>
+                    <strong>ד. הרחקות מנהליות (הצעה)</strong><br>
+                    <small style="color: var(--text-muted);">יחס בין הרחקות לכתבי אישום (מדד שרירותיות).</small>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="foi-preview" id="foiText" data-source="מקור: קובץ 'טיוטה אלימות בספורט.docx'"></div>
+            <button class="action-btn" onclick="copyToClipboard()">
+                <i class="fas fa-copy"></i> העתק טקסט ללוח
+            </button>
+        </div>
+    </div>
+    </div>
 
-                // Check if city exists in data, fallback to 'all' if not
-                if (!realData[city]) {
-                    console.warn(`City ${city} not found in data`);
-                    return;
-                }
+    <script>
+        let realData = {}; // Will be populated from JSON
 
-                const currentData = realData[city][offense];
-                if (!currentData) {
-                    console.warn(`Offense ${offense} not found for city ${city}`);
-                    return;
-                }
+        let profileChartInstance = null;
 
-                const data = currentData.data;
-                const counts = currentData.counts;
-                const text = currentData.text;
-                const total = currentData.total;
+        function updateProfileChart() {
+            if (!realData || Object.keys(realData).length === 0) return;
 
-                let color = '#3b82f6';
-                if (city === 'jerusalem') color = '#eab308';
-                if (city === 'telaviv') color = '#ef4444';
-                if (city === 'haifa') color = '#10b981';
-                if (city === 'beersheva') color = '#f97316';
-                if (city === 'petah_tikva') color = '#3b82f6';
+            const city = document.getElementById('citySelect').value;
+            const offense = document.getElementById('offenseSelect').value;
+            const insightBox = document.getElementById('profileInsight');
+            const counterBox = document.getElementById('totalCounter');
+            const ctx = document.getElementById('profileChartCanvas').getContext('2d');
 
-                insightBox.innerText = text;
-                insightBox.style.borderLeftColor = color;
-                counterBox.innerText = "סה\"כ: " + total + " מקרים";
-                counterBox.style.background = color;
+            // Check if city exists in data, fallback to 'all' if not
+            if (!realData[city]) {
+                console.warn(`City ${city} not found in data`);
+                return;
+            }
 
-                if (profileChartInstance) {
-                    profileChartInstance.destroy();
-                }
+            const currentData = realData[city][offense];
+            if (!currentData) {
+                console.warn(`Offense ${offense} not found for city ${city}`);
+                return;
+            }
 
-                profileChartInstance = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['13-17', '18-21', '22-25', '26-30', '31-40', '41-50', '50+'],
-                        datasets: [{
-                            label: 'אחוז מסך העצורים (%)',
-                            data: data,
-                            backgroundColor: color,
-                            borderRadius: 6
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                            title: { display: true, text: 'התפלגות גילאים (%)' },
-                            tooltip: {
-                                callbacks: {
-                                    label: function (context) {
-                                        const index = context.dataIndex;
-                                        const count = counts[index];
-                                        const pct = context.raw;
-                                        return pct + '% (' + count + ' עצורים)';
-                                    }
+            const data = currentData.data;
+            const counts = currentData.counts;
+            const text = currentData.text;
+            const total = currentData.total;
+
+            let color = '#3b82f6';
+            if (city === 'jerusalem') color = '#eab308';
+            if (city === 'telaviv') color = '#ef4444';
+            if (city === 'haifa') color = '#10b981';
+            if (city === 'beersheva') color = '#f97316';
+            if (city === 'petah_tikva') color = '#3b82f6';
+
+            insightBox.innerText = text;
+            insightBox.style.borderLeftColor = color;
+            counterBox.innerText = "סה\"כ: " + total + " מקרים";
+            counterBox.style.background = color;
+
+            if (profileChartInstance) {
+                profileChartInstance.destroy();
+            }
+
+            profileChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['13-17', '18-21', '22-25', '26-30', '31-40', '41-50', '50+'],
+                    datasets: [{
+                        label: 'אחוז מסך העצורים (%)',
+                        data: data,
+                        backgroundColor: color,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: 'התפלגות גילאים (%)' },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const index = context.dataIndex;
+                                    const count = counts[index];
+                                    const pct = context.raw;
+                                    return pct + '% (' + count + ' עצורים)';
                                 }
                             }
-                        },
-                        scales: { y: { beginAtZero: true, max: 100 } }
-                    }
-                });
-            }
+                        }
+                    },
+                    scales: { y: { beginAtZero: true, max: 100 } }
+                }
+            });
+        }
 
-            function showTab(tabId) {
-                document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-                const activeBtn = document.querySelector(`.nav-btn[onclick="showTab('${tabId}')"]`);
-                if (activeBtn) activeBtn.classList.add('active');
-                document.getElementById(tabId).classList.add('active');
-                if (tabId === 'profile') setTimeout(updateProfileChart, 100);
-                if (tabId === 'map') setTimeout(updateMapViz, 100); // Trigger map update when tab is shown
-            }
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.querySelector(`.nav-btn[onclick="showTab('${tabId}')"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+            if (tabId === 'profile') setTimeout(updateProfileChart, 100);
+            if (tabId === 'map') setTimeout(updateMapViz, 100); // Trigger map update when tab is shown
+        }
 
-            function updateFOI() {
-                const showBodyCam = document.getElementById('chk_bodycam').checked;
-                const showViolence = document.getElementById('chk_violence').checked;
-                const showDemo = document.getElementById('chk_demo').checked;
-                const showAdmin = document.getElementById('chk_admin').checked;
-                let text = `לכבוד\nהממונה על חופש המידע\nמשטרת ישראל / המשרד לביטחון לאומי\n\nהנדון: בקשה לפי חוק חופש המידע, התשנ״ח-1998 – נתוני אלימות, אכיפה ושימוש במצלמות גוף באירועי ספורט\n\nשלום רב,\nאבקש לקבל לידיי את המידע המפורט להלן, המתייחס לשנים 2024-2025 (ועד למועד המענה):\n\n`;
-                if (showBodyCam) text += `1. נושא מצלמות הגוף...\n`;
-                if (showViolence) text += `2. שימוש בכוח ואלימות שוטרים...\n`;
-                if (showDemo) text += `3. פילוח דמוגרפי...\n`;
-                if (showAdmin) text += `4. הרחקות מנהליות...\n`;
-                text += `\nאודה לקבלת המידע בפורמט דיגיטלי קריא.\nבברכה,\nאגם חן`;
-                document.getElementById('foiText').innerText = text;
-            }
+        function updateFOI() {
+            const showBodyCam = document.getElementById('chk_bodycam').checked;
+            const showViolence = document.getElementById('chk_violence').checked;
+            const showDemo = document.getElementById('chk_demo').checked;
+            const showAdmin = document.getElementById('chk_admin').checked;
+            let text = `לכבוד\nהממונה על חופש המידע\nמשטרת ישראל / המשרד לביטחון לאומי\n\nהנדון: בקשה לפי חוק חופש המידע, התשנ״ח-1998 – נתוני אלימות, אכיפה ושימוש במצלמות גוף באירועי ספורט\n\nשלום רב,\nאבקש לקבל לידיי את המידע המפורט להלן, המתייחס לשנים 2024-2025 (ועד למועד המענה):\n\n`;
+            if (showBodyCam) text += `1. נושא מצלמות הגוף...\n`;
+            if (showViolence) text += `2. שימוש בכוח ואלימות שוטרים...\n`;
+            if (showDemo) text += `3. פילוח דמוגרפי...\n`;
+            if (showAdmin) text += `4. הרחקות מנהליות...\n`;
+            text += `\nאודה לקבלת המידע בפורמט דיגיטלי קריא.\nבברכה,\nאגם חן`;
+            document.getElementById('foiText').innerText = text;
+        }
 
-            function copyToClipboard() {
-                const text = document.getElementById('foiText').innerText;
-                navigator.clipboard.writeText(text).then(() => { alert('הטקסט הועתק ללוח!'); });
-            }
+        function copyToClipboard() {
+            const text = document.getElementById('foiText').innerText;
+            navigator.clipboard.writeText(text).then(() => { alert('הטקסט הועתק ללוח!'); });
+        }
 
-            function updateMapViz() {
-                const mapBubblesContainer = document.getElementById('mapBubbles');
-                if (mapBubblesContainer && realData) {
-                    mapBubblesContainer.innerHTML = '';
+        function updateMapViz() {
+            const mapBubblesContainer = document.getElementById('mapBubbles');
+            if (mapBubblesContainer && realData) {
+                mapBubblesContainer.innerHTML = '';
 
-                    // Responsive Percentages (Top/Left) based on the specific map image aspect ratio
-                    // Estimation for standard vertical Israel map:
-                    // Responsive Percentages (Top/Left) calibrated for new map image
-                    const cityPositions = {
-                        'jerusalem': { top: 42, left: 51, color: '#f59e0b' }, // Moved East back near original
-                        'telaviv': { top: 36, left: 44, color: '#ef4444' },
-                        'haifa': { top: 17, left: 51, color: '#3b82f6' }, // Moved Touch South
-                        'beersheva': { top: 58, left: 48, color: '#f97316' },
-                        'petah_tikva': { top: 32, left: 46, color: '#10b981' }
-                    };
+                // Responsive Percentages (Top/Left) based on the specific map image aspect ratio
+                // Estimation for standard vertical Israel map:
+                // Responsive Percentages (Top/Left) calibrated for new map image
+                const cityPositions = {
+                    'jerusalem': { top: 42, left: 51, color: '#f59e0b' }, // Moved East back near original
+                    'telaviv': { top: 36, left: 44, color: '#ef4444' },
+                    'haifa': { top: 17, left: 51, color: '#3b82f6' }, // Moved Touch South
+                    'beersheva': { top: 58, left: 48, color: '#f97316' },
+                    'petah_tikva': { top: 32, left: 46, color: '#10b981' }
+                };
 
-                    // Increase map size visual
-                    const mapContainer = document.getElementById('israelMapContainer');
-                    if (mapContainer) mapContainer.style.maxWidth = '900px';
+                // Increase map size visual
+                const mapContainer = document.getElementById('israelMapContainer');
+                if (mapContainer) mapContainer.style.maxWidth = '900px';
 
-                    const cityKeys = Object.keys(cityPositions);
+                const cityKeys = Object.keys(cityPositions);
 
-                    cityKeys.forEach(key => {
-                        if (realData[key] && realData[key]['all']) {
-                            const total = realData[key]['all'].total;
-                            const pos = cityPositions[key];
+                cityKeys.forEach(key => {
+                    if (realData[key] && realData[key]['all']) {
+                        const total = realData[key]['all'].total;
+                        const pos = cityPositions[key];
 
-                            // Dynamic Size
-                            const size = Math.max(30, Math.sqrt(total) * 4); // px size
+                        // Dynamic Size
+                        const size = Math.max(30, Math.sqrt(total) * 4); // px size
 
-                            const bubble = document.createElement('div');
-                            bubble.className = "map-bubble";
-                            bubble.style.width = `${size}px`;
-                            bubble.style.height = `${size}px`;
-                            bubble.style.backgroundColor = pos.color;
-                            bubble.style.left = `${pos.left}%`;
-                            bubble.style.top = `${pos.top}%`;
+                        const bubble = document.createElement('div');
+                        bubble.className = "map-bubble";
+                        bubble.style.width = `${size}px`;
+                        bubble.style.height = `${size}px`;
+                        bubble.style.backgroundColor = pos.color;
+                        bubble.style.left = `${pos.left}%`;
+                        bubble.style.top = `${pos.top}%`;
 
-                            // Tooltip logic
-                            bubble.innerHTML = `
+                        // Tooltip logic
+                        bubble.innerHTML = `
                             <span class="count">${total}</span>
                             <div class="tooltip">
                                 <strong>${key === 'jerusalem' ? 'ירושלים' :
-                                    key === 'telaviv' ? 'תל אביב' :
-                                        key === 'haifa' ? 'חיפה' :
-                                            key === 'beersheva' ? 'באר שבע' : 'פתח תקווה'}</strong><br>
+                                key === 'telaviv' ? 'תל אביב' :
+                                    key === 'haifa' ? 'חיפה' :
+                                        key === 'beersheva' ? 'באר שבע' : 'פתח תקווה'}</strong><br>
                                 ${total} מעצרים
                             </div>
                         `;
 
-                            mapBubblesContainer.appendChild(bubble);
-                        }
-                    });
-                }
+                        mapBubblesContainer.appendChild(bubble);
+                    }
+                });
+            }
+        }
+
+        let effectivenessChartInstance = null;
+        let closingReasonsChartInstance = null;
+        let comparisonChartInstance = null;
+
+        function renderComparisonChart(stats) {
+            if (!stats) return;
+
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+
+            const labels = [];
+            const data = [];
+            const colors = [];
+
+            // Israel
+            labels.push(`ישראל ${stats.israel.flag}`);
+            data.push(stats.israel.rate);
+            colors.push('#0038b8');
+
+            // England
+            labels.push(`אנגליה ${stats.england.flag}`);
+            data.push(stats.england.rate);
+            colors.push('#cf142b');
+
+            if (stats.netherlands) {
+                labels.push(`הולנד ${stats.netherlands.flag}`);
+                data.push(stats.netherlands.rate);
+                colors.push('#f97316'); // Orange
             }
 
-            let effectivenessChartInstance = null;
-            let closingReasonsChartInstance = null;
-            let comparisonChartInstance = null;
+            // Spain
+            if (stats.spain) {
+                labels.push(`ספרד ${stats.spain.flag}`);
+                data.push(stats.spain.rate);
+                colors.push('#eab308'); // Yellow
+            }
 
-            function renderComparisonChart(stats) {
-                if (!stats) return;
+            // France
+            if (stats.france) {
+                labels.push(`צרפת ${stats.france.flag}`);
+                data.push(stats.france.rate);
+                colors.push('#2563eb'); // Royal Blue
+            }
 
-                const ctx = document.getElementById('comparisonChart').getContext('2d');
+            if (comparisonChartInstance) {
+                comparisonChartInstance.destroy();
+            }
 
-                const labels = [];
-                const data = [];
-                const colors = [];
-
-                // Israel
-                labels.push(`ישראל ${stats.israel.flag}`);
-                data.push(stats.israel.rate);
-                colors.push('#0038b8');
-
-                // England
-                labels.push(`אנגליה ${stats.england.flag}`);
-                data.push(stats.england.rate);
-                colors.push('#cf142b');
-
-                if (stats.netherlands) {
-                    labels.push(`הולנד ${stats.netherlands.flag}`);
-                    data.push(stats.netherlands.rate);
-                    colors.push('#f97316'); // Orange
-                }
-
-                // Spain
-                if (stats.spain) {
-                    labels.push(`ספרד ${stats.spain.flag}`);
-                    data.push(stats.spain.rate);
-                    colors.push('#eab308'); // Yellow
-                }
-
-                // France
-                if (stats.france) {
-                    labels.push(`צרפת ${stats.france.flag}`);
-                    data.push(stats.france.rate);
-                    colors.push('#2563eb'); // Royal Blue
-                }
-
-                if (comparisonChartInstance) {
-                    comparisonChartInstance.destroy();
-                }
-
-                comparisonChartInstance = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'מעצרים לכל 100,000 צופים',
-                            data: data,
-                            backgroundColor: colors,
-                            borderRadius: 8,
-                            barPercentage: 0.6
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                            title: { display: true, text: 'מעצרים לכל 100,000 צופים' },
-                            tooltip: {
-                                callbacks: {
-                                    footer: function (tooltipItems) {
-                                        if (tooltipItems[0].label.includes('ישראל')) {
-                                            return `מבוסס על ${stats.israel.arrests} מעצרים`;
-                                        }
-                                        if (tooltipItems[0].label.includes('הולנד')) {
-                                            return `מבוסס על ${stats.netherlands.arrests} מעצרים (${stats.netherlands.indictment_rate}% כתבי אישום)`;
-                                        }
-                                        if (tooltipItems[0].label.includes('ספרד')) {
-                                            return `מבוסס על ${stats.spain.arrests} מעצרים (${stats.spain.admin_sanctions} סנקציות מנהליות)`;
-                                        }
-                                        if (tooltipItems[0].label.includes('צרפת')) {
-                                            return [`מבוסס על ${stats.france.arrests} מעצרים`, `מקור: ${stats.france.report_name}`];
-                                        }
-                                        return '';
+            comparisonChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'מעצרים לכל 100,000 צופים',
+                        data: data,
+                        backgroundColor: colors,
+                        borderRadius: 8,
+                        barPercentage: 0.6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: 'מעצרים לכל 100,000 צופים' },
+                        tooltip: {
+                            callbacks: {
+                                footer: function (tooltipItems) {
+                                    if (tooltipItems[0].label.includes('ישראל')) {
+                                        return `מבוסס על ${stats.israel.arrests} מעצרים`;
                                     }
+                                    if (tooltipItems[0].label.includes('הולנד')) {
+                                        return `מבוסס על ${stats.netherlands.arrests} מעצרים (${stats.netherlands.indictment_rate}% כתבי אישום)`;
+                                    }
+                                    if (tooltipItems[0].label.includes('ספרד')) {
+                                        return `מבוסס על ${stats.spain.arrests} מעצרים (${stats.spain.admin_sanctions} סנקציות מנהליות)`;
+                                    }
+                                    if (tooltipItems[0].label.includes('צרפת')) {
+                                        return [`מבוסס על ${stats.france.arrests} מעצרים`, `מקור: ${stats.france.report_name}`];
+                                    }
+                                    return '';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255,255,255,0.05)' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+        // realData is already declared globally, so no need to redeclare here.
+
+        // Translate keys to Hebrew for display
+        function renderFinesChart(stats) {
+            if (!stats) return;
+
+            const ctx = document.getElementById('finesChart').getContext('2d');
+
+            // Create Gradient
+            const gradientMoney = ctx.createLinearGradient(0, 400, 0, 0);
+            gradientMoney.addColorStop(0, 'rgba(48, 209, 88, 0.2)'); // Green Faded
+            gradientMoney.addColorStop(1, '#30d158'); // Green
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: stats.chart_data.labels,
+                    datasets: [{
+                        label: 'סכום הקנסות (בש"ח)',
+                        data: stats.chart_data.data,
+                        backgroundColor: gradientMoney,
+                        borderRadius: 8,
+                        barPercentage: 0.6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return context.parsed.y.toLocaleString() + ' ₪';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            ticks: {
+                                callback: function (value) {
+                                    return value.toLocaleString() + ' ₪';
                                 }
                             }
                         },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: { color: 'rgba(255,255,255,0.05)' }
-                            },
-                            x: {
-                                grid: { display: false }
-                            }
+                        x: {
+                            grid: { display: false }
                         }
                     }
-                });
-            }
-            // realData is already declared globally, so no need to redeclare here.
-
-            // Translate keys to Hebrew for display
-            function renderFinesChart(stats) {
-                if (!stats) return;
-
-                const ctx = document.getElementById('finesChart').getContext('2d');
-
-                // Create Gradient
-                const gradientMoney = ctx.createLinearGradient(0, 400, 0, 0);
-                gradientMoney.addColorStop(0, 'rgba(48, 209, 88, 0.2)'); // Green Faded
-                gradientMoney.addColorStop(1, '#30d158'); // Green
-
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: stats.chart_data.labels,
-                        datasets: [{
-                            label: 'סכום הקנסות (בש"ח)',
-                            data: stats.chart_data.data,
-                            backgroundColor: gradientMoney,
-                            borderRadius: 8,
-                            barPercentage: 0.6
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                callbacks: {
-                                    label: function (context) {
-                                        return context.parsed.y.toLocaleString() + ' ₪';
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: { color: 'rgba(255,255,255,0.05)' },
-                                ticks: {
-                                    callback: function (value) {
-                                        return value.toLocaleString() + ' ₪';
-                                    }
-                                }
-                            },
-                            x: {
-                                grid: { display: false }
-                            }
-                        }
-                    }
-                });
-
-                // Update text elements if dynamic (though structurally static here, good practice)
-                document.getElementById('fines-total').innerText = stats.insights.total_fines + ' ₪';
-                document.getElementById('fines-fans-share').innerText = stats.insights.fans_share + '%';
-                document.getElementById('fines-lower-share').innerText = stats.insights.lower_leagues_share + '%';
-            }
-
-            const OFFENSE_LABELS_HE = {
-                'assault': 'אלימות/תקיפה',
-                'pyro': 'פירוטכניקה',
-                'police': 'תקיפת שוטר',
-                'order': 'הפרת סדר',
-                'field': 'פריצה למגרש',
-                'banned_item': 'חפץ אסור',
-                'property': 'ונדליזם',
-                'threat': 'איומים',
-                'other': 'אחר'
-            };
-
-            function renderEffectivenessChart(stats) {
-                const ctx = document.getElementById('effectivenessChart').getContext('2d');
-
-                // Prepare Data
-                const labels = [];
-                const dataPercents = [];
-                const colors = [];
-
-                let totalCases = 0;
-                let totalIndictments = 0;
-
-                // Sort by percentage descending? Or fixed order?
-                // Let's use specific relevant keys
-                const keys = ['assault', 'pyro', 'police', 'order', 'field', 'banned_item'];
-
-                keys.forEach(key => {
-                    if (stats[key]) {
-                        const total = stats[key].total || 0;
-                        const indict = stats[key].indict || 0;
-                        totalCases += total;
-                        totalIndictments += indict;
-
-                        if (total > 5) { // Threshold to avoid noisy data
-                            const pct = (indict / total) * 100;
-                            labels.push(OFFENSE_LABELS_HE[key] || key);
-                            dataPercents.push(pct.toFixed(1));
-
-                            // Dynamic Color: High > Red, Low > Green/Blue
-                            if (pct > 50) colors.push('#ef4444'); // Red
-                            else if (pct > 25) colors.push('#f97316'); // Orange
-                            else colors.push('#3b82f6'); // Blue
-                        }
-                    }
-                });
-
-                // Calculate Global Rate
-                // We can also sum up from stats['other'] if we want truly global
-                // But relying on what we iterated gives a good "Major Offenses" rate. 
-                // Better to use the full sum from the stats object for the text.
-                let globalTotal = 0;
-                let globalIndict = 0;
-                Object.values(stats).forEach(v => {
-                    globalTotal += v.total;
-                    globalIndict += v.indict;
-                });
-
-                const globalRate = globalTotal > 0 ? ((globalIndict / globalTotal) * 100).toFixed(1) : 0;
-
-                // Update Text Insight
-                const viewBox = document.getElementById('indictmentInsightBox');
-                if (viewBox) {
-                    viewBox.style.display = 'block';
-                    document.getElementById('indictmentText').innerHTML =
-                        `רק כ-<b>${globalRate}%</b> מהמעצרים מבשילים לכדי כתב אישום או הליך פלילי (${globalIndict} מתוך ${globalTotal}).`;
                 }
+            });
 
-                // Gradient function for dynamic color assignment
-                function getGradient(ctx, colorHex) {
-                    const gradient = ctx.createLinearGradient(0, 400, 0, 0);
-                    gradient.addColorStop(0, colorHex + '33'); // 20% opacity using hex alpha
-                    gradient.addColorStop(1, colorHex);
-                    return gradient;
-                }
+            // Update text elements if dynamic (though structurally static here, good practice)
+            document.getElementById('fines-total').innerText = stats.insights.total_fines + ' ₪';
+            document.getElementById('fines-fans-share').innerText = stats.insights.fans_share + '%';
+            document.getElementById('fines-lower-share').innerText = stats.insights.lower_leagues_share + '%';
+        }
 
-                const colorsHex = ['#fb923c', '#38bdf8', '#f87171', '#38bdf8', '#fb923c', '#fb923c'];
-                const gradients = colorsHex.map(c => getGradient(ctx, c));
+        const OFFENSE_LABELS_HE = {
+            'assault': 'אלימות/תקיפה',
+            'pyro': 'פירוטכניקה',
+            'police': 'תקיפת שוטר',
+            'order': 'הפרת סדר',
+            'field': 'פריצה למגרש',
+            'banned_item': 'חפץ אסור',
+            'property': 'ונדליזם',
+            'threat': 'איומים',
+            'other': 'אחר'
+        };
 
-                effectivenessChartInstance = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'סיכוי לכתב אישום (%)',
-                            data: dataPercents,
-                            backgroundColor: gradients,
-                            borderRadius: 4
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                callbacks: {
-                                    label: function (context) {
-                                        return context.parsed.y + '% סיכוי לכתב אישום';
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                max: 100,
-                                title: { display: true, text: 'אחוז (%)' },
-                                grid: { color: 'rgba(255,255,255,0.05)' }
-                            },
-                            x: {
-                                ticks: { font: { size: 11 } },
-                                grid: { display: false }
-                            }
-                        }
-                    }
-                });
-            }
+        function renderEffectivenessChart(stats) {
+            const ctx = document.getElementById('effectivenessChart').getContext('2d');
 
-            function renderClosingReasonsChart(stats) {
-                const ctx = document.getElementById('closingReasonsChart').getContext('2d');
+            // Prepare Data
+            const labels = [];
+            const dataPercents = [];
+            const colors = [];
 
-                const labels = [];
-                const lackEvidenceData = [];
-                const lackGuiltData = [];
-                const otherData = [];
+            let totalCases = 0;
+            let totalIndictments = 0;
 
-                const keys = ['assault', 'pyro', 'police', 'order', 'field', 'banned_item'];
+            // Sort by percentage descending? Or fixed order?
+            // Let's use specific relevant keys
+            const keys = ['assault', 'pyro', 'police', 'order', 'field', 'banned_item'];
 
-                keys.forEach(key => {
-                    if (stats[key] && stats[key].total > 0) {
-                        const s = stats[key];
+            keys.forEach(key => {
+                if (stats[key]) {
+                    const total = stats[key].total || 0;
+                    const indict = stats[key].indict || 0;
+                    totalCases += total;
+                    totalIndictments += indict;
+
+                    if (total > 5) { // Threshold to avoid noisy data
+                        const pct = (indict / total) * 100;
                         labels.push(OFFENSE_LABELS_HE[key] || key);
-                        lackEvidenceData.push(s.lack_evidence);
-                        lackGuiltData.push(s.lack_guilt);
-                        otherData.push(s.other);
+                        dataPercents.push(pct.toFixed(1));
+
+                        // Dynamic Color: High > Red, Low > Green/Blue
+                        if (pct > 50) colors.push('#ef4444'); // Red
+                        else if (pct > 25) colors.push('#f97316'); // Orange
+                        else colors.push('#3b82f6'); // Blue
                     }
-                });
+                }
+            });
 
-                // Create Gradients
-                const gradEvidence = ctx.createLinearGradient(0, 400, 0, 0);
-                gradEvidence.addColorStop(0, 'rgba(239, 68, 68, 0.2)'); // Red Faded
-                gradEvidence.addColorStop(1, '#ef4444'); // Red
+            // Calculate Global Rate
+            // We can also sum up from stats['other'] if we want truly global
+            // But relying on what we iterated gives a good "Major Offenses" rate. 
+            // Better to use the full sum from the stats object for the text.
+            let globalTotal = 0;
+            let globalIndict = 0;
+            Object.values(stats).forEach(v => {
+                globalTotal += v.total;
+                globalIndict += v.indict;
+            });
 
-                const gradGuilt = ctx.createLinearGradient(0, 400, 0, 0);
-                gradGuilt.addColorStop(0, 'rgba(16, 185, 129, 0.2)'); // Green Faded
-                gradGuilt.addColorStop(1, '#10b981'); // Green
+            const globalRate = globalTotal > 0 ? ((globalIndict / globalTotal) * 100).toFixed(1) : 0;
 
-                const gradOther = ctx.createLinearGradient(0, 400, 0, 0);
-                gradOther.addColorStop(0, 'rgba(100, 116, 139, 0.2)'); // Gray Faded
-                gradOther.addColorStop(1, '#64748b'); // Gray
+            // Update Text Insight
+            const viewBox = document.getElementById('indictmentInsightBox');
+            if (viewBox) {
+                viewBox.style.display = 'block';
+                document.getElementById('indictmentText').innerHTML =
+                    `רק כ-<b>${globalRate}%</b> מהמעצרים מבשילים לכדי כתב אישום או הליך פלילי (${globalIndict} מתוך ${globalTotal}).`;
+            }
 
-                closingReasonsChartInstance = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [
-                            { label: 'חוסר ראיות', data: lackEvidenceData, backgroundColor: gradEvidence, borderRadius: 4, borderWidth: 0 },
-                            { label: 'חוסר אשמה', data: lackGuiltData, backgroundColor: gradGuilt, borderRadius: 4, borderWidth: 0 },
-                            { label: 'אחר', data: otherData, backgroundColor: gradOther, borderRadius: 4, borderWidth: 0 }
-                        ]
+            // Gradient function for dynamic color assignment
+            function getGradient(ctx, colorHex) {
+                const gradient = ctx.createLinearGradient(0, 400, 0, 0);
+                gradient.addColorStop(0, colorHex + '33'); // 20% opacity using hex alpha
+                gradient.addColorStop(1, colorHex);
+                return gradient;
+            }
+
+            const colorsHex = ['#fb923c', '#38bdf8', '#f87171', '#38bdf8', '#fb923c', '#fb923c'];
+            const gradients = colorsHex.map(c => getGradient(ctx, c));
+
+            effectivenessChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'סיכוי לכתב אישום (%)',
+                        data: dataPercents,
+                        backgroundColor: gradients,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return context.parsed.y + '% סיכוי לכתב אישום';
+                                }
+                            }
+                        }
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            x: { stacked: true, ticks: { color: '#94a3b8' }, grid: { display: false } },
-                            y: { stacked: true, ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' }, title: { display: true, text: 'מספר תיקים שנסגרו' } }
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: { display: true, text: 'אחוז (%)' },
+                            grid: { color: 'rgba(255,255,255,0.05)' }
                         },
-                        plugins: {
-                            legend: { position: 'bottom', labels: { color: '#cbd5e1' } },
-                            tooltip: { mode: 'index', intersect: false }
+                        x: {
+                            ticks: { font: { size: 11 } },
+                            grid: { display: false }
                         }
                     }
+                }
+            });
+        }
+
+        function renderClosingReasonsChart(stats) {
+            const ctx = document.getElementById('closingReasonsChart').getContext('2d');
+
+            const labels = [];
+            const lackEvidenceData = [];
+            const lackGuiltData = [];
+            const otherData = [];
+
+            const keys = ['assault', 'pyro', 'police', 'order', 'field', 'banned_item'];
+
+            keys.forEach(key => {
+                if (stats[key] && stats[key].total > 0) {
+                    const s = stats[key];
+                    labels.push(OFFENSE_LABELS_HE[key] || key);
+                    lackEvidenceData.push(s.lack_evidence);
+                    lackGuiltData.push(s.lack_guilt);
+                    otherData.push(s.other);
+                }
+            });
+
+            // Create Gradients
+            const gradEvidence = ctx.createLinearGradient(0, 400, 0, 0);
+            gradEvidence.addColorStop(0, 'rgba(239, 68, 68, 0.2)'); // Red Faded
+            gradEvidence.addColorStop(1, '#ef4444'); // Red
+
+            const gradGuilt = ctx.createLinearGradient(0, 400, 0, 0);
+            gradGuilt.addColorStop(0, 'rgba(16, 185, 129, 0.2)'); // Green Faded
+            gradGuilt.addColorStop(1, '#10b981'); // Green
+
+            const gradOther = ctx.createLinearGradient(0, 400, 0, 0);
+            gradOther.addColorStop(0, 'rgba(100, 116, 139, 0.2)'); // Gray Faded
+            gradOther.addColorStop(1, '#64748b'); // Gray
+
+            closingReasonsChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'חוסר ראיות', data: lackEvidenceData, backgroundColor: gradEvidence, borderRadius: 4, borderWidth: 0 },
+                        { label: 'חוסר אשמה', data: lackGuiltData, backgroundColor: gradGuilt, borderRadius: 4, borderWidth: 0 },
+                        { label: 'אחר', data: otherData, backgroundColor: gradOther, borderRadius: 4, borderWidth: 0 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { stacked: true, ticks: { color: '#94a3b8' }, grid: { display: false } },
+                        y: { stacked: true, ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' }, title: { display: true, text: 'מספר תיקים שנסגרו' } }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#cbd5e1' } },
+                        tooltip: { mode: 'index', intersect: false }
+                    }
+                }
+            });
+        }
+
+        function renderOffensesChart(stats) {
+            if (!stats || Object.keys(stats).length === 0) return;
+            const labels = Object.keys(stats);
+            const data = Object.values(stats);
+            const ctx = document.getElementById('offensesChart').getContext('2d');
+
+            // Create Neon Blue Gradient
+            const gradientBlue = ctx.createLinearGradient(0, 0, 400, 0); // Left to Right since indexAxis is y
+            gradientBlue.addColorStop(0, 'rgba(56, 189, 248, 0.2)'); // Faded Sky
+            gradientBlue.addColorStop(1, '#38bdf8'); // Bright Sky
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'מעצרים',
+                        data: data,
+                        backgroundColor: gradientBlue,
+                        borderRadius: 4,
+                        barPercentage: 0.6,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        // --- Login Logic ---
+        function checkLogin() {
+            const input = document.getElementById('login-input');
+            const code = input.value;
+            if (code === '1234') {
+                const overlay = document.getElementById('login-overlay');
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 500);
+                sessionStorage.setItem('site_access', 'granted');
+            } else {
+                const errorMsg = document.getElementById('login-error');
+                errorMsg.style.display = 'block';
+                errorMsg.classList.add('shake'); // Optional animation class if added
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        // Check Access on Load
+        document.addEventListener('DOMContentLoaded', function () {
+            const input = document.getElementById('login-input');
+            if (input) {
+                input.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        checkLogin();
+                    }
+                });
+                // Focus input automatically
+                setTimeout(() => input.focus(), 100);
+            }
+
+            if (sessionStorage.getItem('site_access') === 'granted') {
+                const overlay = document.getElementById('login-overlay');
+                if (overlay) overlay.style.display = 'none';
+            }
+        });
+
+        window.onload = function () {
+            // Fetch data
+            fetch('data.json')
+                .then(response => response.json())
+                .then(data => {
+                    realData = data;
+
+                    // Initialize dependent parts
+                    updateFOI();
+                    updateProfileChart();
+
+                    if (realData.meta) {
+                        // Cleaned up unused charts
+                        updateMapViz();
+                    }
+
+                    // Initialize Charts requiring Data
+                    if (realData.indictment_stats) {
+                        renderEffectivenessChart(realData.indictment_stats);
+                    }
+
+                    if (realData.closing_stats) {
+                        renderClosingReasonsChart(realData.closing_stats);
+                    }
+
+                    if (realData.comparison_stats) {
+                        renderComparisonChart(realData.comparison_stats);
+                        renderFinesChart(realData.fines_stats);
+                    }
+
+                    // --- Chart 1: Racism Pie (Static for now) ---
+                    const ctxPie = document.getElementById('racismPieChart');
+                    if (ctxPie) {
+                        new Chart(ctxPie.getContext('2d'), {
+                            type: 'doughnut',
+                            data: {
+                                labels: ['מכבי ת"א', 'בית"ר י-ם', 'מכבי נתניה', 'הפועל חיפה', 'ק"ש', 'אחרים'],
+                                datasets: [{ data: [118, 115, 29, 28, 24, 53], backgroundColor: ['#facc15', '#94a3b8', '#fb923c', '#f87171', '#38bdf8', '#475569'], borderWidth: 0 }]
+                            },
+                            options: { responsive: true, maintainAspectRatio: false, cutout: '50%', plugins: { legend: { position: 'right' } } }
+                        });
+                    }
+                })
+                .catch(err => console.error("Error loading data:", err));
+
+            Chart.defaults.color = '#94a3b8';
+            Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.05)';
+            Chart.defaults.font.family = "'Heebo', sans-serif";
+
+            // Fix tooltip bg
+            Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(15, 23, 42, 0.9)';
+            Chart.defaults.plugins.tooltip.titleColor = '#f8fafc';
+            Chart.defaults.plugins.tooltip.bodyColor = '#cbd5e1';
+            Chart.defaults.plugins.tooltip.borderColor = 'rgba(255, 255, 255, 0.1)';
+            Chart.defaults.plugins.tooltip.borderWidth = 1;
+
+            // --- Chart 2: Bar Gap ---
+            const ctxBar = document.getElementById('barChart');
+            if (ctxBar) {
+                new Chart(ctxBar.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['תיקי חקירה', 'כתבי אישום', 'גזענות', 'אלימות', 'הרחקות'],
+                        datasets: [{ data: [138, 32, 367, 165, 398], backgroundColor: ['#3b82f6', '#3b82f6', '#ef4444', '#ef4444', '#eab308'], borderRadius: 6 }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
                 });
             }
 
-            function renderOffensesChart(stats) {
-                if (!stats || Object.keys(stats).length === 0) return;
-                const labels = Object.keys(stats);
-                const data = Object.values(stats);
-                const ctx = document.getElementById('offensesChart').getContext('2d');
-
-                // Create Neon Blue Gradient
-                const gradientBlue = ctx.createLinearGradient(0, 0, 400, 0); // Left to Right since indexAxis is y
-                gradientBlue.addColorStop(0, 'rgba(56, 189, 248, 0.2)'); // Faded Sky
-                gradientBlue.addColorStop(1, '#38bdf8'); // Bright Sky
+            // --- Chart 3: Offenses ---
+            const ctxOffenses = document.getElementById('offensesChart');
+            if (ctxOffenses) {
+                const ctx = ctxOffenses.getContext('2d');
+                // Neon Gradient
+                const gradientBlue = ctx.createLinearGradient(0, 0, 400, 0);
+                gradientBlue.addColorStop(0, 'rgba(56, 189, 248, 0.2)');
+                gradientBlue.addColorStop(1, '#38bdf8');
 
                 new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'מעצרים',
-                            data: data,
-                            backgroundColor: gradientBlue,
-                            borderRadius: 4,
-                            barPercentage: 0.6,
-                            borderWidth: 0
-                        }]
+                        labels: ['הפרת סדר', 'אש/אבוקות', 'התנהגות פרועה', 'תקיפת שוטר', 'תקיפה', 'תגרה', 'חפץ אסור', 'הפרעת שוטר', 'איסור כניסה', 'אמצעים כימיים'],
+                        datasets: [{ label: 'מעצרים', data: [65, 54, 53, 47, 41, 36, 36, 32, 25, 21], backgroundColor: gradientBlue, borderRadius: 4 }]
                     },
                     options: {
                         indexAxis: 'y',
@@ -1715,145 +1852,9 @@
                 });
             }
 
-            // --- Login Logic ---
-            function checkLogin() {
-                const input = document.getElementById('login-input');
-                const code = input.value;
-                if (code === '1234') {
-                    const overlay = document.getElementById('login-overlay');
-                    overlay.style.opacity = '0';
-                    setTimeout(() => {
-                        overlay.style.display = 'none';
-                    }, 500);
-                    sessionStorage.setItem('site_access', 'granted');
-                } else {
-                    const errorMsg = document.getElementById('login-error');
-                    errorMsg.style.display = 'block';
-                    errorMsg.classList.add('shake'); // Optional animation class if added
-                    input.value = '';
-                    input.focus();
-                }
-            }
 
-            // Check Access on Load
-            document.addEventListener('DOMContentLoaded', function () {
-                const input = document.getElementById('login-input');
-                if (input) {
-                    input.addEventListener('keypress', function (e) {
-                        if (e.key === 'Enter') {
-                            checkLogin();
-                        }
-                    });
-                    // Focus input automatically
-                    setTimeout(() => input.focus(), 100);
-                }
-
-                if (sessionStorage.getItem('site_access') === 'granted') {
-                    const overlay = document.getElementById('login-overlay');
-                    if (overlay) overlay.style.display = 'none';
-                }
-            });
-
-            window.onload = function () {
-                // Fetch data
-                fetch('data.json')
-                    .then(response => response.json())
-                    .then(data => {
-                        realData = data;
-
-                        // Initialize dependent parts
-                        updateFOI();
-                        updateProfileChart();
-
-                        if (realData.meta) {
-                            // Cleaned up unused charts
-                            updateMapViz();
-                        }
-
-                        // Initialize Charts requiring Data
-                        if (realData.indictment_stats) {
-                            renderEffectivenessChart(realData.indictment_stats);
-                        }
-
-                        if (realData.closing_stats) {
-                            renderClosingReasonsChart(realData.closing_stats);
-                        }
-
-                        if (realData.comparison_stats) {
-                            renderComparisonChart(realData.comparison_stats);
-                            renderFinesChart(realData.fines_stats);
-                        }
-
-                        // --- Chart 1: Racism Pie (Static for now) ---
-                        const ctxPie = document.getElementById('racismPieChart');
-                        if (ctxPie) {
-                            new Chart(ctxPie.getContext('2d'), {
-                                type: 'doughnut',
-                                data: {
-                                    labels: ['מכבי ת"א', 'בית"ר י-ם', 'מכבי נתניה', 'הפועל חיפה', 'ק"ש', 'אחרים'],
-                                    datasets: [{ data: [118, 115, 29, 28, 24, 53], backgroundColor: ['#facc15', '#94a3b8', '#fb923c', '#f87171', '#38bdf8', '#475569'], borderWidth: 0 }]
-                                },
-                                options: { responsive: true, maintainAspectRatio: false, cutout: '50%', plugins: { legend: { position: 'right' } } }
-                            });
-                        }
-                    })
-                    .catch(err => console.error("Error loading data:", err));
-
-                Chart.defaults.color = '#94a3b8';
-                Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.05)';
-                Chart.defaults.font.family = "'Heebo', sans-serif";
-
-                // Fix tooltip bg
-                Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(15, 23, 42, 0.9)';
-                Chart.defaults.plugins.tooltip.titleColor = '#f8fafc';
-                Chart.defaults.plugins.tooltip.bodyColor = '#cbd5e1';
-                Chart.defaults.plugins.tooltip.borderColor = 'rgba(255, 255, 255, 0.1)';
-                Chart.defaults.plugins.tooltip.borderWidth = 1;
-
-                // --- Chart 2: Bar Gap ---
-                const ctxBar = document.getElementById('barChart');
-                if (ctxBar) {
-                    new Chart(ctxBar.getContext('2d'), {
-                        type: 'bar',
-                        data: {
-                            labels: ['תיקי חקירה', 'כתבי אישום', 'גזענות', 'אלימות', 'הרחקות'],
-                            datasets: [{ data: [138, 32, 367, 165, 398], backgroundColor: ['#3b82f6', '#3b82f6', '#ef4444', '#ef4444', '#eab308'], borderRadius: 6 }]
-                        },
-                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-                    });
-                }
-
-                // --- Chart 3: Offenses ---
-                const ctxOffenses = document.getElementById('offensesChart');
-                if (ctxOffenses) {
-                    const ctx = ctxOffenses.getContext('2d');
-                    // Neon Gradient
-                    const gradientBlue = ctx.createLinearGradient(0, 0, 400, 0);
-                    gradientBlue.addColorStop(0, 'rgba(56, 189, 248, 0.2)');
-                    gradientBlue.addColorStop(1, '#38bdf8');
-
-                    new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: ['הפרת סדר', 'אש/אבוקות', 'התנהגות פרועה', 'תקיפת שוטר', 'תקיפה', 'תגרה', 'חפץ אסור', 'הפרעת שוטר', 'איסור כניסה', 'אמצעים כימיים'],
-                            datasets: [{ label: 'מעצרים', data: [65, 54, 53, 47, 41, 36, 36, 32, 25, 21], backgroundColor: gradientBlue, borderRadius: 4 }]
-                        },
-                        options: {
-                            indexAxis: 'y',
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: { legend: { display: false } },
-                            scales: {
-                                x: { grid: { color: 'rgba(255,255,255,0.05)' } },
-                                y: { grid: { display: false } }
-                            }
-                        }
-                    });
-                }
-
-
-            };
-        </script>
+        };
+    </script>
 </body>
 
 </html>
