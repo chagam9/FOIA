@@ -1,0 +1,1851 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>דוח אכיפה ואלימות בספורט - דשבורד</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #000000;
+            /* Pure Black Base */
+            --card-bg: rgba(255, 255, 255, 0.05);
+            /* Ultra Subtle Glass */
+            --sidebar-bg: rgba(20, 20, 20, 0.6);
+            --text-color: rgba(255, 255, 255, 0.92);
+            /* Primary Text */
+            --text-muted: rgba(255, 255, 255, 0.55);
+            /* Secondary Text */
+            --border-color: rgba(255, 255, 255, 0.12);
+            /* Crisp Glass Border */
+
+            /* Apple Human Interface Colors (Dark Mode) */
+            --primary-blue: #0A84FF;
+            --accent-blue: #64D2FF;
+            --accent-green: #30D158;
+            --accent-red: #FF453A;
+            --accent-orange: #FF9F0A;
+            --accent-yellow: #FFD60A;
+        }
+
+        body {
+            font-family: 'Heebo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            /* OLED Vignette: Deep radial gradient on top of the image */
+            background-image:
+                radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.4) 70%, #000000 100%),
+                linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
+                url('site_background.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Tooltip Styles */
+        [data-source] {
+            position: relative;
+            cursor: help;
+            border-bottom: 1px dotted var(--text-muted);
+        }
+
+        [data-source]:hover::after {
+            content: attr(data-source);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-blue);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            white-space: nowrap;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            pointer-events: none;
+        }
+
+        [data-source]:hover::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px;
+            border-style: solid;
+            border-color: var(--primary-blue) transparent transparent transparent;
+            margin-bottom: -2px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        /* Layout */
+        /* Glassmorphism Components */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            border-left: 1px solid var(--border-color);
+            z-index: 10;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--text-color);
+            margin-bottom: 40px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 15px;
+            text-align: right;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 12px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 400;
+        }
+
+        .nav-btn:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-color);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(90deg, rgba(56, 189, 248, 0.1), transparent);
+            color: var(--primary-blue);
+            font-weight: 700;
+            border-right: 3px solid var(--primary-blue);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            width: 100%;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .header h1 {
+            font-size: 32px;
+            /* Larger */
+            margin: 0;
+            font-weight: 800;
+            /* Extra Bold */
+            letter-spacing: -1px;
+            background: linear-gradient(180deg, #FFFFFF 0%, #cbd5e1 100%);
+            /* Metallic White Gradient */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            /* Deep shadow to separate from background */
+        }
+
+        .header p {
+            color: var(--text-muted);
+            margin: 5px 0 0 0;
+            font-size: 14px;
+        }
+
+        /* Grids */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .police-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .foi-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+
+        /* Profile Controls Grid */
+        .controls-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+            align-items: end;
+        }
+
+        .total-counter {
+            background: var(--primary-blue);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Cards */
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+            box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .card .value {
+            font-size: 56px;
+            /* Increased size for impact */
+            font-weight: 200;
+            margin: 10px 0;
+            font-family: 'Heebo', sans-serif;
+            letter-spacing: -2px;
+            /* Tighter editorial tracking */
+            color: #ffffff;
+            /* Pure White */
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+            /* Subtle diffuse glow */
+        }
+
+        .card .label {
+            font-size: 14px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.5);
+            /* Dimmed for contrast */
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .card .value.orange {
+            color: var(--accent-orange);
+            text-shadow: 0 0 20px rgba(251, 146, 60, 0.3);
+        }
+
+        .card .value.red {
+            color: var(--accent-red);
+            text-shadow: 0 0 20px rgba(248, 113, 113, 0.3);
+        }
+
+        .card .value.yellow {
+            color: var(--accent-yellow);
+            text-shadow: 0 0 20px rgba(250, 204, 21, 0.3);
+        }
+
+        .card .value.blue {
+            color: var(--accent-blue);
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .card .label {
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        /* Insight Card Styling */
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+
+        /* Updated Insight Cards */
+        .insight-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 140px;
+            backdrop-filter: blur(8px);
+        }
+
+        .insight-card:hover {
+            transform: translateY(-5px);
+            background: rgba(30, 41, 59, 0.6);
+        }
+
+        .insight-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--text-muted);
+        }
+
+        .insight-title {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--text-color);
+            margin-bottom: 5px;
+            line-height: 1.3;
+        }
+
+        .insight-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .insight-source {
+            font-size: 11px;
+            color: #64748b;
+            border-top: 1px solid var(--border-color);
+            padding-top: 8px;
+            margin-top: auto;
+        }
+
+        .alert-box {
+            background: rgba(254, 226, 226, 0.1);
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            font-size: 14px;
+            color: var(--accent-red);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* Form Controls */
+        .control-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .control-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            font-size: 15px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .control-group select:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+        }
+
+        .insight-box {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid var(--primary-blue);
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            text-align: right;
+            font-weight: 500;
+            color: var(--primary-blue);
+        }
+
+        /* Failure & FOI */
+        .failure-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            border-right: 4px solid var(--accent-yellow);
+            margin-bottom: 15px;
+            text-align: right;
+            border: 1px solid var(--border-color);
+        }
+
+        .failure-card h4 {
+            margin: 0 0 5px 0;
+            color: var(--text-color);
+            font-size: 16px;
+        }
+
+        .failure-card p {
+            margin: 0;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .mahash-stats {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stat-row .num {
+            font-weight: 300;
+            font-size: 20px;
+            color: var(--text-color);
+            font-family: 'Heebo';
+        }
+
+        .foi-options .option {
+            background: var(--card-bg);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            transition: 0.2s;
+        }
+
+        .foi-options .option:hover {
+            border-color: var(--accent-blue);
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        .foi-options input {
+            transform: scale(1.2);
+            accent-color: var(--accent-blue);
+        }
+
+        .foi-preview {
+            background: #0f172a;
+            padding: 25px;
+            border-radius: 12px;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            color: #cbd5e1;
+            height: 500px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .action-btn {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 15px;
+            width: 100%;
+            transition: 0.2s;
+        }
+
+        .action-btn:hover {
+            background-color: #1e293b;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                height: auto;
+                overflow-y: auto;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 10px;
+                border-left: none;
+                border-bottom: 1px solid var(--border-color);
+                flex-direction: row;
+                overflow-x: auto;
+                white-space: nowrap;
+                align-items: center;
+                gap: 10px;
+                position: sticky;
+                top: 0;
+                background: var(--sidebar-bg);
+                z-index: 100;
+            }
+
+            .logo {
+                display: none;
+            }
+
+            .nav-btn {
+                padding: 8px 12px;
+                margin: 0;
+                font-size: 14px;
+                border-radius: 20px;
+                border: 1px solid var(--border-color);
+            }
+
+            .nav-btn.active {
+                background-color: var(--primary-blue);
+                color: white;
+                border: 1px solid var(--primary-blue);
+            }
+
+            .main-content {
+                padding: 15px;
+                height: auto;
+                overflow: visible;
+            }
+
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .dashboard-grid,
+            .police-grid,
+            .kpi-grid,
+            .foi-container,
+            .controls-wrapper,
+            .insights-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .insights-grid {
+                overflow-x: auto;
+                display: flex;
+                gap: 15px;
+                padding-bottom: 10px;
+            }
+
+            .insight-card {
+                min-width: 200px;
+            }
+
+            .card .value {
+                font-size: 28px;
+            }
+
+            .foi-preview {
+                height: 300px;
+            }
+
+            [data-source]:hover::after {
+                left: 0;
+                transform: translateX(0);
+                white-space: normal;
+                width: 200px;
+                text-align: center;
+            }
+
+            [data-source]:hover::before {
+                left: 20px;
+                transform: translateX(0);
+            }
+        }
+
+        /* Map Bubble Styles */
+        .map-bubble {
+            position: absolute;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            /* Center on the coordinate */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            animation: pulse-bubble 2s infinite;
+        }
+
+        .map-bubble:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            z-index: 10;
+        }
+
+        .map-bubble .count {
+            pointer-events: none;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .map-bubble .tooltip {
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(30, 41, 59, 0.6);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .map-bubble:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @keyframes pulse-bubble {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+            }
+        }
+
+        /* Login Overlay */
+        #login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 0.5s ease;
+        }
+
+        #login-box {
+            background-color: rgba(20, 20, 20, 0.9);
+            padding: 40px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            box-shadow: 0 0 50px rgba(0, 56, 184, 0.3);
+            backdrop-filter: blur(20px);
+        }
+
+        #login-input {
+            padding: 12px;
+            font-size: 18px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            margin-bottom: 20px;
+            width: 200px;
+            text-align: center;
+            background: #111;
+            color: white;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        #login-input:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 15px rgba(10, 132, 255, 0.2);
+        }
+
+        #login-btn {
+            padding: 12px 30px;
+            font-size: 16px;
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        #login-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Login Overlay -->
+    <div id="login-overlay">
+        <div id="login-box">
+            <h2 style="color: white; margin-bottom: 10px; font-weight: 300; font-size: 1.5rem;">כניסה למערכת</h2>
+            <h1 style="color: var(--primary-blue); margin-bottom: 30px; margin-top:0; font-size: 2rem;">דוח אלימות
+                בספורט</h1>
+            <input type="password" id="login-input" placeholder="קוד גישה">
+            <br>
+            <button id="login-btn" onclick="checkLogin()">אישור</button>
+            <p id="login-error" style="color: var(--accent-red); display: none; margin-top: 15px; font-size: 14px;">
+                <i class="fas fa-exclamation-circle"></i> קוד שגוי
+            </p>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-chart-line" style="color: var(--accent-blue);"></i>
+            <span>BI קליניקה</span>
+        </div>
+        <button class="nav-btn active" onclick="showTab('overview')">
+            <i class="fas fa-home"></i> תמונת מצב
+        </button>
+        <button class="nav-btn" onclick="showTab('profile')">
+            <i class="fas fa-user-secret"></i> פרופיל העבריין
+        </button>
+        <button class="nav-btn" onclick="showTab('police')">
+            <i class="fas fa-shield-alt"></i> שוטרים
+        </button>
+        <button class="nav-btn" onclick="showTab('map')">
+            <i class="fas fa-map-marker-alt"></i> מפה
+        </button>
+        <button class="nav-btn" onclick="showTab('comparison')">
+            <i class="fas fa-globe-europe"></i> השוואה בינלאומית
+        </button>
+        <button class="nav-btn" onclick="showTab('fines')">
+            <i class="fas fa-shekel-sign"></i> קנסות להתאחדות
+        </button>
+        <button class="nav-btn" onclick="showTab('foi')">
+            <i class="fas fa-file-signature"></i> חופש מידע
+        </button>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div>
+                <h1>דוח אינטראקטיבי: אכיפה ואלימות בספורט</h1>
+                <p>קליניקה לחופש מידע | נתוני 2021-2025</p>
+            </div>
+            <div style="font-size: 24px; opacity: 0.8;">
+                <i class="fas fa-futbol" style="color: var(--text-color); margin-left: 10px;"></i>
+                <i class="fas fa-balance-scale" style="color: var(--accent-blue);"></i>
+            </div>
+        </div>
+
+        <div id="overview" class="tab-content active">
+            <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--primary-blue);">תמונת מצב אכיפה (עונת 24/25)
+            </h3>
+
+            <div class="kpi-grid">
+                <div class="card" data-source="מקור: פרוטוקול הוועדה (ספט' 2025), עמ' 2">
+                    <div class="value orange">415</div>
+                    <div class="label">קנסות מנהליים</div>
+                </div>
+                <div class="card" data-source="מקור: פרוטוקול הוועדה (ספט' 2025), עמ' 1">
+                    <div class="value red">398</div>
+                    <div class="label">מורחקים מהמגרשים</div>
+                </div>
+                <div class="card" data-source="מקור: פרוטוקול הוועדה (ספט' 2025), עמ' 1">
+                    <div class="value" style="color: #64748b;">2</div>
+                    <div class="label">תיקי גזענות בלבד</div>
+                </div>
+                <div class="card" data-source="מקור: פרוטוקול הוועדה (ספט' 2025), עמ' 1">
+                    <div class="value yellow">110</div>
+                    <div class="label">תיקי אלימות שנפתחו</div>
+                </div>
+            </div>
+
+            <!-- Enhanced Indictment Insight -->
+            <div id="indictmentInsightBox" class="alert-box"
+                style="margin-bottom: 20px; background-color: #f0fdf4; border-color: #bbf7d0; color: #166534; display: none;">
+                <i class="fas fa-gavel"></i> <span id="indictmentText">רק כ-XX% מהמעצרים מבשילים לכדי כתב אישום או הליך
+                    פלילי.</span>
+            </div>
+
+            <div class="alert-box" style="margin-bottom: 20px;"
+                data-source="מקור: דוח בועטים 24-25, עמ' 1 (367 קריאות) מול פרוטוקול הוועדה עמ' 1">
+                <i class="fas fa-info-circle"></i> פער אדיר בין כמות הקריאות הגזעניות (367) לבין תיקי חקירה שנפתחו בנושא
+                (2 בלבד).
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3 style="margin: 0 0 20px 0; font-size: 16px;">אפקטיביות האכיפה (סיכוי לכתב אישום)</h3>
+                    <div style="height: 300px; position: relative;">
+                        <canvas id="effectivenessChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card" data-source="מקור: דוח בועטים 24-25, עמ' 8 (טבלת סיכום)">
+                    <h3 style="margin: 0 0 20px 0; font-size: 16px;">שיאני הגזענות (עונת 24/25)</h3>
+                    <div style="height: 300px; position: relative;">
+                        <canvas id="racismPieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Row for Deep Dive -->
+            <div class="dashboard-grid" style="margin-top: 20px;">
+                <div class="card" style="grid-column: span 2;">
+                    <h3 style="margin: 0 0 10px 0; font-size: 18px; color: var(--accent-red);">למה התיקים נסגרים? (ניתוח
+                        עילות סגירה)</h3>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">השוואה בין סגירה מחוסר
+                        ראיות (תחום אפור) לבין חוסר אשמה (ניקוי מלא)</p>
+                    <div style="height: 350px; position: relative;">
+                        <canvas id="closingReasonsChart"></canvas>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+        <div id="profile" class="tab-content">
+            <div class="card" style="min-height: 500px;">
+                <h3 style="margin: 0 0 20px 0; color: var(--primary-blue);">חקר נתונים: פרופיל העבריין (נתוני אמת)</h3>
+
+                <div class="controls-wrapper">
+                    <div class="control-group">
+                        <label for="citySelect">בחר עיר:</label>
+                        <select id="citySelect" onchange="updateProfileChart()">
+                            <option value="all">כל הארץ</option>
+                            <option value="jerusalem">ירושלים</option>
+                            <option value="telaviv">תל אביב - יפו</option>
+                            <option value="haifa">חיפה</option>
+                            <option value="beersheva">באר שבע</option>
+                            <option value="petah_tikva">פתח תקווה</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="offenseSelect">בחר סוג עבירה:</label>
+                        <select id="offenseSelect" onchange="updateProfileChart()">
+                            <option value="all">כל העבירות</option>
+                            <option value="pyro">שימוש בחומר נפיץ/אבוקות</option>
+                            <option value="assault">תקיפה/אלימות פיזית</option>
+                            <option value="police">תקיפת/הפרעה לשוטר</option>
+                            <option value="order">הפרת הסדר הציבורי</option>
+                            <option value="field">פריצה למגרש (כניסה אסורה)</option>
+                            <option value="banned_item">הכנסת חפץ אסור</option>
+                            <option value="property">היזק לרכוש (ונדליזם)</option>
+                            <option value="threat">איומים</option>
+                        </select>
+                    </div>
+                    <div id="totalCounter" class="total-counter">
+                        סה"כ: 0 מקרים
+                    </div>
+                </div>
+
+                <div style="height: 350px; position: relative;">
+                    <canvas id="profileChartCanvas"></canvas>
+                </div>
+
+                <div id="profileInsight" class="insight-box">
+                    אנא בחר פרמטרים להצגת נתונים.
+                </div>
+
+                <div class="insights-grid">
+                    <div class="insight-card haifa">
+                        <div class="insight-icon"><i class="fas fa-user-tie"></i></div>
+                        <div class="insight-title">חריגת גיל בעבירות אלימות</div>
+                        <div class="insight-desc">באופן חריג, קבוצת הגיל המובילה בתקיפות בחיפה היא
+                            <strong>31-40</strong>.
+                        </div>
+                        <div class="insight-source">מקור: נתוני מעצרים 2021-2025</div>
+                    </div>
+                    <div class="insight-card tlv">
+                        <div class="insight-icon"><i class="fas fa-bullhorn"></i></div>
+                        <div class="insight-title">הפרות סדר: מעורבות בוגרת</div>
+                        <div class="insight-desc">בת"א, עבירות סדר ציבורי מאפיינות בעיקר גילאי <strong>30+</strong>.
+                        </div>
+                        <div class="insight-source">מקור: נתוני מעצרים 2021-2025</div>
+                    </div>
+                    <div class="insight-card bs">
+                        <div class="insight-icon"><i class="fas fa-running"></i></div>
+                        <div class="insight-title">שיאנית הכניסות האסורות</div>
+                        <div class="insight-desc">ב"ש מובילה עם 9 מקרי פריצה למגרש, כולם ע"י צעירים (18-25).</div>
+                        <div class="insight-source">מקור: נתוני מעצרים 2021-2025</div>
+                    </div>
+                    <div class="insight-card jer">
+                        <div class="insight-icon"><i class="fas fa-handcuffs"></i></div>
+                        <div class="insight-title">צעירים (18-21) נגד שוטרים</div>
+                        <div class="insight-desc">בירושלים, הקבוצה הבולטת ביותר בחיכוך עם המשטרה הם הצעירים.</div>
+                        <div class="insight-source">מקור: נתוני מעצרים 2021-2025</div>
+                    </div>
+                    <div class="insight-card national">
+                        <div class="insight-icon"><i class="fas fa-users"></i></div>
+                        <div class="insight-title">קבוצת הסיכון המרכזית</div>
+                        <div class="insight-desc">ברמה ארצית, גילאי <strong>22-25</strong> אחראים ל-36% מכלל המעצרים.
+                        </div>
+                        <div class="insight-source">מקור: נתוני מעצרים 2021-2025</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="police" class="tab-content">
+            <div class="police-grid">
+                <div>
+                    <h3 style="margin-top: 0; color: var(--primary-blue);">אלימות שוטרים: תמונת מצב</h3>
+                    <div class="card"
+                        style="padding: 20px; border-radius: 12px; border-right: 4px solid var(--accent-red); margin-bottom: 20px;"
+                        data-source="מקור: דוח בועטים 24-25, עמ' 3 (התערבות כוחות המשטרה)">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <h2 style="margin: 0; color: #ffffff; font-weight: 200;">9 אירועי אלימות שוטרים</h2>
+                            <span
+                                style="background: rgba(220, 38, 38, 0.2); color: #fca5a5; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: bold;">עונת
+                                24/25</span>
+                        </div>
+                        <p style="margin: 10px 0 0 0; color: var(--text-muted);">כולל פגיעת רימון עשן בילד שפונה לבי"ח.
+                        </p>
+                    </div>
+                    <h4 style="color: var(--text-color);">כשלים מערכתיים</h4>
+                    <div class="failure-card" data-source="מקור: דוח מח'ש, עמ' 4 (סעיף 3.1)">
+                        <h4><i class="fas fa-exclamation-triangle"
+                                style="color: var(--accent-yellow); margin-left: 10px;"></i>היעדר נתונים על קבוצות
+                            אוכלוסייה</h4>
+                        <p>המשטרה ומח"ש לא מפלחות מתלוננים/נפגעים לפי מוצא (חסם בזיהוי שיטור יתר).</p>
+                    </div>
+                    <div class="failure-card" data-source="מקור: דוח שימוש בכוח, עמ' 24">
+                        <h4><i class="fas fa-file-alt" style="color: var(--accent-yellow); margin-left: 10px;"></i>דיווח
+                            לקוי בדוחות פעולה</h4>
+                        <p>שדות השימוש בכוח אינם "שדות חובה", המידע נרשם בטקסט חופשי וקשה לניתוח.</p>
+                    </div>
+                    <div class="failure-card" data-source="מקור: נוהל משטרה 90.220.003.16 ודוח מרכז המחקר עמ' 2">
+                        <h4><i class="fas fa-video" style="color: var(--accent-yellow); margin-left: 10px;"></i>מצלמות
+                            גוף</h4>
+                        <p>נושא מרכזי בבקשת חופש המידע. נוהל קיים אך האכיפה לגביו לא שקופה.</p>
+                    </div>
+                </div>
+                <div>
+                    <h3 style="margin-top: 0; color: var(--primary-blue);">טיפול מערכתי (מח"ש)</h3>
+                    <div class="mahash-stats">
+                        <div class="stat-row" data-source="מקור: נתוני מרכז המחקר והמידע (2024), עמ' 3">
+                            <span>תלונות למח"ש (2022)</span>
+                            <span class="num">3,249</span>
+                        </div>
+                        <div class="stat-row" data-source="מקור: נתוני מרכז המחקר והמידע (2024), עמ' 3">
+                            <span>נחקרו באזהרה</span>
+                            <span class="num">468</span>
+                        </div>
+                        <div class="stat-row" style="border-bottom: none;"
+                            data-source="מקור: נתוני מרכז המחקר והמידע (2024), עמ' 3">
+                            <span style="color: var(--accent-red); font-weight: 800;">כתבי אישום שהוגשו</span>
+                            <span class="num" style="color: var(--accent-red); font-size: 24px;">69</span>
+                        </div>
+                    </div>
+                    <div class="card" style="margin-top: 20px; padding: 20px; border-radius: 12px;">
+                        <h4 style="margin-top: 0; color: #ffffff; font-weight: 600;">מקרי בוחן (סמי עופר ובלומפילד)</h4>
+                        <p style="font-size: 12px; color: var(--accent-blue); margin-top: -10px;">מקור: מרכז המחקר
+                            והמידע של הכנסת (2024), עמ' 2-3</p>
+                        <ul style="color: var(--text-muted); padding-right: 20px; line-height: 1.6; margin-bottom: 0;">
+                            <li>אירוע סמי עופר (21.2.22): 2 תלונות נסגרו (חוסר ראיות).</li>
+                            <li>אירוע בלומפילד (26.9.23): 2 תלונות נסגרו (נסיבות).</li>
+                            <li style="margin-top: 10px;">בשני המקרים: <b style="color: var(--accent-red);">אין
+                                    אינדיקציה לשימוש במצלמות גוף.</b></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card" style="margin-top: 20px; height: auto;"
+                data-source="מקור: ניתוח נתוני מעצרים 2021-2025 (אקסל)">
+                <h3
+                    style="margin: 0 0 20px 0; color: var(--primary-blue); text-align: right; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+                    <i class="fas fa-handcuffs" style="margin-left: 8px; color: var(--accent-red);"></i>
+                    התפלגות מעצרים: 10 העבירות השכיחות ביותר (2021-2025)
+                </h3>
+                <div style="height: 400px; position: relative;">
+                    <canvas id="offensesChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="comparison" class="tab-content">
+            <div class="card" style="margin-bottom: 20px; height: 500px;">
+                <h3 style="margin: 0 0 20px 0; font-size: 20px; color: var(--primary-blue);">השוואת מעצרים (2024)</h3>
+                <div class="insight-box" style="margin-bottom: 20px; text-align: right;">
+                    <i class="fas fa-globe"></i> <strong>השוואה מנורמלת:</strong> הגרף מציג את מספר המעצרים לכל 100,000
+                    צופים, כדי לאפשר השוואה הוגנת בין הליגות למרות ההבדל בכמות הקהל.
+                </div>
+                <div style="position: relative; width: 100%; height: 400px;">
+                    <canvas id="comparisonChart"></canvas>
+                </div>
+                <div class="insight-box"
+                    style="margin-top: 20px; background-color: #fff7ed; border-color: #fdba74; color: #9a3412;">
+                    <i class="fas fa-gavel"></i> <strong>כתבי אישום:</strong> בהולנד 54% מהמעצרים מבשילים לכתב אישום,
+                    בישראל רק 28.8%.
+                </div>
+                <div class="insight-box"
+                    style="margin-top: 10px; background-color: #fef9c3; border-color: #fde047; color: #854d0e;">
+                    <i class="fas fa-file-contract"></i> <strong>ספרד:</strong> 1675 סנקציות מנהליות, משמע שספרד
+                    מתעדפת עונשים מנהליים על פני מעצרים.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="fines" class="tab-content">
+        <div class="card" style="margin-bottom: 20px;">
+            <h3 style="margin: 0 0 20px 0; font-size: 20px; color: var(--primary-blue);">הכנסות ההתאחדות מקנסות
+                (2018-2022)</h3>
+            <div style="position: relative; width: 100%; height: 400px;">
+                <canvas id="finesChart"></canvas>
+            </div>
+            <div class="insight-source" style="text-align: left; margin-top: 10px;">
+                מקור: הוועדה לבחינת רפורמה בדרכי המאבק בהתפרעויות במשחקי הכדורגל בישראל
+            </div>
+
+            <div class="insights-grid" style="grid-template-columns: repeat(3, 1fr); margin-top: 30px;">
+                <div class="insight-card">
+                    <div class="insight-icon"><i class="fas fa-wallet" style="color: var(--accent-green);"></i></div>
+                    <div class="insight-title" id="fines-total">9.1M ₪</div>
+                    <div class="insight-desc">סך הכל הכנסות מקנסות ב-4 עונות</div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-icon"><i class="fas fa-users" style="color: var(--accent-orange);"></i></div>
+                    <div class="insight-title" id="fines-fans-share">84%</div>
+                    <div class="insight-desc">מהעמדות לדין קשורות ישירות לאוהדים</div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-icon"><i class="fas fa-level-down-alt" style="color: var(--accent-yellow);"></i>
+                    </div>
+                    <div class="insight-title" id="fines-lower-share">51%</div>
+                    <div class="insight-desc">מהעמדות לדין בליגות נמוכות נגרמו עקב אוהדים</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW TAB: MAP -->
+    <div id="map" class="tab-content">
+        <div class="card" style="min-height: 600px; display: flex; flex-direction: column; align-items: center;">
+            <h2 style="color: var(--primary-blue); margin-bottom: 20px;">מפת המעצרים הארצית</h2>
+            <p style="margin-bottom: 30px; color: #64748b;">גודל הבועה מייצג את כמות המעצרים בעיר</p>
+
+            <div id="israelMapContainer"
+                style="width: 100%; max-width: 400px; position: relative; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);">
+                <!-- Map Image Background -->
+                <img src="israel_map_political.png" alt="Israel Map"
+                    style="width: 100%; display: block; height: auto; filter: invert(1) hue-rotate(180deg) contrast(1.2);">
+
+                <!-- Bubbles Overlay Layer -->
+                <div id="mapBubbles" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+                    <!-- Bubbles injected by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="foi" class="tab-content">
+        <div class="foi-container">
+            <h3 style="margin-top: 0; color: var(--primary-blue);">בחר נושאים לבקשה:</h3>
+            <div class="option">
+                <input type="checkbox" id="chk_bodycam" checked onchange="updateFOI()">
+                <div>
+                    <strong>א. מצלמות גוף (חובה)</strong><br>
+                    <small style="color: var(--text-muted);">נתונים על הפעלה/אי-הפעלה, שמירת חומרים
+                        ונהלים.</small>
+                </div>
+            </div>
+            <div class="option">
+                <input type="checkbox" id="chk_violence" checked onchange="updateFOI()">
+                <div>
+                    <strong>ב. אלימות שוטרים במגרשים</strong><br>
+                    <small style="color: var(--text-muted);">מספר דוחות שימוש בכוח ספציפית ביציעים.</small>
+                </div>
+            </div>
+            <div class="option">
+                <input type="checkbox" id="chk_demo" onchange="updateFOI()">
+                <div>
+                    <strong>ג. פילוח דמוגרפי (הצעה)</strong><br>
+                    <small style="color: var(--text-muted);">ניסיון לחלץ נתונים על אכיפת יתר כלפי
+                        מיעוטים.</small>
+                </div>
+            </div>
+            <div class="option">
+                <input type="checkbox" id="chk_admin" onchange="updateFOI()">
+                <div>
+                    <strong>ד. הרחקות מנהליות (הצעה)</strong><br>
+                    <small style="color: var(--text-muted);">יחס בין הרחקות לכתבי אישום (מדד שרירותיות).</small>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="foi-preview" id="foiText" data-source="מקור: קובץ 'טיוטה אלימות בספורט.docx'"></div>
+            <button class="action-btn" onclick="copyToClipboard()">
+                <i class="fas fa-copy"></i> העתק טקסט ללוח
+            </button>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        let realData = {}; // Will be populated from JSON
+
+        let profileChartInstance = null;
+
+        function updateProfileChart() {
+            if (!realData || Object.keys(realData).length === 0) return;
+
+            const city = document.getElementById('citySelect').value;
+            const offense = document.getElementById('offenseSelect').value;
+            const insightBox = document.getElementById('profileInsight');
+            const counterBox = document.getElementById('totalCounter');
+            const ctx = document.getElementById('profileChartCanvas').getContext('2d');
+
+            // Check if city exists in data, fallback to 'all' if not
+            if (!realData[city]) {
+                console.warn(`City ${city} not found in data`);
+                return;
+            }
+
+            const currentData = realData[city][offense];
+            if (!currentData) {
+                console.warn(`Offense ${offense} not found for city ${city}`);
+                return;
+            }
+
+            const data = currentData.data;
+            const counts = currentData.counts;
+            const text = currentData.text;
+            const total = currentData.total;
+
+            let color = '#3b82f6';
+            if (city === 'jerusalem') color = '#eab308';
+            if (city === 'telaviv') color = '#ef4444';
+            if (city === 'haifa') color = '#10b981';
+            if (city === 'beersheva') color = '#f97316';
+            if (city === 'petah_tikva') color = '#3b82f6';
+
+            insightBox.innerText = text;
+            insightBox.style.borderLeftColor = color;
+            counterBox.innerText = "סה\"כ: " + total + " מקרים";
+            counterBox.style.background = color;
+
+            if (profileChartInstance) {
+                profileChartInstance.destroy();
+            }
+
+            profileChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['13-17', '18-21', '22-25', '26-30', '31-40', '41-50', '50+'],
+                    datasets: [{
+                        label: 'אחוז מסך העצורים (%)',
+                        data: data,
+                        backgroundColor: color,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: 'התפלגות גילאים (%)' },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const index = context.dataIndex;
+                                    const count = counts[index];
+                                    const pct = context.raw;
+                                    return pct + '% (' + count + ' עצורים)';
+                                }
+                            }
+                        }
+                    },
+                    scales: { y: { beginAtZero: true, max: 100 } }
+                }
+            });
+        }
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.querySelector(`.nav-btn[onclick="showTab('${tabId}')"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+            if (tabId === 'profile') setTimeout(updateProfileChart, 100);
+            if (tabId === 'map') setTimeout(updateMapViz, 100); // Trigger map update when tab is shown
+        }
+
+        function updateFOI() {
+            const showBodyCam = document.getElementById('chk_bodycam').checked;
+            const showViolence = document.getElementById('chk_violence').checked;
+            const showDemo = document.getElementById('chk_demo').checked;
+            const showAdmin = document.getElementById('chk_admin').checked;
+            let text = `לכבוד\nהממונה על חופש המידע\nמשטרת ישראל / המשרד לביטחון לאומי\n\nהנדון: בקשה לפי חוק חופש המידע, התשנ״ח-1998 – נתוני אלימות, אכיפה ושימוש במצלמות גוף באירועי ספורט\n\nשלום רב,\nאבקש לקבל לידיי את המידע המפורט להלן, המתייחס לשנים 2024-2025 (ועד למועד המענה):\n\n`;
+            if (showBodyCam) text += `1. נושא מצלמות הגוף...\n`;
+            if (showViolence) text += `2. שימוש בכוח ואלימות שוטרים...\n`;
+            if (showDemo) text += `3. פילוח דמוגרפי...\n`;
+            if (showAdmin) text += `4. הרחקות מנהליות...\n`;
+            text += `\nאודה לקבלת המידע בפורמט דיגיטלי קריא.\nבברכה,\nאגם חן`;
+            document.getElementById('foiText').innerText = text;
+        }
+
+        function copyToClipboard() {
+            const text = document.getElementById('foiText').innerText;
+            navigator.clipboard.writeText(text).then(() => { alert('הטקסט הועתק ללוח!'); });
+        }
+
+        function updateMapViz() {
+            const mapBubblesContainer = document.getElementById('mapBubbles');
+            if (mapBubblesContainer && realData) {
+                mapBubblesContainer.innerHTML = '';
+
+                // Responsive Percentages (Top/Left) based on the specific map image aspect ratio
+                // Estimation for standard vertical Israel map:
+                // Responsive Percentages (Top/Left) calibrated for new map image
+                const cityPositions = {
+                    'jerusalem': { top: 42, left: 51, color: '#f59e0b' }, // Moved East back near original
+                    'telaviv': { top: 36, left: 44, color: '#ef4444' },
+                    'haifa': { top: 17, left: 51, color: '#3b82f6' }, // Moved Touch South
+                    'beersheva': { top: 58, left: 48, color: '#f97316' },
+                    'petah_tikva': { top: 32, left: 46, color: '#10b981' }
+                };
+
+                // Increase map size visual
+                const mapContainer = document.getElementById('israelMapContainer');
+                if (mapContainer) mapContainer.style.maxWidth = '900px';
+
+                const cityKeys = Object.keys(cityPositions);
+
+                cityKeys.forEach(key => {
+                    if (realData[key] && realData[key]['all']) {
+                        const total = realData[key]['all'].total;
+                        const pos = cityPositions[key];
+
+                        // Dynamic Size
+                        const size = Math.max(30, Math.sqrt(total) * 4); // px size
+
+                        const bubble = document.createElement('div');
+                        bubble.className = "map-bubble";
+                        bubble.style.width = `${size}px`;
+                        bubble.style.height = `${size}px`;
+                        bubble.style.backgroundColor = pos.color;
+                        bubble.style.left = `${pos.left}%`;
+                        bubble.style.top = `${pos.top}%`;
+
+                        // Tooltip logic
+                        bubble.innerHTML = `
+                            <span class="count">${total}</span>
+                            <div class="tooltip">
+                                <strong>${key === 'jerusalem' ? 'ירושלים' :
+                                key === 'telaviv' ? 'תל אביב' :
+                                    key === 'haifa' ? 'חיפה' :
+                                        key === 'beersheva' ? 'באר שבע' : 'פתח תקווה'}</strong><br>
+                                ${total} מעצרים
+                            </div>
+                        `;
+
+                        mapBubblesContainer.appendChild(bubble);
+                    }
+                });
+            }
+        }
+
+        let effectivenessChartInstance = null;
+        let closingReasonsChartInstance = null;
+        let comparisonChartInstance = null;
+
+        function renderComparisonChart(stats) {
+            if (!stats) return;
+
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+
+            const labels = [];
+            const data = [];
+            const colors = [];
+
+            // Israel
+            labels.push(`ישראל ${stats.israel.flag}`);
+            data.push(stats.israel.rate);
+            colors.push('#0038b8');
+
+            // England
+            labels.push(`אנגליה ${stats.england.flag}`);
+            data.push(stats.england.rate);
+            colors.push('#cf142b');
+
+            if (stats.netherlands) {
+                labels.push(`הולנד ${stats.netherlands.flag}`);
+                data.push(stats.netherlands.rate);
+                colors.push('#f97316'); // Orange
+            }
+
+            // Spain
+            if (stats.spain) {
+                labels.push(`ספרד ${stats.spain.flag}`);
+                data.push(stats.spain.rate);
+                colors.push('#eab308'); // Yellow
+            }
+
+            // France
+            if (stats.france) {
+                labels.push(`צרפת ${stats.france.flag}`);
+                data.push(stats.france.rate);
+                colors.push('#2563eb'); // Royal Blue
+            }
+
+            if (comparisonChartInstance) {
+                comparisonChartInstance.destroy();
+            }
+
+            comparisonChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'מעצרים לכל 100,000 צופים',
+                        data: data,
+                        backgroundColor: colors,
+                        borderRadius: 8,
+                        barPercentage: 0.6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: 'מעצרים לכל 100,000 צופים' },
+                        tooltip: {
+                            callbacks: {
+                                footer: function (tooltipItems) {
+                                    if (tooltipItems[0].label.includes('ישראל')) {
+                                        return `מבוסס על ${stats.israel.arrests} מעצרים`;
+                                    }
+                                    if (tooltipItems[0].label.includes('הולנד')) {
+                                        return `מבוסס על ${stats.netherlands.arrests} מעצרים (${stats.netherlands.indictment_rate}% כתבי אישום)`;
+                                    }
+                                    if (tooltipItems[0].label.includes('ספרד')) {
+                                        return `מבוסס על ${stats.spain.arrests} מעצרים (${stats.spain.admin_sanctions} סנקציות מנהליות)`;
+                                    }
+                                    if (tooltipItems[0].label.includes('צרפת')) {
+                                        return [`מבוסס על ${stats.france.arrests} מעצרים`, `מקור: ${stats.france.report_name}`];
+                                    }
+                                    return '';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255,255,255,0.05)' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+        // realData is already declared globally, so no need to redeclare here.
+
+        // Translate keys to Hebrew for display
+        function renderFinesChart(stats) {
+            if (!stats) return;
+
+            const ctx = document.getElementById('finesChart').getContext('2d');
+
+            // Create Gradient
+            const gradientMoney = ctx.createLinearGradient(0, 400, 0, 0);
+            gradientMoney.addColorStop(0, 'rgba(48, 209, 88, 0.2)'); // Green Faded
+            gradientMoney.addColorStop(1, '#30d158'); // Green
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: stats.chart_data.labels,
+                    datasets: [{
+                        label: 'סכום הקנסות (בש"ח)',
+                        data: stats.chart_data.data,
+                        backgroundColor: gradientMoney,
+                        borderRadius: 8,
+                        barPercentage: 0.6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return context.parsed.y.toLocaleString() + ' ₪';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            ticks: {
+                                callback: function (value) {
+                                    return value.toLocaleString() + ' ₪';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Update text elements if dynamic (though structurally static here, good practice)
+            document.getElementById('fines-total').innerText = stats.insights.total_fines + ' ₪';
+            document.getElementById('fines-fans-share').innerText = stats.insights.fans_share + '%';
+            document.getElementById('fines-lower-share').innerText = stats.insights.lower_leagues_share + '%';
+        }
+
+        const OFFENSE_LABELS_HE = {
+            'assault': 'אלימות/תקיפה',
+            'pyro': 'פירוטכניקה',
+            'police': 'תקיפת שוטר',
+            'order': 'הפרת סדר',
+            'field': 'פריצה למגרש',
+            'banned_item': 'חפץ אסור',
+            'property': 'ונדליזם',
+            'threat': 'איומים',
+            'other': 'אחר'
+        };
+
+        function renderEffectivenessChart(stats) {
+            const ctx = document.getElementById('effectivenessChart').getContext('2d');
+
+            // Prepare Data
+            const labels = [];
+            const dataPercents = [];
+            const colors = [];
+
+            let totalCases = 0;
+            let totalIndictments = 0;
+
+            // Sort by percentage descending? Or fixed order?
+            // Let's use specific relevant keys
+            const keys = ['assault', 'pyro', 'police', 'order', 'field', 'banned_item'];
+
+            keys.forEach(key => {
+                if (stats[key]) {
+                    const total = stats[key].total || 0;
+                    const indict = stats[key].indict || 0;
+                    totalCases += total;
+                    totalIndictments += indict;
+
+                    if (total > 5) { // Threshold to avoid noisy data
+                        const pct = (indict / total) * 100;
+                        labels.push(OFFENSE_LABELS_HE[key] || key);
+                        dataPercents.push(pct.toFixed(1));
+
+                        // Dynamic Color: High > Red, Low > Green/Blue
+                        if (pct > 50) colors.push('#ef4444'); // Red
+                        else if (pct > 25) colors.push('#f97316'); // Orange
+                        else colors.push('#3b82f6'); // Blue
+                    }
+                }
+            });
+
+            // Calculate Global Rate
+            // We can also sum up from stats['other'] if we want truly global
+            // But relying on what we iterated gives a good "Major Offenses" rate. 
+            // Better to use the full sum from the stats object for the text.
+            let globalTotal = 0;
+            let globalIndict = 0;
+            Object.values(stats).forEach(v => {
+                globalTotal += v.total;
+                globalIndict += v.indict;
+            });
+
+            const globalRate = globalTotal > 0 ? ((globalIndict / globalTotal) * 100).toFixed(1) : 0;
+
+            // Update Text Insight
+            const viewBox = document.getElementById('indictmentInsightBox');
+            if (viewBox) {
+                viewBox.style.display = 'block';
+                document.getElementById('indictmentText').innerHTML =
+                    `רק כ-<b>${globalRate}%</b> מהמעצרים מבשילים לכדי כתב אישום או הליך פלילי (${globalIndict} מתוך ${globalTotal}).`;
+            }
+
+            // Gradient function for dynamic color assignment
+            function getGradient(ctx, colorHex) {
+                const gradient = ctx.createLinearGradient(0, 400, 0, 0);
+                gradient.addColorStop(0, colorHex + '33'); // 20% opacity using hex alpha
+                gradient.addColorStop(1, colorHex);
+                return gradient;
+            }
+
+            const colorsHex = ['#fb923c', '#38bdf8', '#f87171', '#38bdf8', '#fb923c', '#fb923c'];
+            const gradients = colorsHex.map(c => getGradient(ctx, c));
+
+            effectivenessChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'סיכוי לכתב אישום (%)',
+                        data: dataPercents,
+                        backgroundColor: gradients,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return context.parsed.y + '% סיכוי לכתב אישום';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: { display: true, text: 'אחוז (%)' },
+                            grid: { color: 'rgba(255,255,255,0.05)' }
+                        },
+                        x: {
+                            ticks: { font: { size: 11 } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderClosingReasonsChart(stats) {
+            const ctx = document.getElementById('closingReasonsChart').getContext('2d');
+
+            const labels = [];
+            const lackEvidenceData = [];
+            const lackGuiltData = [];
+            const otherData = [];
+
+            const keys = ['assault', 'pyro', 'police', 'order', 'field', 'banned_item'];
+
+            keys.forEach(key => {
+                if (stats[key] && stats[key].total > 0) {
+                    const s = stats[key];
+                    labels.push(OFFENSE_LABELS_HE[key] || key);
+                    lackEvidenceData.push(s.lack_evidence);
+                    lackGuiltData.push(s.lack_guilt);
+                    otherData.push(s.other);
+                }
+            });
+
+            // Create Gradients
+            const gradEvidence = ctx.createLinearGradient(0, 400, 0, 0);
+            gradEvidence.addColorStop(0, 'rgba(239, 68, 68, 0.2)'); // Red Faded
+            gradEvidence.addColorStop(1, '#ef4444'); // Red
+
+            const gradGuilt = ctx.createLinearGradient(0, 400, 0, 0);
+            gradGuilt.addColorStop(0, 'rgba(16, 185, 129, 0.2)'); // Green Faded
+            gradGuilt.addColorStop(1, '#10b981'); // Green
+
+            const gradOther = ctx.createLinearGradient(0, 400, 0, 0);
+            gradOther.addColorStop(0, 'rgba(100, 116, 139, 0.2)'); // Gray Faded
+            gradOther.addColorStop(1, '#64748b'); // Gray
+
+            closingReasonsChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'חוסר ראיות', data: lackEvidenceData, backgroundColor: gradEvidence, borderRadius: 4, borderWidth: 0 },
+                        { label: 'חוסר אשמה', data: lackGuiltData, backgroundColor: gradGuilt, borderRadius: 4, borderWidth: 0 },
+                        { label: 'אחר', data: otherData, backgroundColor: gradOther, borderRadius: 4, borderWidth: 0 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { stacked: true, ticks: { color: '#94a3b8' }, grid: { display: false } },
+                        y: { stacked: true, ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' }, title: { display: true, text: 'מספר תיקים שנסגרו' } }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#cbd5e1' } },
+                        tooltip: { mode: 'index', intersect: false }
+                    }
+                }
+            });
+        }
+
+        function renderOffensesChart(stats) {
+            if (!stats || Object.keys(stats).length === 0) return;
+            const labels = Object.keys(stats);
+            const data = Object.values(stats);
+            const ctx = document.getElementById('offensesChart').getContext('2d');
+
+            // Create Neon Blue Gradient
+            const gradientBlue = ctx.createLinearGradient(0, 0, 400, 0); // Left to Right since indexAxis is y
+            gradientBlue.addColorStop(0, 'rgba(56, 189, 248, 0.2)'); // Faded Sky
+            gradientBlue.addColorStop(1, '#38bdf8'); // Bright Sky
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'מעצרים',
+                        data: data,
+                        backgroundColor: gradientBlue,
+                        borderRadius: 4,
+                        barPercentage: 0.6,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        // --- Login Logic ---
+        function checkLogin() {
+            const input = document.getElementById('login-input');
+            const code = input.value;
+            if (code === '1234') {
+                const overlay = document.getElementById('login-overlay');
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 500);
+                sessionStorage.setItem('site_access', 'granted');
+            } else {
+                const errorMsg = document.getElementById('login-error');
+                errorMsg.style.display = 'block';
+                errorMsg.classList.add('shake'); // Optional animation class if added
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        // Check Access on Load
+        document.addEventListener('DOMContentLoaded', function () {
+            const input = document.getElementById('login-input');
+            if (input) {
+                input.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        checkLogin();
+                    }
+                });
+                // Focus input automatically
+                setTimeout(() => input.focus(), 100);
+            }
+
+            if (sessionStorage.getItem('site_access') === 'granted') {
+                const overlay = document.getElementById('login-overlay');
+                if (overlay) overlay.style.display = 'none';
+            }
+        });
+
+        window.onload = function () {
+            // Fetch data
+            fetch('data.json')
+                .then(response => response.json())
+                .then(data => {
+                    realData = data;
+
+                    // Initialize dependent parts
+                    updateFOI();
+                    updateProfileChart();
+
+                    if (realData.meta) {
+                        // Cleaned up unused charts
+                        updateMapViz();
+                    }
+
+                    // Initialize Charts requiring Data
+                    if (realData.indictment_stats) {
+                        renderEffectivenessChart(realData.indictment_stats);
+                    }
+
+                    if (realData.closing_stats) {
+                        renderClosingReasonsChart(realData.closing_stats);
+                    }
+
+                    if (realData.comparison_stats) {
+                        renderComparisonChart(realData.comparison_stats);
+                        renderFinesChart(realData.fines_stats);
+                    }
+
+                    // --- Chart 1: Racism Pie (Static for now) ---
+                    const ctxPie = document.getElementById('racismPieChart');
+                    if (ctxPie) {
+                        new Chart(ctxPie.getContext('2d'), {
+                            type: 'doughnut',
+                            data: {
+                                labels: ['מכבי ת"א', 'בית"ר י-ם', 'מכבי נתניה', 'הפועל חיפה', 'ק"ש', 'אחרים'],
+                                datasets: [{ data: [118, 115, 29, 28, 24, 53], backgroundColor: ['#facc15', '#94a3b8', '#fb923c', '#f87171', '#38bdf8', '#475569'], borderWidth: 0 }]
+                            },
+                            options: { responsive: true, maintainAspectRatio: false, cutout: '50%', plugins: { legend: { position: 'right' } } }
+                        });
+                    }
+                })
+                .catch(err => console.error("Error loading data:", err));
+
+            Chart.defaults.color = '#94a3b8';
+            Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.05)';
+            Chart.defaults.font.family = "'Heebo', sans-serif";
+
+            // Fix tooltip bg
+            Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(15, 23, 42, 0.9)';
+            Chart.defaults.plugins.tooltip.titleColor = '#f8fafc';
+            Chart.defaults.plugins.tooltip.bodyColor = '#cbd5e1';
+            Chart.defaults.plugins.tooltip.borderColor = 'rgba(255, 255, 255, 0.1)';
+            Chart.defaults.plugins.tooltip.borderWidth = 1;
+
+            // --- Chart 2: Bar Gap ---
+            const ctxBar = document.getElementById('barChart');
+            if (ctxBar) {
+                new Chart(ctxBar.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['תיקי חקירה', 'כתבי אישום', 'גזענות', 'אלימות', 'הרחקות'],
+                        datasets: [{ data: [138, 32, 367, 165, 398], backgroundColor: ['#3b82f6', '#3b82f6', '#ef4444', '#ef4444', '#eab308'], borderRadius: 6 }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+            }
+
+            // --- Chart 3: Offenses ---
+            const ctxOffenses = document.getElementById('offensesChart');
+            if (ctxOffenses) {
+                const ctx = ctxOffenses.getContext('2d');
+                // Neon Gradient
+                const gradientBlue = ctx.createLinearGradient(0, 0, 400, 0);
+                gradientBlue.addColorStop(0, 'rgba(56, 189, 248, 0.2)');
+                gradientBlue.addColorStop(1, '#38bdf8');
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['הפרת סדר', 'אש/אבוקות', 'התנהגות פרועה', 'תקיפת שוטר', 'תקיפה', 'תגרה', 'חפץ אסור', 'הפרעת שוטר', 'איסור כניסה', 'אמצעים כימיים'],
+                        datasets: [{ label: 'מעצרים', data: [65, 54, 53, 47, 41, 36, 36, 32, 25, 21], backgroundColor: gradientBlue, borderRadius: 4 }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { grid: { color: 'rgba(255,255,255,0.05)' } },
+                            y: { grid: { display: false } }
+                        }
+                    }
+                });
+            }
+
+
+        };
+    </script>
+</body>
+
+</html>
