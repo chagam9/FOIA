@@ -788,8 +788,8 @@
             <i class="fas fa-chart-line" style="color: var(--accent-blue);"></i>
             <span>BI קליניקה</span>
             <span
-                style="font-size: 10px; color: #00ff00; font-family: monospace; border: 1px solid #00ff00; padding: 2px 4px; border-radius: 4px; margin-right: 8px;">Ver
-                1.03</span>
+                style="font-size: 10px; color: #ff0000; font-family: monospace; border: 1px solid #ff0000; padding: 2px 4px; border-radius: 4px; margin-right: 8px;">Ver
+                1.04</span>
         </div>
         <button class="nav-btn active" onclick="showTab('overview')">
             <i class="fas fa-home"></i> תמונת מצב
@@ -1080,103 +1080,103 @@
             </div>
 
         </div>
-    </div>
 
-    <div id="fines" class="tab-content">
-        <div class="card" style="margin-bottom: 20px;">
-            <h3 style="margin: 0 0 20px 0; font-size: 20px; color: var(--primary-blue);">הכנסות ההתאחדות מקנסות
-                (2018-2022)</h3>
-            <div style="position: relative; width: 100%; height: 400px;">
-                <canvas id="finesChart"></canvas>
-            </div>
-            <div class="insight-source" style="text-align: left; margin-top: 10px;">
-                מקור: הוועדה לבחינת רפורמה בדרכי המאבק בהתפרעויות במשחקי הכדורגל בישראל
-            </div>
+        <div id="fines" class="tab-content">
+            <div class="card" style="margin-bottom: 20px;">
+                <h3 style="margin: 0 0 20px 0; font-size: 20px; color: var(--primary-blue);">הכנסות ההתאחדות מקנסות
+                    (2018-2022)</h3>
+                <div style="position: relative; width: 100%; height: 400px;">
+                    <canvas id="finesChart"></canvas>
+                </div>
+                <div class="insight-source" style="text-align: left; margin-top: 10px;">
+                    מקור: הוועדה לבחינת רפורמה בדרכי המאבק בהתפרעויות במשחקי הכדורגל בישראל
+                </div>
 
-            <div class="insights-grid" style="grid-template-columns: repeat(3, 1fr); margin-top: 30px;">
-                <div class="insight-card">
-                    <div class="insight-icon"><i class="fas fa-wallet" style="color: var(--accent-green);"></i>
+                <div class="insights-grid" style="grid-template-columns: repeat(3, 1fr); margin-top: 30px;">
+                    <div class="insight-card">
+                        <div class="insight-icon"><i class="fas fa-wallet" style="color: var(--accent-green);"></i>
+                        </div>
+                        <div class="insight-title" id="fines-total">9.1M ₪</div>
+                        <div class="insight-desc">סך הכל הכנסות מקנסות ב-4 עונות</div>
                     </div>
-                    <div class="insight-title" id="fines-total">9.1M ₪</div>
-                    <div class="insight-desc">סך הכל הכנסות מקנסות ב-4 עונות</div>
-                </div>
-                <div class="insight-card">
-                    <div class="insight-icon"><i class="fas fa-users" style="color: var(--accent-orange);"></i>
+                    <div class="insight-card">
+                        <div class="insight-icon"><i class="fas fa-users" style="color: var(--accent-orange);"></i>
+                        </div>
+                        <div class="insight-title" id="fines-fans-share">84%</div>
+                        <div class="insight-desc">מהעמדות לדין קשורות ישירות לאוהדים</div>
                     </div>
-                    <div class="insight-title" id="fines-fans-share">84%</div>
-                    <div class="insight-desc">מהעמדות לדין קשורות ישירות לאוהדים</div>
-                </div>
-                <div class="insight-card">
-                    <div class="insight-icon"><i class="fas fa-level-down-alt" style="color: var(--accent-yellow);"></i>
+                    <div class="insight-card">
+                        <div class="insight-icon"><i class="fas fa-level-down-alt"
+                                style="color: var(--accent-yellow);"></i>
+                        </div>
+                        <div class="insight-title" id="fines-lower-share">51%</div>
+                        <div class="insight-desc">מהעמדות לדין בליגות נמוכות נגרמו עקב אוהדים</div>
                     </div>
-                    <div class="insight-title" id="fines-lower-share">51%</div>
-                    <div class="insight-desc">מהעמדות לדין בליגות נמוכות נגרמו עקב אוהדים</div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- NEW TAB: MAP -->
-    <div id="map" class="tab-content">
-        <div class="card" style="min-height: 600px; display: flex; flex-direction: column; align-items: center;">
-            <h2 style="color: var(--primary-blue); margin-bottom: 20px;">מפת המעצרים הארצית</h2>
-            <p style="margin-bottom: 30px; color: #64748b;">גודל הבועה מייצג את כמות המעצרים בעיר</p>
+        <!-- NEW TAB: MAP -->
+        <div id="map" class="tab-content">
+            <div class="card" style="min-height: 600px; display: flex; flex-direction: column; align-items: center;">
+                <h2 style="color: var(--primary-blue); margin-bottom: 20px;">מפת המעצרים הארצית</h2>
+                <p style="margin-bottom: 30px; color: #64748b;">גודל הבועה מייצג את כמות המעצרים בעיר</p>
 
-            <div id="israelMapContainer"
-                style="width: 100%; max-width: 400px; position: relative; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);">
-                <!-- Map Image Background -->
-                <img src="israel_map_political.png" alt="Israel Map"
-                    style="width: 100%; display: block; height: auto; filter: invert(1) hue-rotate(180deg) contrast(1.2);">
+                <div id="israelMapContainer"
+                    style="width: 100%; max-width: 400px; position: relative; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);">
+                    <!-- Map Image Background -->
+                    <img src="israel_map_political.png" alt="Israel Map"
+                        style="width: 100%; display: block; height: auto; filter: invert(1) hue-rotate(180deg) contrast(1.2);">
 
-                <!-- Bubbles Overlay Layer -->
-                <div id="mapBubbles" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-                    <!-- Bubbles injected by JS -->
+                    <!-- Bubbles Overlay Layer -->
+                    <div id="mapBubbles" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+                        <!-- Bubbles injected by JS -->
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div id="foi" class="tab-content">
-        <div class="foi-container">
-            <h3 style="margin-top: 0; color: var(--primary-blue);">בחר נושאים לבקשה:</h3>
-            <div class="option">
-                <input type="checkbox" id="chk_bodycam" checked onchange="updateFOI()">
-                <div>
-                    <strong>א. מצלמות גוף (חובה)</strong><br>
-                    <small style="color: var(--text-muted);">נתונים על הפעלה/אי-הפעלה, שמירת חומרים
-                        ונהלים.</small>
+        <div id="foi" class="tab-content">
+            <div class="foi-container">
+                <h3 style="margin-top: 0; color: var(--primary-blue);">בחר נושאים לבקשה:</h3>
+                <div class="option">
+                    <input type="checkbox" id="chk_bodycam" checked onchange="updateFOI()">
+                    <div>
+                        <strong>א. מצלמות גוף (חובה)</strong><br>
+                        <small style="color: var(--text-muted);">נתונים על הפעלה/אי-הפעלה, שמירת חומרים
+                            ונהלים.</small>
+                    </div>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="chk_violence" checked onchange="updateFOI()">
+                    <div>
+                        <strong>ב. אלימות שוטרים במגרשים</strong><br>
+                        <small style="color: var(--text-muted);">מספר דוחות שימוש בכוח ספציפית ביציעים.</small>
+                    </div>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="chk_demo" onchange="updateFOI()">
+                    <div>
+                        <strong>ג. פילוח דמוגרפי (הצעה)</strong><br>
+                        <small style="color: var(--text-muted);">ניסיון לחלץ נתונים על אכיפת יתר כלפי
+                            מיעוטים.</small>
+                    </div>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="chk_admin" onchange="updateFOI()">
+                    <div>
+                        <strong>ד. הרחקות מנהליות (הצעה)</strong><br>
+                        <small style="color: var(--text-muted);">יחס בין הרחקות לכתבי אישום (מדד שרירותיות).</small>
+                    </div>
                 </div>
             </div>
-            <div class="option">
-                <input type="checkbox" id="chk_violence" checked onchange="updateFOI()">
-                <div>
-                    <strong>ב. אלימות שוטרים במגרשים</strong><br>
-                    <small style="color: var(--text-muted);">מספר דוחות שימוש בכוח ספציפית ביציעים.</small>
-                </div>
-            </div>
-            <div class="option">
-                <input type="checkbox" id="chk_demo" onchange="updateFOI()">
-                <div>
-                    <strong>ג. פילוח דמוגרפי (הצעה)</strong><br>
-                    <small style="color: var(--text-muted);">ניסיון לחלץ נתונים על אכיפת יתר כלפי
-                        מיעוטים.</small>
-                </div>
-            </div>
-            <div class="option">
-                <input type="checkbox" id="chk_admin" onchange="updateFOI()">
-                <div>
-                    <strong>ד. הרחקות מנהליות (הצעה)</strong><br>
-                    <small style="color: var(--text-muted);">יחס בין הרחקות לכתבי אישום (מדד שרירותיות).</small>
-                </div>
+            <div>
+                <div class="foi-preview" id="foiText" data-source="מקור: קובץ 'טיוטה אלימות בספורט.docx'"></div>
+                <button class="action-btn" onclick="copyToClipboard()">
+                    <i class="fas fa-copy"></i> העתק טקסט ללוח
+                </button>
             </div>
         </div>
-        <div>
-            <div class="foi-preview" id="foiText" data-source="מקור: קובץ 'טיוטה אלימות בספורט.docx'"></div>
-            <button class="action-btn" onclick="copyToClipboard()">
-                <i class="fas fa-copy"></i> העתק טקסט ללוח
-            </button>
-        </div>
-    </div>
     </div>
 
     <script>
